@@ -13,7 +13,10 @@
 ## Negative Prompt
 
 ```
-low quality, blurry, bad anatomy, extra fingers, deformed face, watermark, text
+low quality, blurry, bad anatomy, extra fingers, deformed face, watermark, text,
+ugly face, asymmetrical face, crooked face, distorted face, disfigured,
+bad proportions, malformed, fused features, poorly drawn face, cloned face,
+double face, mutation, mutated, gross proportions, missing eyes, extra eyes
 ```
 
 ## キャラクター別プロンプト（参考）
