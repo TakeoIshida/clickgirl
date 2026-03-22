@@ -185,10 +185,10 @@ def process_character(char_name: str, char_def: dict, skip_existing: bool = True
 
         rarity_style = RARITY_SUFFIX[rarity]
         prompt = (
-            f"masterpiece, best quality, {base_prompt}, "
-            f"{rarity_style}, "
-            f"white background, full body, standing, looking at viewer, "
-            f"anime style, detailed face, beautiful eyes"
+            f"anime, Makoto Shinkai style, cinematic, masterpiece, best quality, "
+            f"{base_prompt}, {rarity_style}, "
+            f"depth of field, bokeh background, beautiful detailed background, "
+            f"atmospheric lighting, highly detailed, beautiful eyes, looking at viewer"
         )
 
         print(f"\n  [{asset_name}] 生成中... (rarity={rarity})")
