@@ -15,7 +15,7 @@ from rembg import remove
 # =====================
 # 設定
 # =====================
-HF_TOKEN = "YOUR_HF_TOKEN_HERE"  # ← HuggingFace APIトークンを入れる
+HF_TOKEN = os.environ.get("HF_TOKEN", "")
 MODEL = "gsdf/Counterfeit-V2.5"
 API_URL = f"https://api-inference.huggingface.co/models/{MODEL}"
 
