@@ -11,10 +11,12 @@ import requests
 from io import BytesIO
 from PIL import Image
 from rembg import remove
+from dotenv import load_dotenv
 
 # =====================
 # 設定
 # =====================
+load_dotenv("/Users/ishidatakeo/Desktop/swiftgame/clickgirl/ClickGirl/ClickGirl/.env")
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
 MODEL = "gsdf/Counterfeit-V2.5"
 API_URL = f"https://router.huggingface.co/hf-inference/models/{MODEL}"
