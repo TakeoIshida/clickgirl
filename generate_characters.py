@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ClickGirl キャラクター画像生成スクリプト
-HuggingFace API (Counterfeit-V2.5) で画像生成 → 背景除去 → xcassets に追加
+Leonardo.ai API で画像生成 → 背景除去 → xcassets に追加
 """
 
 import os
@@ -17,20 +17,27 @@ from dotenv import load_dotenv
 # 設定
 # =====================
 load_dotenv("/Users/ishidatakeo/Desktop/swiftgame/clickgirl/ClickGirl/ClickGirl/.env")
-HF_TOKEN = os.environ.get("HF_TOKEN", "")
-MODEL = "stabilityai/stable-diffusion-xl-base-1.0"
-API_URL = f"https://router.huggingface.co/hf-inference/models/{MODEL}"
+TOKEN = os.environ.get("LEONARDO_TOKEN", "")
+
+BASE_URL = "https://cloud.leonardo.ai/api/rest/v1"
+HEADERS = {
+    "Authorization": f"Bearer {TOKEN}",
+    "Content-Type": "application/json",
+}
 
 ASSETS_DIR = "/Users/ishidatakeo/Desktop/swiftgame/clickgirl/ClickGirl/ClickGirl/Assets.xcassets"
 OUTPUT_W = 784
 OUTPUT_H = 1176
 
+# Leonardo.ai アニメ特化モデル
+# "AlbedoBase XL" はアニメ＆リアル両対応で高品質
+MODEL_ID = "2067ae52-33fd-4a82-bb92-c2c55e7d2786"  # AlbedoBase XL
+
 # =====================
-# キャラクター定義
+# レアリティ別スタイル
 # =====================
-# レアリティ別スタイル修飾子
 RARITY_SUFFIX = {
-    "N":   "casual everyday outfit, natural lighting, outdoor background, park or city street, sunlight",
+    "N":   "casual everyday outfit, natural lighting, outdoor background, park or city street, warm sunlight",
     "R":   "business formal wear, elegant blouse, indoor office background, warm sunlight through window",
     "SR":  "luxury fashion, designer dress, beautiful restaurant or rooftop background, golden hour lighting",
     "SSR": "ultra glamorous gown, ornate jewelry, night cityscape background, bokeh lights, dramatic cinematic lighting",
@@ -39,52 +46,24 @@ RARITY_SUFFIX = {
 NEGATIVE_PROMPT = (
     "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, "
     "fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, "
-    "signature, watermark, username, blurry, ugly, duplicate, nsfw"
+    "signature, watermark, username, blurry, ugly, duplicate, nsfw, 3d, realistic"
 )
 
-# キャラクターごとのプロンプト定義
-# index: (rarity, 衣装メモ)
+# =====================
+# キャラクター定義
+# =====================
 CHARACTERS = {
-    "karen": {
-        "base": "1girl, solo, karen, short brown hair, brown eyes, friendly smile, office worker, sales manager",
-        "images": {
-            # index: rarity
-            0: "N", 1: "N", 2: "N", 3: "N",
-            4: "R", 5: "R", 6: "R",
-            7: "SR", 8: "SR",
-            9: "SSR",
-        }
-    },
-    "misaki": {
-        "base": "1girl, solo, misaki, long black hair, glasses, intelligent expression, developer, tech lead",
-        "images": {
-            0: "N", 1: "N", 2: "N",
-            3: "R", 4: "R", 5: "R",
-            6: "SR",
-            7: "SSR",
-        }
-    },
-    "yuki": {
-        "base": "1girl, solo, yuki, silver white hair, cool expression, manager, administrative director",
-        "images": {
-            0: "N", 1: "N", 2: "N", 3: "N",
-            4: "R", 5: "R", 6: "R",
-            7: "SR", 8: "SR",
-            9: "SSR",
-        }
-    },
     "rio": {
-        "base": "1girl, solo, rio, pink hair, energetic smile, marketing director, cheerful",
+        "base": "1girl, solo, short pink hair, energetic smile, marketing director, cheerful, beautiful eyes",
         "images": {
             0: "N", 1: "N", 2: "N",
-            # 追加分（仕様書では追加予定）
             3: "R", 4: "R", 5: "R",
             6: "SR",
             7: "SSR",
         }
     },
     "akari": {
-        "base": "1girl, solo, akari, long blonde hair, mature beauty, secretary, president secretary, elegant",
+        "base": "1girl, solo, long blonde hair, mature beauty, secretary, president secretary, elegant, beautiful eyes",
         "images": {
             0: "N", 1: "N", 2: "N",
             3: "R", 4: "R", 5: "R",
@@ -98,7 +77,6 @@ CHARACTERS = {
 # xcassets ヘルパー
 # =====================
 def make_imageset(name: str, filename: str):
-    """imageset フォルダと Contents.json を作成"""
     folder = os.path.join(ASSETS_DIR, f"{name}.imageset")
     os.makedirs(folder, exist_ok=True)
     contents = {
@@ -115,54 +93,77 @@ def make_imageset(name: str, filename: str):
 
 
 def asset_exists(name: str) -> bool:
-    """既に画像が存在するか確認"""
     folder = os.path.join(ASSETS_DIR, f"{name}.imageset")
     if not os.path.exists(folder):
         return False
     for f in os.listdir(folder):
-        if f.endswith((".jpg", ".png")) and not f == "Contents.json":
+        if f.endswith((".jpg", ".png", ".jpeg")):
             return True
     return False
 
 
 # =====================
-# 画像生成
+# Leonardo.ai API
 # =====================
 def generate_image(prompt: str, negative_prompt: str, retries: int = 3) -> Image.Image | None:
-    """HuggingFace API で画像生成"""
-    headers = {"Authorization": f"Bearer {HF_TOKEN}"}
+    """Leonardo.ai で画像を生成して PIL Image を返す"""
+
+    # Step 1: 生成ジョブを送信
     payload = {
-        "inputs": prompt,
-        "parameters": {
-            "negative_prompt": negative_prompt,
-            "width": OUTPUT_W,
-            "height": OUTPUT_H,
-            "num_inference_steps": 35,
-            "guidance_scale": 9.0,
-        }
+        "prompt": prompt,
+        "negative_prompt": negative_prompt,
+        "modelId": MODEL_ID,
+        "width": OUTPUT_W,
+        "height": OUTPUT_H,
+        "num_images": 1,
+        "guidance_scale": 7,
+        "num_inference_steps": 30,
+        "public": False,
     }
 
     for attempt in range(retries):
         try:
-            resp = requests.post(API_URL, headers=headers, json=payload, timeout=120)
-            if resp.status_code == 200:
-                return Image.open(BytesIO(resp.content)).convert("RGB")
-            elif resp.status_code == 503:
-                wait = 20 + attempt * 10
-                print(f"  モデル読み込み中... {wait}秒待機")
-                time.sleep(wait)
-            else:
-                print(f"  APIエラー {resp.status_code}: {resp.text[:200]}")
+            resp = requests.post(f"{BASE_URL}/generations", headers=HEADERS, json=payload, timeout=30)
+            if resp.status_code != 200:
+                print(f"  生成リクエスト失敗 {resp.status_code}: {resp.text[:200]}")
                 return None
+
+            generation_id = resp.json()["sdGenerationJob"]["generationId"]
+            break
         except Exception as e:
             print(f"  リクエスト失敗 (試行{attempt+1}): {e}")
             time.sleep(5)
+    else:
+        return None
 
+    # Step 2: 完了をポーリング
+    print(f"  生成中 (ID: {generation_id[:8]}...)  ", end="", flush=True)
+    for _ in range(60):
+        time.sleep(3)
+        try:
+            r = requests.get(f"{BASE_URL}/generations/{generation_id}", headers=HEADERS, timeout=15)
+            data = r.json().get("generations_by_pk", {})
+            status = data.get("status", "")
+            if status == "COMPLETE":
+                images = data.get("generated_images", [])
+                if images:
+                    print("完了")
+                    img_url = images[0]["url"]
+                    img_resp = requests.get(img_url, timeout=30)
+                    return Image.open(BytesIO(img_resp.content)).convert("RGB")
+                break
+            elif status == "FAILED":
+                print("失敗")
+                return None
+            print(".", end="", flush=True)
+        except Exception as e:
+            print(f"  ポーリングエラー: {e}")
+
+    print("タイムアウト")
     return None
 
 
 def remove_background(img: Image.Image) -> Image.Image:
-    """rembg で背景を除去して RGBA PNG を返す"""
     buf = BytesIO()
     img.save(buf, format="PNG")
     result_bytes = remove(buf.getvalue())
@@ -188,55 +189,44 @@ def process_character(char_name: str, char_def: dict, skip_existing: bool = True
             f"anime, Makoto Shinkai style, cinematic, masterpiece, best quality, "
             f"{base_prompt}, {rarity_style}, "
             f"depth of field, bokeh background, beautiful detailed background, "
-            f"atmospheric lighting, highly detailed, beautiful eyes, looking at viewer"
+            f"atmospheric lighting, highly detailed, looking at viewer"
         )
 
-        print(f"\n  [{asset_name}] 生成中... (rarity={rarity})")
-        print(f"  プロンプト: {prompt[:80]}...")
+        print(f"\n  [{asset_name}] 生成開始 (rarity={rarity})")
 
         img = generate_image(prompt, NEGATIVE_PROMPT)
         if img is None:
             print(f"  [{asset_name}] 生成失敗、スキップ")
             continue
 
-        # --- JPG 保存（背景あり）---
+        # JPG 保存（背景あり）
         jpg_folder = make_imageset(asset_name, f"{asset_name}.jpg")
         jpg_path = os.path.join(jpg_folder, f"{asset_name}.jpg")
         img.save(jpg_path, "JPEG", quality=90)
-        print(f"  [{asset_name}] JPG 保存: {jpg_path}")
+        print(f"  [{asset_name}] JPG 保存")
 
-        # --- PNG 保存（背景なし）---
+        # PNG 保存（背景なし）
         print(f"  [{nobg_name}] 背景除去中...")
         nobg_img = remove_background(img)
         png_folder = make_imageset(nobg_name, f"{nobg_name}.png")
         png_path = os.path.join(png_folder, f"{nobg_name}.png")
         nobg_img.save(png_path, "PNG")
-        print(f"  [{nobg_name}] PNG 保存: {png_path}")
+        print(f"  [{nobg_name}] PNG 保存")
 
-        # API 負荷軽減
         time.sleep(2)
 
 
 def main():
-    if HF_TOKEN == "YOUR_HF_TOKEN_HERE":
-        print("エラー: HF_TOKEN を設定してください")
-        print("  generate_characters.py の HF_TOKEN = ... の行を編集してください")
+    if not TOKEN:
+        print("エラー: LEONARDO_TOKEN が .env に設定されていません")
         return
 
-    print("=== ClickGirl キャラクター画像生成 ===")
-    print(f"モデル: {MODEL}")
+    print("=== ClickGirl キャラクター画像生成 (Leonardo.ai) ===")
+    print(f"モデル: {MODEL_ID}")
     print(f"出力サイズ: {OUTPUT_W}×{OUTPUT_H}")
-    print(f"保存先: {ASSETS_DIR}")
     print()
 
-    # 生成するキャラクターを選択（コメントアウトで除外）
-    targets = [
-        # "karen",    # 完成済み
-        # "misaki",   # 完成済み
-        # "yuki",     # 完成済み
-        "rio",      # 3枚→8枚に追加
-        "akari",    # 0枚→8枚を生成
-    ]
+    targets = ["rio", "akari"]
 
     for char in targets:
         print(f"\n{'='*40}")
