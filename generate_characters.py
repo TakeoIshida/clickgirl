@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 # =====================
 load_dotenv("/Users/ishidatakeo/Desktop/swiftgame/clickgirl/ClickGirl/ClickGirl/.env")
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
-MODEL = "gsdf/Counterfeit-V2.5"
+MODEL = "black-forest-labs/FLUX.1-schnell"
 API_URL = f"https://router.huggingface.co/hf-inference/models/{MODEL}"
 
 ASSETS_DIR = "/Users/ishidatakeo/Desktop/swiftgame/clickgirl/ClickGirl/ClickGirl/Assets.xcassets"
