@@ -30,10 +30,10 @@ OUTPUT_H = 1176
 # =====================
 # レアリティ別スタイル修飾子
 RARITY_SUFFIX = {
-    "N":   "casual office wear, simple clothes, everyday look",
-    "R":   "business formal wear, elegant blouse, stylish outfit",
-    "SR":  "luxury fashion, designer dress, shiny fabric, detailed accessories",
-    "SSR": "ultra glamorous, sparkling gown, ornate jewelry, dramatic lighting, divine aura",
+    "N":   "casual everyday outfit, natural lighting, outdoor background, park or city street, sunlight",
+    "R":   "business formal wear, elegant blouse, indoor office background, warm sunlight through window",
+    "SR":  "luxury fashion, designer dress, beautiful restaurant or rooftop background, golden hour lighting",
+    "SSR": "ultra glamorous gown, ornate jewelry, night cityscape background, bokeh lights, dramatic cinematic lighting",
 }
 
 NEGATIVE_PROMPT = (
