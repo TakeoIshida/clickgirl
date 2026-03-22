@@ -310,6 +310,75 @@ officeIncomeMultiplier = 1.0 + Σ(level × incomeBoostPerLevel)
 
 ---
 
+## 画像生成フロー
+
+### 使用ツール
+
+| ツール | 役割 |
+|--------|------|
+| Leonardo.ai（Web画面） | 画像生成（無料150トークン/日） |
+| `import_images.py` | 背景除去 + xcassets 自動登録 |
+| `Leonardo.md` | 生成設定の詳細 |
+
+### Leonardo.ai 生成設定
+
+| 項目 | 設定値 |
+|------|--------|
+| Model | Leonardo Anime XL |
+| Style | anime illustration |
+| Contrast | Low（1） |
+| Image Dimensions | 2:3 |
+| Size | 784 × 1176 |
+
+**Negative Prompt:**
+```
+low quality, blurry, bad anatomy, extra fingers, deformed face, watermark, text,
+ugly face, asymmetrical face, crooked face, distorted face, disfigured,
+bad proportions, malformed, fused features, poorly drawn face, cloned face,
+double face, mutation, mutated, gross proportions, missing eyes, extra eyes,
+oversaturated, unnatural colors, color bleeding, neon colors, weird colors,
+rainbow hair, multicolored hair, color noise, chromatic aberration
+```
+
+### キャラクター別プロンプト方針
+
+| キャラ | 髪色 | 特徴 |
+|--------|------|------|
+| karen | ピンク（短め） | 明るい笑顔、営業部長 |
+| misaki | 黒（ロング）+ 眼鏡 | クールな表情、開発部長 |
+| yuki | シルバーホワイト | クールビューティ、管理部長 |
+| rio | ピンク（ショート） | 元気な笑顔、マーケティング部長 |
+| akari | 金髪（ロング） | 大人の色気、社長秘書 |
+
+**レアリティ別背景・衣装:**
+
+| レアリティ | 衣装 | 背景 |
+|-----------|------|------|
+| N | カジュアル | 屋外・公園・街中・自然光 |
+| R | ビジネス正装 | オフィス・窓からの陽光 |
+| SR | ラグジュアリーファッション | レストラン・ルーフトップ・黄金時間 |
+| SSR | 豪華なドレス・装飾品 | 夜景・ボケ照明・シネマティック |
+
+### 画像追加手順
+
+1. **Leonardo.ai Web画面**（[leonardo.ai](https://leonardo.ai)）で上記設定で生成
+2. 画像をダウンロードし、命名規則に従ってリネーム
+   - 例: `rio_3.jpg`, `akari_0.jpg`
+3. 以下のフォルダに配置:
+   ```
+   swiftgame/clickgirl/downloaded_images/
+   ```
+4. Claude Code に「インポートして」と依頼
+   → `import_images.py` が背景除去・xcassets登録を自動実行
+
+### 注意事項
+
+- Leonardo.ai の **APIは有料**（Web画面のみ無料）
+- APIキーは `.env` に記載、**GitHubにアップしない**（`.gitignore` 設定済み）
+- 1日150トークン、1枚あたり約10〜15トークン消費
+
+---
+
 ## 収益倍率の適用順序
 
 ```
