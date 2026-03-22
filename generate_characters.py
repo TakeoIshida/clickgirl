@@ -29,9 +29,8 @@ ASSETS_DIR = "/Users/ishidatakeo/Desktop/swiftgame/clickgirl/ClickGirl/ClickGirl
 OUTPUT_W = 784
 OUTPUT_H = 1176
 
-# Leonardo.ai アニメ特化モデル
-# "AlbedoBase XL" はアニメ＆リアル両対応で高品質
-MODEL_ID = "2067ae52-33fd-4a82-bb92-c2c55e7d2786"  # AlbedoBase XL
+# Leonardo Anime XL（アニメ特化モデル）
+MODEL_ID = "e71a1c2f-4f80-4800-934f-2c68979d8cc8"  # Leonardo Anime XL
 
 # =====================
 # レアリティ別スタイル
