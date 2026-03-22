@@ -43,9 +43,7 @@ RARITY_SUFFIX = {
 }
 
 NEGATIVE_PROMPT = (
-    "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, "
-    "fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, "
-    "signature, watermark, username, blurry, ugly, duplicate, nsfw, 3d, realistic"
+    "low quality, blurry, bad anatomy, extra fingers, deformed face, watermark, text"
 )
 
 # =====================
