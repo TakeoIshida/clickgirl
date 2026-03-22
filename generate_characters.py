@@ -17,7 +17,7 @@ from rembg import remove
 # =====================
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
 MODEL = "gsdf/Counterfeit-V2.5"
-API_URL = f"https://api-inference.huggingface.co/models/{MODEL}"
+API_URL = f"https://router.huggingface.co/hf-inference/models/{MODEL}"
 
 ASSETS_DIR = "/Users/ishidatakeo/Desktop/swiftgame/clickgirl/ClickGirl/ClickGirl/Assets.xcassets"
 OUTPUT_W = 784
