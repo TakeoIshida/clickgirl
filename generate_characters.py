@@ -137,8 +137,8 @@ def generate_image(prompt: str, negative_prompt: str, retries: int = 3) -> Image
             "negative_prompt": negative_prompt,
             "width": OUTPUT_W,
             "height": OUTPUT_H,
-            "num_inference_steps": 30,
-            "guidance_scale": 7.5,
+            "num_inference_steps": 35,
+            "guidance_scale": 9.0,
         }
     }
 
