@@ -115,6 +115,8 @@ def generate_image(prompt: str, negative_prompt: str, retries: int = 3) -> Image
         "num_images": 1,
         "guidance_scale": 7,
         "num_inference_steps": 30,
+        "presetStyle": "ILLUSTRATION",
+        "contrast": 3.0,
         "public": False,
     }
 
