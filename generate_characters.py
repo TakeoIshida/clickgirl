@@ -46,7 +46,9 @@ NEGATIVE_PROMPT = (
     "low quality, blurry, bad anatomy, extra fingers, deformed face, watermark, text, "
     "ugly face, asymmetrical face, crooked face, distorted face, disfigured, "
     "bad proportions, malformed, fused features, poorly drawn face, cloned face, "
-    "double face, mutation, mutated, gross proportions, missing eyes, extra eyes"
+    "double face, mutation, mutated, gross proportions, missing eyes, extra eyes, "
+    "oversaturated, unnatural colors, color bleeding, neon colors, weird colors, "
+    "rainbow hair, multicolored hair, color noise, chromatic aberration"
 )
 
 # =====================
