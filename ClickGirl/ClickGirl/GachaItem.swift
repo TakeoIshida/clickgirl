@@ -98,12 +98,6 @@ enum GachaCatalog {
         // りお (3枚: 0-2=N / 画像追加次第拡張予定)
         add(3, "りお", "rio", .n,   indices: 0...2)
 
-        // あかり
-        add(4, "あかり", "akari", .n,   indices: 0...2)
-        add(4, "あかり", "akari", .r,   indices: 3...5)
-        add(4, "あかり", "akari", .sr,  indices: 6...6)
-        add(4, "あかり", "akari", .ssr, indices: 7...7)
-
         return cards
     }()
 
