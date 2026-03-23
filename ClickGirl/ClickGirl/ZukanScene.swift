@@ -12,7 +12,6 @@ class ZukanScene: SKScene {
         CharInfo(id: 1, name: "みさき", prefix: "misaki", count: 8),
         CharInfo(id: 2, name: "ゆき",   prefix: "yuki",   count: 10),
         CharInfo(id: 3, name: "りお",   prefix: "rio",    count: 3),
-        CharInfo(id: 4, name: "あかり", prefix: "akari",  count: 8),
     ]
 
     private var currentCharIdx = 0
