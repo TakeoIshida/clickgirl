@@ -235,7 +235,6 @@ cardIncomeMultiplier = 1.0 + Σ(rarity.incomeBonus × 所持枚数)
 | みさき | 8枚 | N×3 / R×3 / SR×1 / SSR×1 |
 | ゆき | 10枚 | N×4 / R×3 / SR×2 / SSR×1 |
 | りお | 3枚（追加予定） | N×3 |
-| あかり | 8枚 | N×3 / R×3 / SR×1 / SSR×1 |
 
 ### 解放条件
 
