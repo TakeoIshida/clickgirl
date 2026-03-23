@@ -345,7 +345,6 @@ rainbow hair, multicolored hair, color noise, chromatic aberration
 | misaki | 黒（ロング）+ 眼鏡 | クールな表情、開発部長 |
 | yuki | シルバーホワイト | クールビューティ、管理部長 |
 | rio | ピンク（ショート） | 元気な笑顔、マーケティング部長 |
-| akari | 金髪（ロング） | 大人の色気、社長秘書 |
 
 **レアリティ別背景・衣装:**
 
