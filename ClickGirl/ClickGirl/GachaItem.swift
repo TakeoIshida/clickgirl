@@ -98,6 +98,13 @@ enum GachaCatalog {
         // りお (3枚: 0-2=N / 画像追加次第拡張予定)
         add(3, "りお", "rio", .n,   indices: 0...2)
 
+        // さき (8枚: 0-1=N, 2=R, 3=SR, 4-5=SR secret, 6-7=SSR secret)
+        add(4, "さき", "saki", .n,   indices: 0...1)
+        add(4, "さき", "saki", .r,   indices: 2...2)
+        add(4, "さき", "saki", .sr,  indices: 3...3)
+        add(4, "さき", "saki", .sr,  indices: 4...5)   // シークレットSR
+        add(4, "さき", "saki", .ssr, indices: 6...7)   // シークレットSSR
+
         return cards
     }()
 
