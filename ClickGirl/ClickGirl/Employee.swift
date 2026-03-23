@@ -59,5 +59,11 @@ struct Employee {
             description: "SNS戦略で会社を一躍有名に",
             baseCost: 300_000, baseIncomePerSec: 3_000.0
         ),
+        Employee(
+            id: 4, name: "さき", role: "広報部長",
+            charPrefix: "saki", imageCount: 8,
+            description: "鋭い眼差しで会社のブランドを牽引",
+            baseCost: 400_000, baseIncomePerSec: 4_000.0
+        ),
     ]
 }
