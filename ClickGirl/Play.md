@@ -305,6 +305,8 @@ officeIncomeMultiplier = 1.0 + Σ(level × incomeBoostPerLevel)
 | ガチャカード枚数 | cg_gachaCards |
 | 都市建物 | cg_city |
 
+> **Note**: あかり（id: 4）は削除済み。社員は4名（カレン・みさき・ゆき・りお）。
+
 ---
 
 ## 画像生成フロー
