@@ -1114,31 +1114,68 @@ class CityScene: SKScene {
     // MARK: - Effects
 
     private func showBuildEffect(name: String) {
+        // Gold burst particles
+        for _ in 0..<8 {
+            let particle = SKShapeNode(circleOfRadius: CGFloat.random(in: 2.5...5.0))
+            particle.fillColor = UIColor(red: 1.0, green: CGFloat.random(in: 0.7...0.95), blue: 0.1, alpha: 0.9)
+            particle.strokeColor = .clear
+            particle.position = CGPoint(x: frame.midX + CGFloat.random(in: -20...20),
+                                        y: frame.height - topBarH - cityViewH / 2)
+            particle.zPosition = 29
+            addChild(particle)
+            let angle = CGFloat.random(in: 0...(2 * .pi))
+            let dist  = CGFloat.random(in: 30...70)
+            particle.run(SKAction.sequence([
+                SKAction.group([
+                    SKAction.moveBy(x: cos(angle) * dist, y: sin(angle) * dist, duration: 0.55),
+                    SKAction.fadeOut(withDuration: 0.55),
+                    SKAction.scale(to: 0.1, duration: 0.55)
+                ]),
+                SKAction.removeFromParent()
+            ]))
+        }
+
+        // Banner
+        let banner = SKNode()
+        banner.zPosition = 30
+        banner.position = CGPoint(x: frame.midX, y: frame.height - topBarH - cityViewH / 2)
+        addChild(banner)
+
+        let bannerBg = SKShapeNode(rectOf: CGSize(width: 220, height: 38), cornerRadius: 12)
+        bannerBg.fillColor = UIColor(red: 0.10, green: 0.08, blue: 0.02, alpha: 0.95)
+        bannerBg.strokeColor = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.8)
+        bannerBg.lineWidth = 1.5
+        banner.addChild(bannerBg)
+
         let label = SKLabelNode(text: "🏗️ \(name) 完成！")
         label.fontName = "HiraginoSans-W7"
-        label.fontSize = 20
-        label.fontColor = UIColor(red: 1.0, green: 0.9, blue: 0.3, alpha: 1.0)
-        label.position = CGPoint(x: frame.midX, y: frame.height - topBarH - cityViewH / 2)
-        label.zPosition = 30
-        label.setScale(0.6)
-        addChild(label)
-        label.run(SKAction.sequence([
-            SKAction.group([SKAction.scale(to: 1.05, duration: 0.18), SKAction.fadeIn(withDuration: 0.18)]),
-            SKAction.scale(to: 1.0, duration: 0.08),
-            SKAction.wait(forDuration: 1.3),
-            SKAction.group([SKAction.fadeOut(withDuration: 0.4), SKAction.moveBy(x: 0, y: 30, duration: 0.4)]),
+        label.fontSize = 16
+        label.fontColor = UIColor(red: 1.0, green: 0.92, blue: 0.3, alpha: 1.0)
+        label.verticalAlignmentMode = .center
+        banner.addChild(label)
+
+        banner.setScale(0.55)
+        banner.alpha = 0
+        banner.run(SKAction.sequence([
+            SKAction.group([SKAction.scale(to: 1.05, duration: 0.2), SKAction.fadeIn(withDuration: 0.2)]),
+            SKAction.scale(to: 1.0, duration: 0.1),
+            SKAction.wait(forDuration: 1.4),
+            SKAction.group([SKAction.fadeOut(withDuration: 0.38), SKAction.moveBy(x: 0, y: 28, duration: 0.38)]),
             SKAction.removeFromParent()
         ]))
     }
 
     private func showToast(_ message: String) {
-        let bg = SKShapeNode(rectOf: CGSize(width: frame.width - 40, height: 40), cornerRadius: 10)
-        bg.fillColor = UIColor(red: 0.12, green: 0.05, blue: 0.22, alpha: 0.97)
-        bg.strokeColor = UIColor(red: 0.6, green: 0.3, blue: 0.9, alpha: 0.7)
-        bg.lineWidth = 1
-        bg.position = CGPoint(x: frame.midX, y: frame.midY)
+        let toastY: CGFloat = 72
+        let bg = SKShapeNode(rectOf: CGSize(width: frame.width - 36, height: 42), cornerRadius: 12)
+        bg.fillColor = UIColor(red: 0.10, green: 0.04, blue: 0.20, alpha: 0.97)
+        bg.strokeColor = UIColor(red: 0.62, green: 0.30, blue: 0.90, alpha: 0.68)
+        bg.lineWidth = 1.2
+        bg.position = CGPoint(x: frame.midX, y: toastY - 20)
         bg.zPosition = 60
+        bg.alpha = 0
         addChild(bg)
+
         let lbl = SKLabelNode(text: message)
         lbl.fontName = "HiraginoSans-W5"
         lbl.fontSize = 12
@@ -1146,9 +1183,20 @@ class CityScene: SKScene {
         lbl.verticalAlignmentMode = .center
         lbl.position = bg.position
         lbl.zPosition = 61
+        lbl.alpha = 0
         addChild(lbl)
-        let seq = SKAction.sequence([SKAction.wait(forDuration: 2.2), SKAction.fadeOut(withDuration: 0.4), SKAction.removeFromParent()])
-        bg.run(seq); lbl.run(seq)
+
+        let slideIn = SKAction.group([
+            SKAction.moveBy(x: 0, y: 20, duration: 0.22),
+            SKAction.fadeIn(withDuration: 0.22)
+        ])
+        let slideOut = SKAction.group([
+            SKAction.moveBy(x: 0, y: 10, duration: 0.32),
+            SKAction.fadeOut(withDuration: 0.32)
+        ])
+        let seq = SKAction.sequence([slideIn, SKAction.wait(forDuration: 2.0), slideOut, SKAction.removeFromParent()])
+        bg.run(seq)
+        lbl.run(seq)
     }
 
     // MARK: - Navigation
