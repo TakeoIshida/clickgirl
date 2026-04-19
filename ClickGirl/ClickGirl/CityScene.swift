@@ -837,42 +837,73 @@ class CityScene: SKScene {
 
         // Panel
         let panelW: CGFloat = frame.width - 30
-        let panelH: CGFloat = CGFloat(CityBuildingType.all.count) * 68 + 70
-        let panel = SKShapeNode(rectOf: CGSize(width: panelW, height: panelH), cornerRadius: 18)
-        panel.fillColor = UIColor(red: 0.06, green: 0.07, blue: 0.18, alpha: 0.98)
-        panel.strokeColor = UIColor(red: 0.4, green: 0.5, blue: 0.9, alpha: 0.7)
+        let panelH: CGFloat = CGFloat(CityBuildingType.all.count) * 68 + 80
+        let panel = SKShapeNode(rectOf: CGSize(width: panelW, height: panelH), cornerRadius: 20)
+        panel.fillColor = UIColor(red: 0.05, green: 0.06, blue: 0.16, alpha: 0.98)
+        panel.strokeColor = UIColor(red: 0.38, green: 0.5, blue: 0.92, alpha: 0.65)
         panel.lineWidth = 1.5
         panel.position = CGPoint(x: frame.midX, y: frame.midY)
         overlay.addChild(panel)
 
-        let titleLbl = SKLabelNode(text: "建物を選ぶ")
-        titleLbl.fontName = "HiraginoSans-W6"
+        // Panel header decoration — gold line
+        let headerLine = SKShapeNode(rectOf: CGSize(width: panelW - 30, height: 1.5))
+        headerLine.fillColor = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.5)
+        headerLine.strokeColor = .clear
+        headerLine.position = CGPoint(x: frame.midX, y: frame.midY + panelH/2 - 44)
+        overlay.addChild(headerLine)
+
+        // Corner decoration dots
+        for xSign: CGFloat in [-1, 1] {
+            let corner = SKShapeNode(circleOfRadius: 3.5)
+            corner.fillColor = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.7)
+            corner.strokeColor = .clear
+            corner.position = CGPoint(x: frame.midX + xSign * (panelW/2 - 14), y: frame.midY + panelH/2 - 22)
+            overlay.addChild(corner)
+        }
+
+        let titleLbl = SKLabelNode(text: "🏗️ 建物を選ぶ")
+        titleLbl.fontName = "HiraginoSans-W7"
         titleLbl.fontSize = 16
         titleLbl.fontColor = .white
         titleLbl.verticalAlignmentMode = .center
-        titleLbl.position = CGPoint(x: frame.midX, y: frame.midY + panelH/2 - 26)
+        titleLbl.position = CGPoint(x: frame.midX, y: frame.midY + panelH/2 - 25)
         overlay.addChild(titleLbl)
 
         for (i, t) in CityBuildingType.all.enumerated() {
-            let rowY = frame.midY + panelH/2 - 60 - CGFloat(i) * 68
+            let rowY = frame.midY + panelH/2 - 66 - CGFloat(i) * 68
             let canAfford = gm.money >= t.placeCost
 
-            let rowBg = SKShapeNode(rectOf: CGSize(width: panelW - 20, height: 58), cornerRadius: 10)
+            let rowBg = SKShapeNode(rectOf: CGSize(width: panelW - 20, height: 58), cornerRadius: 12)
             rowBg.fillColor = canAfford
-                ? UIColor(red: t.cr * 0.2 + 0.05, green: t.cg * 0.2 + 0.05, blue: t.cb * 0.2 + 0.1, alpha: 0.9)
-                : UIColor(white: 0.06, alpha: 0.8)
+                ? UIColor(red: t.cr * 0.22 + 0.04, green: t.cg * 0.22 + 0.04, blue: t.cb * 0.22 + 0.1, alpha: 0.92)
+                : UIColor(white: 0.055, alpha: 0.85)
             rowBg.strokeColor = canAfford
-                ? UIColor(red: t.cr * 0.5 + 0.2, green: t.cg * 0.5 + 0.2, blue: t.cb * 0.5 + 0.2, alpha: 0.6)
-                : UIColor(white: 0.2, alpha: 0.3)
-            rowBg.lineWidth = 1
+                ? UIColor(red: t.cr * 0.55 + 0.18, green: t.cg * 0.55 + 0.18, blue: t.cb * 0.55 + 0.22, alpha: 0.65)
+                : UIColor(white: 0.18, alpha: 0.3)
+            rowBg.lineWidth = 1.2
             rowBg.position = CGPoint(x: frame.midX, y: rowY)
             rowBg.name = "selectBuilding_\(plot)_\(t.id)"
+            // Slide-in entrance animation
+            rowBg.alpha = 0
+            rowBg.position.x += 24
+            rowBg.run(SKAction.sequence([
+                SKAction.wait(forDuration: Double(i) * 0.06),
+                SKAction.group([
+                    SKAction.fadeIn(withDuration: 0.16),
+                    SKAction.moveBy(x: -24, y: 0, duration: 0.16)
+                ])
+            ]))
             overlay.addChild(rowBg)
 
             let iconLbl = SKLabelNode(text: t.icon)
             iconLbl.fontSize = 26
             iconLbl.verticalAlignmentMode = .center
-            iconLbl.position = CGPoint(x: frame.midX - panelW/2 + 30, y: rowY)
+            iconLbl.position = CGPoint(x: frame.midX - panelW/2 + 32, y: rowY)
+            iconLbl.alpha = 0
+            iconLbl.run(SKAction.sequence([
+                SKAction.wait(forDuration: Double(i) * 0.06 + 0.1),
+                SKAction.fadeIn(withDuration: 0.14)
+            ]))
             overlay.addChild(iconLbl)
 
             let nameLbl = SKLabelNode(text: t.name)
@@ -881,10 +912,15 @@ class CityScene: SKScene {
             nameLbl.fontColor = canAfford ? .white : UIColor(white: 0.35, alpha: 1.0)
             nameLbl.horizontalAlignmentMode = .left
             nameLbl.verticalAlignmentMode   = .center
-            nameLbl.position = CGPoint(x: frame.midX - panelW/2 + 56, y: rowY + 9)
+            nameLbl.position = CGPoint(x: frame.midX - panelW/2 + 58, y: rowY + 9)
+            nameLbl.alpha = 0
+            nameLbl.run(SKAction.sequence([
+                SKAction.wait(forDuration: Double(i) * 0.06 + 0.1),
+                SKAction.fadeIn(withDuration: 0.14)
+            ]))
             overlay.addChild(nameLbl)
 
-            let costLbl = SKLabelNode(text: "¥\(formatMoney(t.placeCost)) / +¥\(formatMoney(t.baseIncome))/s")
+            let costLbl = SKLabelNode(text: "¥\(formatMoney(t.placeCost))  /  +¥\(formatMoney(t.baseIncome))/s")
             costLbl.fontName = "HiraginoSans-W4"
             costLbl.fontSize = 11
             costLbl.fontColor = canAfford
@@ -892,23 +928,44 @@ class CityScene: SKScene {
                 : UIColor(white: 0.28, alpha: 1.0)
             costLbl.horizontalAlignmentMode = .left
             costLbl.verticalAlignmentMode   = .center
-            costLbl.position = CGPoint(x: frame.midX - panelW/2 + 56, y: rowY - 10)
+            costLbl.position = CGPoint(x: frame.midX - panelW/2 + 58, y: rowY - 11)
+            costLbl.alpha = 0
+            costLbl.run(SKAction.sequence([
+                SKAction.wait(forDuration: Double(i) * 0.06 + 0.1),
+                SKAction.fadeIn(withDuration: 0.14)
+            ]))
             overlay.addChild(costLbl)
+
+            // Max level badge on right
+            let maxLvlTxt = "MAX Lv.\(t.maxLevel)"
+            let maxBadge = SKLabelNode(text: maxLvlTxt)
+            maxBadge.fontName = "HiraginoSans-W4"
+            maxBadge.fontSize = 10
+            maxBadge.fontColor = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: canAfford ? 0.75 : 0.3)
+            maxBadge.horizontalAlignmentMode = .right
+            maxBadge.verticalAlignmentMode   = .center
+            maxBadge.position = CGPoint(x: frame.midX + panelW/2 - 16, y: rowY)
+            maxBadge.alpha = 0
+            maxBadge.run(SKAction.sequence([
+                SKAction.wait(forDuration: Double(i) * 0.06 + 0.12),
+                SKAction.fadeIn(withDuration: 0.14)
+            ]))
+            overlay.addChild(maxBadge)
         }
 
         // Cancel button
-        let cancelBtn = SKShapeNode(rectOf: CGSize(width: panelW - 20, height: 36), cornerRadius: 10)
-        cancelBtn.fillColor = UIColor(red: 0.2, green: 0.1, blue: 0.1, alpha: 0.8)
-        cancelBtn.strokeColor = UIColor(red: 0.5, green: 0.2, blue: 0.2, alpha: 0.6)
-        cancelBtn.lineWidth = 1
-        cancelBtn.position = CGPoint(x: frame.midX, y: frame.midY - panelH/2 + 26)
+        let cancelBtn = SKShapeNode(rectOf: CGSize(width: panelW - 20, height: 38), cornerRadius: 12)
+        cancelBtn.fillColor = UIColor(red: 0.18, green: 0.08, blue: 0.1, alpha: 0.85)
+        cancelBtn.strokeColor = UIColor(red: 0.55, green: 0.22, blue: 0.22, alpha: 0.55)
+        cancelBtn.lineWidth = 1.2
+        cancelBtn.position = CGPoint(x: frame.midX, y: frame.midY - panelH/2 + 28)
         cancelBtn.name = "cancelOverlay"
         overlay.addChild(cancelBtn)
 
         let cancelLbl = SKLabelNode(text: "キャンセル")
         cancelLbl.fontName = "HiraginoSans-W5"
         cancelLbl.fontSize = 14
-        cancelLbl.fontColor = UIColor(red: 0.9, green: 0.5, blue: 0.5, alpha: 1.0)
+        cancelLbl.fontColor = UIColor(red: 0.9, green: 0.48, blue: 0.48, alpha: 1.0)
         cancelLbl.verticalAlignmentMode = .center
         cancelLbl.position = cancelBtn.position
         cancelLbl.name = "cancelOverlay"
