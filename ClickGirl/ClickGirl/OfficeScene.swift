@@ -597,16 +597,31 @@ class OfficeScene: SKScene {
         container.name = "cityNavBtn"
         let w = frame.width - sideMargin * 2
         let h: CGFloat = 44
+
+        // パルスグロー外枠
+        let glow = SKShapeNode(rectOf: CGSize(width: w + 6, height: h + 6), cornerRadius: 15)
+        glow.fillColor   = .clear
+        glow.strokeColor = UIColor(red: 0.45, green: 0.68, blue: 1.0, alpha: 0.65)
+        glow.lineWidth   = 2
+        glow.name        = "cityNavBtn"
+        let glowPulse = SKAction.sequence([
+            SKAction.fadeAlpha(to: 0.12, duration: 1.0),
+            SKAction.fadeAlpha(to: 1.0,  duration: 1.0)
+        ])
+        glow.run(SKAction.repeatForever(glowPulse))
+        container.addChild(glow)
+
         let bg = SKShapeNode(rectOf: CGSize(width: w, height: h), cornerRadius: 12)
-        bg.fillColor = UIColor(red: 0.1, green: 0.18, blue: 0.38, alpha: 0.95)
-        bg.strokeColor = UIColor(red: 0.4, green: 0.6, blue: 1.0, alpha: 0.7)
-        bg.lineWidth = 1.5
-        bg.name = "cityNavBtn"
+        bg.fillColor   = UIColor(red: 0.1, green: 0.18, blue: 0.38, alpha: 0.95)
+        bg.strokeColor = UIColor(red: 0.42, green: 0.62, blue: 1.0, alpha: 0.72)
+        bg.lineWidth   = 1.5
+        bg.name        = "cityNavBtn"
         container.addChild(bg)
-        let lbl = SKLabelNode(text: "🌆 都市開発へ  ▶")
+
+        let lbl = SKLabelNode(text: "🌆  都市開発へ  ▶")
         lbl.fontName = "HiraginoSans-W6"
         lbl.fontSize = 15
-        lbl.fontColor = UIColor(red: 0.6, green: 0.85, blue: 1.0, alpha: 1.0)
+        lbl.fontColor = UIColor(red: 0.62, green: 0.86, blue: 1.0, alpha: 1.0)
         lbl.verticalAlignmentMode = .center
         lbl.name = "cityNavBtn"
         container.addChild(lbl)
