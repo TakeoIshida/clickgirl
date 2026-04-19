@@ -182,13 +182,16 @@ class EmployeeCardNode: SKNode {
 
         } else {
             // 採用ボタン
-            let hireBtn = SKShapeNode(rectOf: CGSize(width: 120, height: 30), cornerRadius: 10)
+            let hireBtnSize = CGSize(width: 120, height: 30)
+            let hireBtn = SKShapeNode(rectOf: hireBtnSize, cornerRadius: 10)
             hireBtn.fillColor = UIColor(red: 0.7, green: 0.2, blue: 0.6, alpha: 0.9)
             hireBtn.strokeColor = UIColor(red: 1.0, green: 0.5, blue: 0.9, alpha: 0.8)
             hireBtn.lineWidth = 1.5
             hireBtn.position = CGPoint(x: 0, y: -68)
             hireBtn.name = "empCard_\(employee.id)"
             addChild(hireBtn)
+            actionBtnPos  = hireBtn.position
+            actionBtnSize = hireBtnSize
 
             let hireLabel = SKLabelNode(text: "採用 ¥\(formatMoney(employee.hireCost))")
             hireLabel.fontName = "HiraginoSans-W6"
