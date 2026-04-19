@@ -601,7 +601,6 @@ class CityScene: SKScene {
 
     // placeholders so legacy call-sites compile (no longer called)
     private func addTree(at pos: CGPoint) {}
-    }
 
     // MARK: - Scroll List (plot cards)
 
