@@ -155,20 +155,31 @@ class GameScene: SKScene {
         bobDown.timingMode = .easeInEaseOut
         mainCharNode.run(SKAction.repeatForever(SKAction.sequence([bobUp, bobDown])))
 
-        // タップヒント
+        // タップヒント（ピル背景付き）
+        let hintY = centerY - charH / 2 - 18
+        let hintPill = SKShapeNode(rectOf: CGSize(width: 210, height: 26), cornerRadius: 13)
+        hintPill.fillColor   = UIColor(red: 0.06, green: 0.06, blue: 0.2, alpha: 0.72)
+        hintPill.strokeColor = UIColor(red: 0.6, green: 0.7, blue: 1.0, alpha: 0.35)
+        hintPill.lineWidth   = 1
+        hintPill.position    = CGPoint(x: frame.midX, y: hintY)
+        hintPill.zPosition   = 2
+        addChild(hintPill)
+
         tapHintLabel = SKLabelNode(text: "👆 タップして売上を稼ごう！")
         tapHintLabel.fontName = "HiraginoSans-W5"
-        tapHintLabel.fontSize = 15
-        tapHintLabel.fontColor = UIColor(white: 0.9, alpha: 0.85)
-        tapHintLabel.position = CGPoint(x: frame.midX, y: centerY - charH / 2 - 14)
+        tapHintLabel.fontSize = 13
+        tapHintLabel.fontColor = UIColor(white: 0.92, alpha: 0.9)
+        tapHintLabel.verticalAlignmentMode = .center
+        tapHintLabel.position = CGPoint(x: frame.midX, y: hintY)
         tapHintLabel.zPosition = 3
         addChild(tapHintLabel)
 
         let fadeSeq = SKAction.sequence([
-            SKAction.fadeAlpha(to: 0.25, duration: 1.2),
-            SKAction.fadeAlpha(to: 0.85, duration: 1.2)
+            SKAction.fadeAlpha(to: 0.2, duration: 1.2),
+            SKAction.fadeAlpha(to: 0.9, duration: 1.2)
         ])
         tapHintLabel.run(SKAction.repeatForever(fadeSeq))
+        hintPill.run(SKAction.repeatForever(fadeSeq.copy() as! SKAction))
 
         // グロウリング
         let glow = SKShapeNode(circleOfRadius: charW * 0.36)
