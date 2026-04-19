@@ -330,6 +330,21 @@ class CityScene: SKScene {
         let rTop   = center.y + bldH / 2
         let rBot   = center.y - bldH / 2
 
+        // ---- 環境光グロー（建物カラーの柔らかい光） ----
+        let glowSize = CGSize(width: plotSz.width + 6, height: plotSz.height + 6)
+        let glow = SKShapeNode(rectOf: glowSize, cornerRadius: 5)
+        glow.fillColor = UIColor(red: t.cr * 0.35, green: t.cg * 0.35, blue: t.cb * 0.35, alpha: 0.18)
+        glow.strokeColor = UIColor(red: t.cr * 0.5, green: t.cg * 0.5, blue: t.cb * 0.5, alpha: 0.28)
+        glow.lineWidth = 2
+        glow.position = center
+        glow.zPosition = -1
+        cityNode.addChild(glow)
+        let glowPulse = SKAction.sequence([
+            SKAction.fadeAlpha(to: 0.06, duration: Double.random(in: 1.8...3.2)),
+            SKAction.fadeAlpha(to: 0.18, duration: Double.random(in: 1.8...3.2))
+        ])
+        glow.run(SKAction.repeatForever(glowPulse))
+
         // ---- 地盤・歩道 ----
         let ground = SKShapeNode(rectOf: plotSz, cornerRadius: 3)
         ground.fillColor = UIColor(red: 0.14, green: 0.15, blue: 0.24, alpha: 1.0)
