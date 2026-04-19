@@ -400,6 +400,29 @@ class OfficeScene: SKScene {
         shine.strokeColor = .clear
         shine.position = CGPoint(x: pos.x + sz.width * 0.32, y: pos.y)
         roomNode.addChild(shine)
+
+        // 窓Lv2以上: 床への光ビーム
+        if level >= 2 {
+            let beamPath = CGMutablePath()
+            let beamTopW: CGFloat = sz.width * 0.55
+            let beamBotW: CGFloat = sz.width * 1.1
+            let beamH:    CGFloat = 55
+            beamPath.move(to: CGPoint(x: pos.x - beamTopW/2, y: pos.y - sz.height/2))
+            beamPath.addLine(to: CGPoint(x: pos.x + beamTopW/2, y: pos.y - sz.height/2))
+            beamPath.addLine(to: CGPoint(x: pos.x + beamBotW/2, y: pos.y - sz.height/2 - beamH))
+            beamPath.addLine(to: CGPoint(x: pos.x - beamBotW/2, y: pos.y - sz.height/2 - beamH))
+            beamPath.closeSubpath()
+            let beam = SKShapeNode(path: beamPath)
+            beam.fillColor   = UIColor(red: 0.85, green: 0.92, blue: 1.0, alpha: 0.06)
+            beam.strokeColor = .clear
+            beam.zPosition   = 1
+            roomNode.addChild(beam)
+            let beamPulse = SKAction.sequence([
+                SKAction.fadeAlpha(to: 0.02, duration: 2.5),
+                SKAction.fadeAlpha(to: 0.09, duration: 2.5)
+            ])
+            beam.run(SKAction.repeatForever(beamPulse))
+        }
     }
 
     private func drawDesk(at pos: CGPoint, level: Int) {
