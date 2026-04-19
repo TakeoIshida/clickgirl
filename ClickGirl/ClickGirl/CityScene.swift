@@ -223,70 +223,140 @@ class CityScene: SKScene {
         let vw = frame.width - 16
         let vh = cityViewH
 
-        // --- グリッドレイアウト計算 ---
-        let cols = 3, rows = 2
-        let roadW:   CGFloat = 15
-        let margin:  CGFloat = 8
-        let labelH:  CGFloat = 20
-        let gridW = vw - 2 * margin
-        let gridH = vh - 2 * margin - labelH
-        let plotW = (gridW - CGFloat(cols - 1) * roadW) / CGFloat(cols)
-        let plotH = (gridH - CGFloat(rows - 1) * roadW) / CGFloat(rows)
+        // ===== Layer 1: Sky background =====
+        let skyBase = SKShapeNode(rectOf: CGSize(width: vw, height: vh), cornerRadius: 12)
+        skyBase.fillColor   = UIColor(red: 0.50, green: 0.76, blue: 0.93, alpha: 1.0)
+        skyBase.strokeColor = UIColor(red: 0.30, green: 0.50, blue: 0.82, alpha: 0.55)
+        skyBase.lineWidth   = 1.5
+        skyBase.zPosition   = 1
+        cityNode.addChild(skyBase)
 
-        // グリッド左上 (cityNode ローカル座標)
-        let gLeft = -gridW / 2
-        let gTop  =  gridH / 2 - labelH / 2 + 2
+        // Lighter top sky
+        let skyTop = SKShapeNode(rectOf: CGSize(width: vw - 4, height: vh * 0.45))
+        skyTop.fillColor   = UIColor(red: 0.65, green: 0.88, blue: 0.98, alpha: 1.0)
+        skyTop.strokeColor = .clear
+        skyTop.position    = CGPoint(x: 0, y: vh * 0.275)
+        skyTop.zPosition   = 2
+        cityNode.addChild(skyTop)
 
-        // --- 道路面 (全体を舗装色で塗る) ---
-        let asphalt = SKShapeNode(rectOf: CGSize(width: gridW, height: gridH), cornerRadius: 4)
-        asphalt.fillColor = UIColor(red: 0.11, green: 0.12, blue: 0.21, alpha: 1.0)
-        asphalt.strokeColor = .clear
-        asphalt.position = CGPoint(x: 0, y: gTop - gridH / 2)
-        cityNode.addChild(asphalt)
-
-        // --- 縦道路センターライン ---
-        for c in 0..<(cols - 1) {
-            let rx = gLeft + CGFloat(c + 1) * (plotW + roadW) - roadW / 2
-            addDashedLine(x: rx, y0: gTop, y1: gTop - gridH, vertical: true)
-        }
-        // --- 横道路センターライン ---
-        for r in 0..<(rows - 1) {
-            let ry = gTop - CGFloat(r + 1) * (plotH + roadW) + roadW / 2
-            addDashedLine(x: gLeft, y0: ry, y1: gLeft + gridW, vertical: false)
-        }
-
-        // --- 交差点の街灯 ---
-        let ix = gLeft + (plotW + roadW)
-        let iy = gTop  - (plotH + roadW)
-        addStreetLight(at: CGPoint(x: ix,        y: iy))
-        addStreetLight(at: CGPoint(x: ix + plotW + roadW, y: iy))
-
-        // --- 縁石（各プロット外周） ---
-        for i in 0..<plotCount {
-            let c = i % cols, r = i / cols
-            let px = gLeft + CGFloat(c) * (plotW + roadW)
-            let py = gTop  - CGFloat(r) * (plotH + roadW)
-            let center = CGPoint(x: px + plotW / 2, y: py - plotH / 2)
-            let pSize  = CGSize(width: plotW, height: plotH)
-
-            if let bld = gm.cityBuildings[i],
-               let t = CityBuildingType.all.first(where: { $0.id == bld.typeId }) {
-                drawTopDownBuilding(type: t, level: bld.level, center: center, size: pSize)
-            } else {
-                drawEmptyPlot(center: center, size: pSize)
+        // ===== Layer 2: Distant city silhouette =====
+        let horizonY: CGFloat = vh * 0.18
+        let bgBldgs: [(x: CGFloat, w: CGFloat, h: CGFloat)] = [
+            (-vw*0.40, 20, 50), (-vw*0.24, 16, 66), (-vw*0.10, 26, 40),
+            ( vw*0.04, 22, 58), ( vw*0.18, 30, 72), ( vw*0.33, 22, 48),
+            (-vw*0.44, 14, 32), ( vw*0.42, 16, 36)
+        ]
+        for b in bgBldgs {
+            let s = SKShapeNode(rectOf: CGSize(width: b.w, height: b.h))
+            s.fillColor   = UIColor(red: 0.20, green: 0.30, blue: 0.55, alpha: 0.60)
+            s.strokeColor = .clear
+            s.position    = CGPoint(x: b.x, y: horizonY + b.h/2)
+            s.zPosition   = 3
+            cityNode.addChild(s)
+            // Window lights
+            for wr in 0..<Int(b.h / 16) {
+                guard Bool.random() else { continue }
+                let win = SKShapeNode(rectOf: CGSize(width: 3, height: 2))
+                win.fillColor   = UIColor(red: 1.0, green: 0.95, blue: 0.55, alpha: CGFloat.random(in: 0.4...0.8))
+                win.strokeColor = .clear
+                win.position    = CGPoint(x: b.x + CGFloat.random(in: -b.w*0.3...b.w*0.3),
+                                          y: horizonY + CGFloat(wr+1) * b.h / (CGFloat(Int(b.h/16))+1))
+                win.zPosition   = 4
+                cityNode.addChild(win)
             }
         }
 
-        // --- 街路樹 (空きスペースに点在) ---
-        let treeSpots: [CGPoint] = [
-            CGPoint(x: gLeft + gridW - 10, y: gTop  - 10),
-            CGPoint(x: gLeft + 10,         y: gTop  - 10),
-            CGPoint(x: gLeft + gridW - 10, y: gTop  - gridH + 10),
-            CGPoint(x: gLeft + 10,         y: gTop  - gridH + 10),
-        ]
-        for sp in treeSpots { addTree(at: sp) }
+        // ===== Layer 3: Water strip =====
+        let waterMidY: CGFloat = vh * 0.11
+        let waterH:    CGFloat = 28
+        let waterPath = CGMutablePath()
+        waterPath.move(to:    CGPoint(x: -vw/2, y: waterMidY + waterH * 0.58))
+        waterPath.addLine(to: CGPoint(x:  vw/2, y: waterMidY + waterH * 0.42))
+        waterPath.addLine(to: CGPoint(x:  vw/2, y: waterMidY - waterH * 0.42))
+        waterPath.addLine(to: CGPoint(x: -vw/2, y: waterMidY - waterH * 0.58))
+        waterPath.closeSubpath()
+        let water = SKShapeNode(path: waterPath)
+        water.fillColor   = UIColor(red: 0.16, green: 0.52, blue: 0.88, alpha: 1.0)
+        water.strokeColor = .clear
+        water.zPosition   = 5
+        cityNode.addChild(water)
+        // Shimmer
+        for i in 0..<5 {
+            let sw = CGFloat.random(in: 30...75)
+            let sh = SKShapeNode(rectOf: CGSize(width: sw, height: 1.5), cornerRadius: 0.5)
+            sh.fillColor   = UIColor(white: 1.0, alpha: 0.28)
+            sh.strokeColor = .clear
+            sh.position    = CGPoint(x: -vw/2 + CGFloat(i) * vw/4 + CGFloat.random(in: -8...8),
+                                     y: waterMidY + CGFloat(i % 3 - 1) * 5)
+            sh.zPosition   = 6
+            cityNode.addChild(sh)
+            sh.run(SKAction.repeatForever(SKAction.sequence([
+                SKAction.fadeAlpha(to: 0.05, duration: Double.random(in: 1.1...2.6)),
+                SKAction.fadeAlpha(to: 0.35, duration: Double.random(in: 1.1...2.6))
+            ])))
+        }
 
-        // --- 都市収益ラベル ---
+        // ===== Layer 4: Ground base =====
+        let groundTopY: CGFloat = waterMidY - waterH * 0.5
+        let groundH = groundTopY + vh/2
+        let groundNode = SKShapeNode(rectOf: CGSize(width: vw - 4, height: groundH))
+        groundNode.fillColor   = UIColor(red: 0.24, green: 0.40, blue: 0.18, alpha: 1.0)
+        groundNode.strokeColor = .clear
+        groundNode.position    = CGPoint(x: 0, y: groundTopY - groundH/2)
+        groundNode.zPosition   = 6
+        cityNode.addChild(groundNode)
+
+        // Road base
+        let roadBase = SKShapeNode(rectOf: CGSize(width: vw - 4, height: groundH * 0.68))
+        roadBase.fillColor   = UIColor(red: 0.27, green: 0.27, blue: 0.29, alpha: 0.72)
+        roadBase.strokeColor = .clear
+        roadBase.position    = CGPoint(x: 0, y: groundTopY - groundH * 0.34 - 6)
+        roadBase.zPosition   = 7
+        cityNode.addChild(roadBase)
+
+        // ===== Layer 5: Isometric plots (depth-sorted) =====
+        let plotOrder: [(col: Int, row: Int, plot: Int)] = [
+            (0,0,0),(1,0,1),(2,0,2),(0,1,3),(1,1,4),(2,1,5)
+        ].sorted { ($0.col + $0.row) < ($1.col + $1.row) }
+
+        for p in plotOrder {
+            let center = isoCenter(col: p.col, row: p.row)
+            let baseZ  = CGFloat(p.col + p.row) * 14 + 20
+
+            // Road diamond
+            drawIsoTile(center: center, w: tW + 10, h: tH + 5,
+                        fill: UIColor(red: 0.30, green: 0.30, blue: 0.32, alpha: 1.0), z: baseZ)
+            // Sidewalk diamond
+            drawIsoTile(center: center, w: tW - 2, h: tH - 1,
+                        fill: UIColor(red: 0.58, green: 0.56, blue: 0.52, alpha: 1.0), z: baseZ + 1)
+
+            if let bld = gm.cityBuildings[p.plot],
+               let t = CityBuildingType.all.first(where: { $0.id == bld.typeId }) {
+                drawIsoBuilding(center: center, type: t, level: bld.level, baseZ: baseZ + 2)
+            } else {
+                drawIsoEmptyPlot(center: center, baseZ: baseZ + 2)
+            }
+        }
+
+        // ===== Layer 6: Trees =====
+        let treeSpots: [CGPoint] = [
+            CGPoint(x: gox - tW - 8,         y: goy + 10),
+            CGPoint(x: gox + tW * 1.5 + 14,  y: goy - tH + 6),
+            CGPoint(x: gox - tW * 0.5 - 18,  y: goy - tH * 1.5 - 4),
+            CGPoint(x: gox + tW + 10,         y: goy + tH * 0.5 + 6),
+            CGPoint(x: -vw/2 + 18,            y: goy + 12),
+            CGPoint(x:  vw/2 - 18,            y: goy - 16),
+        ]
+        for sp in treeSpots { addIsoTree(at: sp) }
+
+        // Street lights at road intersections
+        let lightPositions: [CGPoint] = [
+            CGPoint(x: isoCenter(col:1,row:0).x + tW/2, y: isoCenter(col:1,row:0).y),
+            CGPoint(x: isoCenter(col:1,row:1).x - tW/2, y: isoCenter(col:1,row:1).y),
+        ]
+        for lp in lightPositions { addIsoStreetLight(at: lp) }
+
+        // ===== Income label =====
         let cityInc = gm.cityIncomePerSec
         let incLbl = SKLabelNode(
             text: cityInc > 0 ? "都市収益  +¥\(formatMoney(cityInc))/s" : "建物を建てて都市を発展させよう"
@@ -294,340 +364,243 @@ class CityScene: SKScene {
         incLbl.fontName = "HiraginoSans-W4"
         incLbl.fontSize = 11
         incLbl.fontColor = UIColor(red: 0.42, green: 1.0, blue: 0.58, alpha: 0.88)
-        incLbl.position = CGPoint(x: 0, y: -vh / 2 + 8)
+        incLbl.position  = CGPoint(x: 0, y: -vh / 2 + 8)
+        incLbl.zPosition = 90
         cityNode.addChild(incLbl)
     }
 
-    // MARK: - Top-Down Building
+    // MARK: - Iso Helpers
 
-    private func drawTopDownBuilding(type t: CityBuildingType, level: Int,
-                                      center: CGPoint, size plotSz: CGSize) {
-        // 建物フットプリントサイズ
-        let pad: CGFloat
-        switch t.id {
-        case "tower": pad = 16
-        case "hotel": pad = 10
-        case "mall":  pad = 7
-        default:      pad = 12
-        }
-        let bldW = plotSz.width  - pad * 2
-        let bldH = plotSz.height - pad * 2
+    private func drawIsoTile(center: CGPoint, w: CGFloat, h: CGFloat, fill: UIColor, z: CGFloat) {
+        let p = CGMutablePath()
+        p.move(to:    CGPoint(x: center.x,     y: center.y + h/2))
+        p.addLine(to: CGPoint(x: center.x+w/2, y: center.y))
+        p.addLine(to: CGPoint(x: center.x,     y: center.y - h/2))
+        p.addLine(to: CGPoint(x: center.x-w/2, y: center.y))
+        p.closeSubpath()
+        let tile = SKShapeNode(path: p)
+        tile.fillColor   = fill
+        tile.strokeColor = UIColor(white: 0, alpha: 0.12)
+        tile.lineWidth   = 0.5
+        tile.zPosition   = z
+        cityNode.addChild(tile)
+    }
 
-        // 壁の高さ（レベルで増加）
-        let wallH: CGFloat
-        switch t.id {
-        case "tower":      wallH = 10 + CGFloat(level) * 13
-        case "hotel":      wallH = 7  + CGFloat(level) * 9
-        case "mall":       wallH = 6  + CGFloat(level) * 7
-        case "restaurant": wallH = 5  + CGFloat(level) * 5
-        default:           wallH = 4  + CGFloat(level) * 4  // cafe
-        }
-        let wallSide = wallH * 0.38  // 東面の幅
+    private func drawIsoBuilding(center: CGPoint, type t: CityBuildingType, level: Int, baseZ: CGFloat) {
+        let bh = t.buildingHeight(level: level) * 0.48
+        let fw = tW * 0.70
+        let fd = tH * 0.70
 
-        // 屋上の色
-        let br: CGFloat = min(0.65 + CGFloat(level - 1) * 0.06, 1.0)
-        let roofR = min(t.cr * br + 0.04, 1.0)
-        let roofG = min(t.cg * br + 0.04, 1.0)
-        let roofB = min(t.cb * br + 0.08, 1.0)
+        let br = min(0.55 + CGFloat(level-1) * 0.09, 1.0)
+        let rr = min(t.cr * br + 0.12, 1.0)
+        let rg = min(t.cg * br + 0.12, 1.0)
+        let rb = min(t.cb * br + 0.14, 1.0)
 
-        let rLeft  = center.x - bldW / 2
-        let rRight = center.x + bldW / 2
-        let rTop   = center.y + bldH / 2
-        let rBot   = center.y - bldH / 2
+        // Front-left face
+        let fl = CGMutablePath()
+        fl.move(to:    CGPoint(x: center.x,      y: center.y - fd/2))
+        fl.addLine(to: CGPoint(x: center.x-fw/2, y: center.y))
+        fl.addLine(to: CGPoint(x: center.x-fw/2, y: center.y + bh))
+        fl.addLine(to: CGPoint(x: center.x,      y: center.y - fd/2 + bh))
+        fl.closeSubpath()
+        let leftFace = SKShapeNode(path: fl)
+        leftFace.fillColor   = UIColor(red: rr*0.62, green: rg*0.62, blue: rb*0.65, alpha: 1.0)
+        leftFace.strokeColor = UIColor(white: 0, alpha: 0.14)
+        leftFace.lineWidth   = 0.5
+        leftFace.zPosition   = baseZ
+        cityNode.addChild(leftFace)
 
-        // ---- 環境光グロー（建物カラーの柔らかい光） ----
-        let glowSize = CGSize(width: plotSz.width + 6, height: plotSz.height + 6)
-        let glow = SKShapeNode(rectOf: glowSize, cornerRadius: 5)
-        glow.fillColor = UIColor(red: t.cr * 0.35, green: t.cg * 0.35, blue: t.cb * 0.35, alpha: 0.18)
-        glow.strokeColor = UIColor(red: t.cr * 0.5, green: t.cg * 0.5, blue: t.cb * 0.5, alpha: 0.28)
-        glow.lineWidth = 2
-        glow.position = center
-        glow.zPosition = -1
-        cityNode.addChild(glow)
-        let glowPulse = SKAction.sequence([
-            SKAction.fadeAlpha(to: 0.06, duration: Double.random(in: 1.8...3.2)),
-            SKAction.fadeAlpha(to: 0.18, duration: Double.random(in: 1.8...3.2))
-        ])
-        glow.run(SKAction.repeatForever(glowPulse))
+        // Front-right face
+        let fr = CGMutablePath()
+        fr.move(to:    CGPoint(x: center.x,      y: center.y - fd/2))
+        fr.addLine(to: CGPoint(x: center.x+fw/2, y: center.y))
+        fr.addLine(to: CGPoint(x: center.x+fw/2, y: center.y + bh))
+        fr.addLine(to: CGPoint(x: center.x,      y: center.y - fd/2 + bh))
+        fr.closeSubpath()
+        let rightFace = SKShapeNode(path: fr)
+        rightFace.fillColor   = UIColor(red: rr*0.44, green: rg*0.44, blue: rb*0.47, alpha: 1.0)
+        rightFace.strokeColor = UIColor(white: 0, alpha: 0.14)
+        rightFace.lineWidth   = 0.5
+        rightFace.zPosition   = baseZ
+        cityNode.addChild(rightFace)
 
-        // ---- 地盤・歩道 ----
-        let ground = SKShapeNode(rectOf: plotSz, cornerRadius: 3)
-        ground.fillColor = UIColor(red: 0.14, green: 0.15, blue: 0.24, alpha: 1.0)
-        ground.strokeColor = UIColor(white: 0.3, alpha: 0.2)
-        ground.lineWidth = 0.5
-        ground.position = center
-        ground.zPosition = 0
-        cityNode.addChild(ground)
+        // Roof face
+        let rf = CGMutablePath()
+        rf.move(to:    CGPoint(x: center.x,      y: center.y + fd/2 + bh))
+        rf.addLine(to: CGPoint(x: center.x+fw/2, y: center.y + bh))
+        rf.addLine(to: CGPoint(x: center.x,      y: center.y - fd/2 + bh))
+        rf.addLine(to: CGPoint(x: center.x-fw/2, y: center.y + bh))
+        rf.closeSubpath()
+        let roofFace = SKShapeNode(path: rf)
+        roofFace.fillColor   = UIColor(red: rr, green: rg, blue: rb, alpha: 1.0)
+        roofFace.strokeColor = UIColor(white: 1.0, alpha: 0.10)
+        roofFace.lineWidth   = 0.5
+        roofFace.zPosition   = baseZ + 1
+        cityNode.addChild(roofFace)
 
-        let sidewalk = SKShapeNode(rectOf: CGSize(width: plotSz.width - 6, height: plotSz.height - 6), cornerRadius: 2)
-        sidewalk.fillColor = UIColor(red: 0.19, green: 0.20, blue: 0.32, alpha: 1.0)
-        sidewalk.strokeColor = .clear
-        sidewalk.zPosition = 1
-        sidewalk.position = center
-        cityNode.addChild(sidewalk)
-
-        // ---- 南面（下側の壁）— オブリーク投影 ----
-        let southPath = CGMutablePath()
-        southPath.move(to: CGPoint(x: rLeft,          y: rBot))
-        southPath.addLine(to: CGPoint(x: rRight,         y: rBot))
-        southPath.addLine(to: CGPoint(x: rRight + wallSide, y: rBot - wallH))
-        southPath.addLine(to: CGPoint(x: rLeft  + wallSide, y: rBot - wallH))
-        southPath.closeSubpath()
-        let southFace = SKShapeNode(path: southPath)
-        southFace.fillColor = UIColor(red: roofR * 0.58, green: roofG * 0.58, blue: roofB * 0.62, alpha: 1.0)
-        southFace.strokeColor = UIColor(white: 0.0, alpha: 0.25)
-        southFace.lineWidth = 0.5
-        southFace.zPosition = 2
-        cityNode.addChild(southFace)
-
-        // ---- 東面（右側の壁）----
-        let eastPath = CGMutablePath()
-        eastPath.move(to: CGPoint(x: rRight,          y: rTop))
-        eastPath.addLine(to: CGPoint(x: rRight,          y: rBot))
-        eastPath.addLine(to: CGPoint(x: rRight + wallSide, y: rBot - wallH))
-        eastPath.addLine(to: CGPoint(x: rRight + wallSide, y: rTop - wallH))
-        eastPath.closeSubpath()
-        let eastFace = SKShapeNode(path: eastPath)
-        eastFace.fillColor = UIColor(red: roofR * 0.38, green: roofG * 0.38, blue: roofB * 0.44, alpha: 1.0)
-        eastFace.strokeColor = UIColor(white: 0.0, alpha: 0.25)
-        eastFace.lineWidth = 0.5
-        eastFace.zPosition = 2
-        cityNode.addChild(eastFace)
-
-        // 南面の窓
-        if wallH > 12 {
-            let wCols = max(2, Int(bldW / 16))
-            let wRows = max(1, Int(wallH / 14))
+        // Windows on front-left face (parallelogram interpolation)
+        if bh > 20 {
+            let wRows = max(1, Int(bh / 15))
+            let wCols = 3
             for wr in 0..<wRows {
-                let tp = CGFloat(wr + 1) / CGFloat(wRows + 1)
-                let baseY = rBot - wallH * tp
-                let lx = rLeft + wallSide * tp
-                let rx = rRight + wallSide * tp
-                let step = (rx - lx) / CGFloat(wCols + 1)
                 for wc in 0..<wCols {
                     guard Bool.random() || Bool.random() else { continue }
-                    let win = SKShapeNode(rectOf: CGSize(width: 3.5, height: 3.0), cornerRadius: 0.3)
-                    win.fillColor = UIColor(red: 1.0,
-                                            green: CGFloat.random(in: 0.85...0.98),
-                                            blue: CGFloat.random(in: 0.4...0.65),
-                                            alpha: CGFloat.random(in: 0.6...0.95))
+                    let u = CGFloat(wc+1) / CGFloat(wCols+1)
+                    let v = CGFloat(wr+1) / CGFloat(wRows+1)
+                    let wx = center.x - u * fw/2
+                    let wy = center.y - fd/2 + u * fd/2 + v * bh
+                    let win = SKShapeNode(rectOf: CGSize(width: 3.0, height: 2.5), cornerRadius: 0.3)
+                    win.fillColor   = UIColor(red: 1.0, green: CGFloat.random(in: 0.85...0.98),
+                                              blue: CGFloat.random(in: 0.4...0.65),
+                                              alpha: CGFloat.random(in: 0.5...0.92))
                     win.strokeColor = .clear
-                    win.position = CGPoint(x: lx + step * CGFloat(wc + 1), y: baseY)
-                    win.zPosition = 3
+                    win.position    = CGPoint(x: wx, y: wy)
+                    win.zPosition   = baseZ + 2
                     cityNode.addChild(win)
                 }
             }
         }
 
-        // ---- 屋上（ルーフ面）----
-        let roof = SKShapeNode(rectOf: CGSize(width: bldW, height: bldH), cornerRadius: 3)
-        roof.fillColor = UIColor(red: roofR, green: roofG, blue: roofB, alpha: 1.0)
-        roof.strokeColor = UIColor(red: min(t.cr + 0.3, 1), green: min(t.cg + 0.3, 1), blue: min(t.cb + 0.3, 1), alpha: 0.55)
-        roof.lineWidth = 1.0
-        roof.position = center
-        roof.zPosition = 4
-        cityNode.addChild(roof)
+        // Roof details per type
+        let roofCenter = CGPoint(x: center.x, y: center.y + bh)
+        switch t.id {
+        case "tower":
+            let ant = SKShapeNode(rectOf: CGSize(width: 2.5, height: bh * 0.32), cornerRadius: 1)
+            ant.fillColor   = UIColor(white: 0.78, alpha: 0.92)
+            ant.strokeColor = .clear
+            ant.position    = CGPoint(x: center.x, y: center.y + bh + bh * 0.16)
+            ant.zPosition   = baseZ + 5
+            cityNode.addChild(ant)
+            let lamp = SKShapeNode(circleOfRadius: 2.5)
+            lamp.fillColor   = UIColor(red: 1.0, green: 0.2, blue: 0.2, alpha: 1.0)
+            lamp.strokeColor = .clear
+            lamp.position    = CGPoint(x: center.x, y: center.y + bh + bh * 0.32)
+            lamp.zPosition   = baseZ + 6
+            cityNode.addChild(lamp)
+            lamp.run(SKAction.repeatForever(SKAction.sequence([
+                SKAction.fadeAlpha(to: 0.2, duration: 0.7),
+                SKAction.fadeAlpha(to: 1.0, duration: 0.7)
+            ])))
+        case "hotel":
+            let pool = SKShapeNode(ellipseOf: CGSize(width: fw * 0.30, height: fd * 0.25))
+            pool.fillColor   = UIColor(red: 0.2, green: 0.62, blue: 0.92, alpha: 0.85)
+            pool.strokeColor = UIColor(red: 0.4, green: 0.8, blue: 1.0, alpha: 0.5)
+            pool.lineWidth   = 1
+            pool.position    = CGPoint(x: roofCenter.x + fw * 0.10, y: roofCenter.y + fd * 0.05)
+            pool.zPosition   = baseZ + 3
+            cityNode.addChild(pool)
+        case "mall":
+            for i in 0..<3 {
+                let stripe = SKShapeNode(rectOf: CGSize(width: fw * 0.48, height: 2.5), cornerRadius: 1)
+                stripe.fillColor   = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.20)
+                stripe.strokeColor = .clear
+                stripe.position    = CGPoint(x: roofCenter.x, y: roofCenter.y + CGFloat(i-1) * 6)
+                stripe.zPosition   = baseZ + 3
+                cityNode.addChild(stripe)
+            }
+        default: break
+        }
 
-        // 屋上テクスチャ
-        drawRooftopDetails(type: t, level: level, center: center, bldSize: CGSize(width: bldW, height: bldH))
+        // Icon on roof
+        let icon = SKLabelNode(text: t.icon)
+        icon.fontSize  = min(fw, fd) * 0.46
+        icon.alpha     = 0.62
+        icon.verticalAlignmentMode = .center
+        icon.position  = CGPoint(x: center.x, y: center.y + bh + 2)
+        icon.zPosition = baseZ + 3
+        cityNode.addChild(icon)
 
-        // アイコン
-        let iconLbl = SKLabelNode(text: t.icon)
-        iconLbl.fontSize = min(bldW, bldH) * 0.44
-        iconLbl.alpha = 0.58
-        iconLbl.verticalAlignmentMode = .center
-        iconLbl.position = center
-        iconLbl.zPosition = 5
-        cityNode.addChild(iconLbl)
+        // Ambient glow
+        let glowPath = CGMutablePath()
+        glowPath.move(to:    CGPoint(x: center.x,         y: center.y + (fd/2 + 4) + bh))
+        glowPath.addLine(to: CGPoint(x: center.x+(fw/2+4), y: center.y + bh))
+        glowPath.addLine(to: CGPoint(x: center.x,         y: center.y - (fd/2 + 4) + bh))
+        glowPath.addLine(to: CGPoint(x: center.x-(fw/2+4), y: center.y + bh))
+        glowPath.closeSubpath()
+        let glowNode = SKShapeNode(path: glowPath)
+        glowNode.fillColor   = UIColor(red: t.cr*0.4, green: t.cg*0.4, blue: t.cb*0.4, alpha: 0.0)
+        glowNode.strokeColor = UIColor(red: t.cr*0.6+0.1, green: t.cg*0.6+0.1, blue: t.cb*0.6+0.1, alpha: 0.32)
+        glowNode.lineWidth   = 2
+        glowNode.zPosition   = baseZ - 1
+        cityNode.addChild(glowNode)
+        glowNode.run(SKAction.repeatForever(SKAction.sequence([
+            SKAction.fadeAlpha(to: 0.05, duration: Double.random(in: 1.6...3.0)),
+            SKAction.fadeAlpha(to: 0.32, duration: Double.random(in: 1.6...3.0))
+        ])))
 
-        // レベルバッジ（左上）
+        // Level badge
         if level > 1 {
-            let badge = SKShapeNode(rectOf: CGSize(width: 22, height: 13), cornerRadius: 4)
-            badge.fillColor = UIColor(red: 1.0, green: 0.85, blue: 0.1, alpha: 0.92)
+            let badge = SKShapeNode(rectOf: CGSize(width: 20, height: 12), cornerRadius: 3)
+            badge.fillColor   = UIColor(red: 1.0, green: 0.85, blue: 0.1, alpha: 0.92)
             badge.strokeColor = .clear
-            badge.position = CGPoint(x: center.x - bldW / 2 + 11, y: center.y + bldH / 2 - 7)
-            badge.zPosition = 6
+            badge.position    = CGPoint(x: center.x + fw/2 - 8, y: center.y + bh + fd/2 - 4)
+            badge.zPosition   = baseZ + 7
             cityNode.addChild(badge)
             let lvLbl = SKLabelNode(text: "L\(level)")
             lvLbl.fontName = "HiraginoSans-W8"
-            lvLbl.fontSize = 9
-            lvLbl.fontColor = UIColor(red: 0.12, green: 0.08, blue: 0.0, alpha: 1.0)
+            lvLbl.fontSize = 8
+            lvLbl.fontColor = UIColor(red: 0.08, green: 0.05, blue: 0.0, alpha: 1.0)
             lvLbl.verticalAlignmentMode = .center
-            lvLbl.position = badge.position
-            lvLbl.zPosition = 7
+            lvLbl.position  = badge.position
+            lvLbl.zPosition = baseZ + 8
             cityNode.addChild(lvLbl)
         }
     }
 
-    private func drawRooftopDetails(type t: CityBuildingType, level: Int,
-                                     center: CGPoint, bldSize sz: CGSize) {
-        switch t.id {
-        case "tower":
-            // アンテナ塔
-            let antenna = SKShapeNode(rectOf: CGSize(width: 3, height: sz.height * 0.35), cornerRadius: 1)
-            antenna.fillColor = UIColor(white: 0.7, alpha: 0.9)
-            antenna.strokeColor = .clear
-            antenna.position = CGPoint(x: center.x, y: center.y + sz.height * 0.5 - sz.height * 0.175 - 2)
-            cityNode.addChild(antenna)
-            // 頂点の赤ランプ
-            let lamp = SKShapeNode(circleOfRadius: 3)
-            lamp.fillColor = UIColor(red: 1.0, green: 0.2, blue: 0.2, alpha: 1.0)
-            lamp.strokeColor = .clear
-            lamp.position = CGPoint(x: center.x, y: center.y + sz.height * 0.5 + sz.height * 0.35 / 2 - 2)
-            cityNode.addChild(lamp)
-            let blink = SKAction.sequence([
-                SKAction.fadeAlpha(to: 0.2, duration: 0.8),
-                SKAction.fadeAlpha(to: 1.0, duration: 0.8)
-            ])
-            lamp.run(SKAction.repeatForever(blink))
-
-        case "hotel":
-            // プール（水色の四角）
-            let pool = SKShapeNode(rectOf: CGSize(width: sz.width * 0.35, height: sz.height * 0.28), cornerRadius: 3)
-            pool.fillColor = UIColor(red: 0.2, green: 0.6, blue: 0.9, alpha: 0.85)
-            pool.strokeColor = UIColor(red: 0.4, green: 0.8, blue: 1.0, alpha: 0.5)
-            pool.lineWidth = 1
-            pool.position = CGPoint(x: center.x + sz.width * 0.18, y: center.y - sz.height * 0.1)
-            cityNode.addChild(pool)
-
-        case "mall":
-            // ガラス天窓（ストライプ）
-            for i in 0..<3 {
-                let stripe = SKShapeNode(rectOf: CGSize(width: sz.width * 0.55, height: 4), cornerRadius: 1)
-                stripe.fillColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.25)
-                stripe.strokeColor = .clear
-                stripe.position = CGPoint(x: center.x, y: center.y - sz.height * 0.15 + CGFloat(i) * 8)
-                cityNode.addChild(stripe)
-            }
-
-        case "restaurant":
-            // テラス席（小さな四角が並ぶ）
-            for i in 0..<(level >= 3 ? 4 : 2) {
-                let table = SKShapeNode(circleOfRadius: 3)
-                table.fillColor = UIColor(red: 0.9, green: 0.6, blue: 0.3, alpha: 0.8)
-                table.strokeColor = .clear
-                table.position = CGPoint(x: center.x - sz.width * 0.2 + CGFloat(i) * 12,
-                                          y: center.y + sz.height * 0.22)
-                cityNode.addChild(table)
-            }
-
-        default: // cafe
-            // 看板（色帯）
-            let sign = SKShapeNode(rectOf: CGSize(width: sz.width * 0.6, height: 5), cornerRadius: 2)
-            sign.fillColor = UIColor(red: min(t.cr + 0.3, 1),
-                                      green: min(t.cg + 0.3, 1),
-                                      blue:  min(t.cb + 0.3, 1), alpha: 0.9)
-            sign.strokeColor = .clear
-            sign.position = CGPoint(x: center.x, y: center.y - sz.height * 0.3)
-            cityNode.addChild(sign)
-        }
-    }
-
-    // MARK: - Empty Plot
-
-    private func drawEmptyPlot(center: CGPoint, size: CGSize) {
-        // 地盤
-        let ground = SKShapeNode(rectOf: size, cornerRadius: 3)
-        ground.fillColor = UIColor(red: 0.11, green: 0.12, blue: 0.2, alpha: 1.0)
-        ground.strokeColor = UIColor(white: 0.28, alpha: 0.3)
-        ground.lineWidth = 0.5
-        ground.position = center
-        cityNode.addChild(ground)
-
-        // 点線の区画枠（手動でダッシュ描画）
-        let bw = size.width - 8, bh = size.height - 8
-        let dashLen: CGFloat = 6, gapLen: CGFloat = 5
-        let dashColor = UIColor(white: 0.32, alpha: 0.45)
-        // 上辺
-        var x = center.x - bw/2; let topY = center.y + bh/2
-        while x < center.x + bw/2 {
-            let w = min(dashLen, center.x + bw/2 - x)
-            let d = SKShapeNode(rectOf: CGSize(width: w, height: 1)); d.fillColor = dashColor; d.strokeColor = .clear
-            d.position = CGPoint(x: x + w/2, y: topY); cityNode.addChild(d); x += dashLen + gapLen
-        }
-        // 下辺
-        x = center.x - bw/2; let botY = center.y - bh/2
-        while x < center.x + bw/2 {
-            let w = min(dashLen, center.x + bw/2 - x)
-            let d = SKShapeNode(rectOf: CGSize(width: w, height: 1)); d.fillColor = dashColor; d.strokeColor = .clear
-            d.position = CGPoint(x: x + w/2, y: botY); cityNode.addChild(d); x += dashLen + gapLen
-        }
-        // 左辺
-        var y = center.y - bh/2; let leftX = center.x - bw/2
-        while y < center.y + bh/2 {
-            let h = min(dashLen, center.y + bh/2 - y)
-            let d = SKShapeNode(rectOf: CGSize(width: 1, height: h)); d.fillColor = dashColor; d.strokeColor = .clear
-            d.position = CGPoint(x: leftX, y: y + h/2); cityNode.addChild(d); y += dashLen + gapLen
-        }
-        // 右辺
-        y = center.y - bh/2; let rightX = center.x + bw/2
-        while y < center.y + bh/2 {
-            let h = min(dashLen, center.y + bh/2 - y)
-            let d = SKShapeNode(rectOf: CGSize(width: 1, height: h)); d.fillColor = dashColor; d.strokeColor = .clear
-            d.position = CGPoint(x: rightX, y: y + h/2); cityNode.addChild(d); y += dashLen + gapLen
-        }
-
-        // 十字マーク
-        for (w, h): (CGFloat, CGFloat) in [(20, 2), (2, 20)] {
-            let arm = SKShapeNode(rectOf: CGSize(width: w, height: h), cornerRadius: 1)
-            arm.fillColor = UIColor(white: 0.35, alpha: 0.5)
+    private func drawIsoEmptyPlot(center: CGPoint, baseZ: CGFloat) {
+        drawIsoTile(center: center, w: tW - 4, h: tH - 2,
+                    fill: UIColor(red: 0.18, green: 0.34, blue: 0.14, alpha: 1.0), z: baseZ)
+        for (w, h): (CGFloat, CGFloat) in [(12, 1.5), (1.5, 12)] {
+            let arm = SKShapeNode(rectOf: CGSize(width: w, height: h), cornerRadius: 0.5)
+            arm.fillColor   = UIColor(white: 0.40, alpha: 0.48)
             arm.strokeColor = .clear
-            arm.position = center
+            arm.position    = center
+            arm.zPosition   = baseZ + 1
             cityNode.addChild(arm)
         }
     }
 
-    // MARK: - Road Helpers
-
-    private func addDashedLine(x xOrY: CGFloat, y0: CGFloat, y1: CGFloat, vertical: Bool) {
-        let dashLen: CGFloat = 8, gapLen: CGFloat = 7
-        let total = abs(y1 - y0)
-        let count = Int(total / (dashLen + gapLen))
-        for i in 0..<count {
-            let offset = CGFloat(i) * (dashLen + gapLen) + dashLen / 2
-            let pos: CGPoint = vertical
-                ? CGPoint(x: xOrY, y: y0 - offset)
-                : CGPoint(x: y0 + offset, y: xOrY)
-            let dash = SKShapeNode(rectOf: vertical
-                ? CGSize(width: 1.5, height: dashLen)
-                : CGSize(width: dashLen, height: 1.5), cornerRadius: 0.5)
-            dash.fillColor = UIColor(white: 0.42, alpha: 0.55)
-            dash.strokeColor = .clear
-            dash.position = pos
-            cityNode.addChild(dash)
+    private func addIsoTree(at pos: CGPoint) {
+        let trunk = SKShapeNode(rectOf: CGSize(width: 3.5, height: 7), cornerRadius: 1)
+        trunk.fillColor   = UIColor(red: 0.40, green: 0.26, blue: 0.10, alpha: 1.0)
+        trunk.strokeColor = .clear
+        trunk.position    = pos
+        trunk.zPosition   = 70
+        cityNode.addChild(trunk)
+        let sizes: [(CGFloat, CGFloat)] = [(9, 9), (7, 17), (5, 23)]
+        for (r, yo) in sizes {
+            let leaf = SKShapeNode(circleOfRadius: r)
+            leaf.fillColor   = UIColor(red: CGFloat.random(in: 0.12...0.20),
+                                        green: CGFloat.random(in: 0.52...0.68),
+                                        blue: CGFloat.random(in: 0.10...0.20), alpha: 0.95)
+            leaf.strokeColor = .clear
+            leaf.position    = CGPoint(x: pos.x + CGFloat.random(in: -1.5...1.5), y: pos.y + yo)
+            leaf.zPosition   = 71
+            cityNode.addChild(leaf)
         }
     }
 
-    private func addStreetLight(at pos: CGPoint) {
-        let glow = SKShapeNode(circleOfRadius: 10)
-        glow.fillColor = UIColor(red: 1.0, green: 0.94, blue: 0.5, alpha: 0.1)
-        glow.strokeColor = .clear
-        glow.position = pos
-        cityNode.addChild(glow)
+    private func addIsoStreetLight(at pos: CGPoint) {
         let dot = SKShapeNode(circleOfRadius: 2.5)
-        dot.fillColor = UIColor(red: 1.0, green: 0.94, blue: 0.6, alpha: 0.92)
+        dot.fillColor   = UIColor(red: 1.0, green: 0.94, blue: 0.6, alpha: 0.88)
         dot.strokeColor = .clear
-        dot.position = pos
+        dot.position    = pos
+        dot.zPosition   = 72
         cityNode.addChild(dot)
-        let pulse = SKAction.sequence([
-            SKAction.fadeAlpha(to: 0.5, duration: 1.8),
-            SKAction.fadeAlpha(to: 0.92, duration: 1.8)
-        ])
-        dot.run(SKAction.repeatForever(pulse))
+        let halo = SKShapeNode(circleOfRadius: 8)
+        halo.fillColor   = UIColor(red: 1.0, green: 0.92, blue: 0.5, alpha: 0.08)
+        halo.strokeColor = .clear
+        halo.position    = pos
+        halo.zPosition   = 71
+        cityNode.addChild(halo)
+        dot.run(SKAction.repeatForever(SKAction.sequence([
+            SKAction.fadeAlpha(to: 0.45, duration: 2.0),
+            SKAction.fadeAlpha(to: 0.92, duration: 2.0)
+        ])))
     }
 
-    private func addTree(at pos: CGPoint) {
-        let shadow = SKShapeNode(ellipseOf: CGSize(width: 11, height: 6))
-        shadow.fillColor = UIColor(white: 0, alpha: 0.25)
-        shadow.strokeColor = .clear
-        shadow.position = CGPoint(x: pos.x + 3, y: pos.y - 3)
-        cityNode.addChild(shadow)
-        let tree = SKShapeNode(circleOfRadius: 6)
-        tree.fillColor = UIColor(red: 0.14, green: 0.55, blue: 0.2, alpha: 0.92)
-        tree.strokeColor = UIColor(red: 0.08, green: 0.32, blue: 0.1, alpha: 0.5)
-        tree.lineWidth = 1
-        tree.position = pos
-        cityNode.addChild(tree)
+    // placeholders so legacy call-sites compile (no longer called)
+    private func addTree(at pos: CGPoint) {}
     }
 
     // MARK: - Scroll List (plot cards)
