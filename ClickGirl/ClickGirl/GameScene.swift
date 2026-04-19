@@ -373,29 +373,45 @@ class GameScene: SKScene {
         }
 
         let multiplier = 1.0 + min(Double(comboCount - 1) * 0.1, 1.0)
+        let fontSize: CGFloat = comboCount >= 10 ? 22 : 17
+        let textColor: UIColor = comboCount >= 10
+            ? UIColor(red: 1.0, green: 0.32, blue: 0.32, alpha: 1.0)
+            : comboCount >= 5
+            ? UIColor(red: 1.0, green: 0.62, blue: 0.1, alpha: 1.0)
+            : UIColor(red: 1.0, green: 0.92, blue: 0.2, alpha: 1.0)
+
+        let banner = SKNode()
+        banner.position = CGPoint(x: frame.midX, y: frame.height * 0.705)
+        banner.zPosition = 22
+
+        // バナー背景
+        let bannerW: CGFloat = comboCount >= 10 ? 230 : 200
+        let bannerBg = SKShapeNode(rectOf: CGSize(width: bannerW, height: 32), cornerRadius: 10)
+        bannerBg.fillColor   = UIColor(red: 0.04, green: 0.04, blue: 0.15, alpha: 0.82)
+        bannerBg.strokeColor = textColor.withAlphaComponent(0.55)
+        bannerBg.lineWidth   = 1.5
+        banner.addChild(bannerBg)
+
         let label = SKLabelNode(text: "COMBO ×\(comboCount)  ×\(String(format: "%.1f", multiplier))")
         label.fontName = "HiraginoSans-W8"
-        label.fontSize = comboCount >= 10 ? 24 : 18
-        label.fontColor = comboCount >= 10
-            ? UIColor(red: 1.0, green: 0.3, blue: 0.3, alpha: 1.0)
-            : comboCount >= 5
-            ? UIColor(red: 1.0, green: 0.6, blue: 0.1, alpha: 1.0)
-            : UIColor(red: 1.0, green: 0.92, blue: 0.2, alpha: 1.0)
-        label.position = CGPoint(x: frame.midX, y: frame.height * 0.705)
-        label.zPosition = 22
+        label.fontSize = fontSize
+        label.fontColor = textColor
+        label.verticalAlignmentMode = .center
 
         // 影
         let shadow = SKLabelNode(text: label.text!)
-        shadow.fontName = label.fontName
-        shadow.fontSize = label.fontSize
-        shadow.fontColor = UIColor(red: 0.3, green: 0.2, blue: 0.0, alpha: 0.5)
-        shadow.position = CGPoint(x: 2, y: -2)
+        shadow.fontName  = label.fontName
+        shadow.fontSize  = label.fontSize
+        shadow.fontColor = UIColor(red: 0.25, green: 0.15, blue: 0.0, alpha: 0.5)
+        shadow.verticalAlignmentMode = .center
+        shadow.position  = CGPoint(x: 2, y: -2)
         label.addChild(shadow)
+        banner.addChild(label)
 
-        label.setScale(1.35)
-        label.run(SKAction.scale(to: 1.0, duration: 0.1))
-        addChild(label)
-        comboLabelNode = label
+        banner.setScale(1.35)
+        banner.run(SKAction.scale(to: 1.0, duration: 0.1))
+        addChild(banner)
+        comboLabelNode = banner
     }
 
     private func animateMainCharTap() {
