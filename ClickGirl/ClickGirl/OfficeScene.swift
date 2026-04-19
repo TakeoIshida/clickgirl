@@ -488,20 +488,29 @@ class OfficeScene: SKScene {
     private func setupBoostBar() {
         let boostY = frame.height - topBarH - roomAreaH - boostBarH / 2 - 12
 
-        let barBg = SKShapeNode(rectOf: CGSize(width: frame.width - 20, height: boostBarH), cornerRadius: 8)
-        barBg.fillColor = UIColor(red: 0.05, green: 0.1, blue: 0.2, alpha: 0.95)
-        barBg.strokeColor = UIColor(red: 0.25, green: 0.48, blue: 0.8, alpha: 0.5)
-        barBg.lineWidth = 1
-        barBg.position = CGPoint(x: frame.midX, y: boostY)
-        barBg.zPosition = 5
+        let barBg = SKShapeNode(rectOf: CGSize(width: frame.width - 20, height: boostBarH), cornerRadius: 10)
+        barBg.fillColor   = UIColor(red: 0.04, green: 0.09, blue: 0.18, alpha: 0.97)
+        barBg.strokeColor = UIColor(red: 0.22, green: 0.45, blue: 0.78, alpha: 0.5)
+        barBg.lineWidth   = 1.2
+        barBg.position    = CGPoint(x: frame.midX, y: boostY)
+        barBg.zPosition   = 5
         addChild(barBg)
 
+        // 左: オフィスアイコン + ラベル
+        let iconLbl = SKLabelNode(text: "🏢")
+        iconLbl.fontSize = 16
+        iconLbl.verticalAlignmentMode = .center
+        iconLbl.position  = CGPoint(x: 20, y: boostY)
+        iconLbl.zPosition = 6
+        addChild(iconLbl)
+
         boostLabel = SKLabelNode()
-        boostLabel.fontName = "HiraginoSans-W5"
-        boostLabel.fontSize = 13
-        boostLabel.fontColor = UIColor(red: 0.4, green: 1.0, blue: 0.55, alpha: 0.95)
-        boostLabel.verticalAlignmentMode = .center
-        boostLabel.position = CGPoint(x: frame.midX, y: boostY)
+        boostLabel.fontName  = "HiraginoSans-W5"
+        boostLabel.fontSize  = 12
+        boostLabel.fontColor = UIColor(white: 0.85, alpha: 0.9)
+        boostLabel.horizontalAlignmentMode = .left
+        boostLabel.verticalAlignmentMode   = .center
+        boostLabel.position  = CGPoint(x: 42, y: boostY)
         boostLabel.zPosition = 6
         updateBoostLabel()
         addChild(boostLabel)
@@ -510,8 +519,8 @@ class OfficeScene: SKScene {
         let boostCover = SKSpriteNode(color: UIColor(red: 0.04, green: 0.04, blue: 0.12, alpha: 1.0),
                                        size: CGSize(width: frame.width, height: boostBarH + 24))
         boostCover.anchorPoint = CGPoint(x: 0, y: 0)
-        boostCover.position = CGPoint(x: 0, y: boostY - (boostBarH + 24) / 2)
-        boostCover.zPosition = 4
+        boostCover.position    = CGPoint(x: 0, y: boostY - (boostBarH + 24) / 2)
+        boostCover.zPosition   = 4
         addChild(boostCover)
     }
 
@@ -519,7 +528,7 @@ class OfficeScene: SKScene {
         let officePct = Int((gm.officeIncomeMultiplier - 1.0) * 100)
         let floorPct  = Int((gm.floorIncomeMultiplier  - 1.0) * 100)
         let total = officePct + floorPct
-        boostLabel.text = "🏢 オフィスボーナス: +\(total)%  (\(gm.officeFloors)F)"
+        boostLabel.text = "オフィスボーナス  +\(total)%  (\(gm.officeFloors)F)"
     }
 
     // MARK: - Scroll List
