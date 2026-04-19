@@ -34,7 +34,7 @@ class GameScene: SKScene {
     private var comboCount: Int = 0
     private var comboAccum: TimeInterval = 0
     private let comboResetTime: TimeInterval = 0.85
-    private var comboLabelNode: SKLabelNode?
+    private var comboLabelNode: SKNode?
 
     // MARK: - Setup
 
