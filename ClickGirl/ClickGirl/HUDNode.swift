@@ -51,27 +51,27 @@ class HUDNode: SKNode {
         incomeLabel.position  = CGPoint(x: 16, y: 38)
         addChild(incomeLabel)
 
-        // ボタン4つを2行2列で並べる
-        let btnW: CGFloat = 62
-        let btnH: CGFloat = 22
-        let col1X = width - 108
-        let col2X = width - 44
+        // ナビボタン 4つ（2列×2行）
+        let btnW: CGFloat = 72
+        let btnH: CGFloat = 26
+        let col1X = width - 114
+        let col2X = width - 40
         let btns: [(name: String, label: String, fill: UIColor, stroke: UIColor, x: CGFloat, y: CGFloat)] = [
             ("zukanBtn",  "📖 図鑑",
-             UIColor(red: 0.30, green: 0.15, blue: 0.50, alpha: 0.9),
-             UIColor(red: 0.70, green: 0.40, blue: 1.00, alpha: 0.7), col1X, 96),
+             UIColor(red: 0.28, green: 0.12, blue: 0.48, alpha: 0.92),
+             UIColor(red: 0.68, green: 0.38, blue: 1.00, alpha: 0.72), col1X, 97),
             ("gachaBtn",  "🎰 ガチャ",
-             UIColor(red: 0.35, green: 0.08, blue: 0.55, alpha: 0.9),
-             UIColor(red: 0.85, green: 0.50, blue: 1.00, alpha: 0.7), col2X, 96),
+             UIColor(red: 0.34, green: 0.06, blue: 0.52, alpha: 0.92),
+             UIColor(red: 0.88, green: 0.52, blue: 1.00, alpha: 0.75), col2X, 97),
             ("shopBtn",   "🛒 Shop",
-             UIColor(red: 0.15, green: 0.35, blue: 0.20, alpha: 0.9),
-             UIColor(red: 0.30, green: 0.90, blue: 0.40, alpha: 0.7), col1X, 68),
+             UIColor(red: 0.12, green: 0.32, blue: 0.18, alpha: 0.92),
+             UIColor(red: 0.28, green: 0.88, blue: 0.40, alpha: 0.72), col1X, 66),
             ("officeBtn", "🏢 Office",
-             UIColor(red: 0.20, green: 0.25, blue: 0.50, alpha: 0.9),
-             UIColor(red: 0.40, green: 0.60, blue: 1.00, alpha: 0.7), col2X, 68),
+             UIColor(red: 0.18, green: 0.22, blue: 0.48, alpha: 0.92),
+             UIColor(red: 0.38, green: 0.58, blue: 1.00, alpha: 0.72), col2X, 66),
         ]
         for btn in btns {
-            let bg = SKShapeNode(rectOf: CGSize(width: btnW, height: btnH), cornerRadius: 7)
+            let bg = SKShapeNode(rectOf: CGSize(width: btnW, height: btnH), cornerRadius: 9)
             bg.fillColor   = btn.fill
             bg.strokeColor = btn.stroke
             bg.lineWidth   = 1.5
@@ -81,7 +81,7 @@ class HUDNode: SKNode {
 
             let lbl = SKLabelNode(text: btn.label)
             lbl.fontName  = "HiraginoSans-W6"
-            lbl.fontSize  = 10
+            lbl.fontSize  = 11
             lbl.fontColor = .white
             lbl.verticalAlignmentMode = .center
             lbl.position  = bg.position
@@ -89,19 +89,48 @@ class HUDNode: SKNode {
             addChild(lbl)
         }
 
+        // ガチャボタンにパルスグロー（注目を引く）
+        let gachaGlow = SKShapeNode(rectOf: CGSize(width: btnW + 6, height: btnH + 6), cornerRadius: 12)
+        gachaGlow.fillColor   = .clear
+        gachaGlow.strokeColor = UIColor(red: 0.9, green: 0.55, blue: 1.0, alpha: 0.75)
+        gachaGlow.lineWidth   = 2
+        gachaGlow.position    = CGPoint(x: col2X, y: 97)
+        gachaGlow.name        = "gachaBtn"
+        addChild(gachaGlow)
+        let glowPulse = SKAction.sequence([
+            SKAction.fadeAlpha(to: 0.1, duration: 0.9),
+            SKAction.fadeAlpha(to: 1.0, duration: 0.9)
+        ])
+        gachaGlow.run(SKAction.repeatForever(glowPulse))
+
         addGlowDecor()
     }
 
     private func addGlowDecor() {
-        let star = SKLabelNode(text: "★")
+        // HUD下端のゴールドアクセントライン
+        let accentLine = SKShapeNode(rectOf: CGSize(width: width, height: 1.5))
+        accentLine.fillColor   = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.4)
+        accentLine.strokeColor = .clear
+        accentLine.position    = CGPoint(x: width / 2, y: 0)
+        addChild(accentLine)
+
+        // アクセントラインのグロー
+        let lineGlow = SKShapeNode(rectOf: CGSize(width: width, height: 6))
+        lineGlow.fillColor   = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.06)
+        lineGlow.strokeColor = .clear
+        lineGlow.position    = CGPoint(x: width / 2, y: -2)
+        addChild(lineGlow)
+
+        // 会社名左のミニ★デコ
+        let star = SKLabelNode(text: "✦")
         star.fontName  = "HiraginoSans-W6"
-        star.fontSize  = 16
-        star.fontColor = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.8)
-        star.position  = CGPoint(x: width - 20, y: 40)
+        star.fontSize  = 10
+        star.fontColor = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.7)
+        star.position  = CGPoint(x: 8, y: 101)
         addChild(star)
         let pulse = SKAction.sequence([
-            SKAction.fadeAlpha(to: 0.3, duration: 0.8),
-            SKAction.fadeAlpha(to: 0.9, duration: 0.8)
+            SKAction.fadeAlpha(to: 0.2, duration: 1.2),
+            SKAction.fadeAlpha(to: 0.85, duration: 1.2)
         ])
         star.run(SKAction.repeatForever(pulse))
     }
