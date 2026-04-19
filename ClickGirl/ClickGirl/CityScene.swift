@@ -203,20 +203,25 @@ class CityScene: SKScene {
         drawCityView()
     }
 
-    // MARK: - Top-Down City View
+    // MARK: - Isometric City View
+
+    // Tile constants
+    private let tW: CGFloat = 76
+    private let tH: CGFloat = 38
+    private let gox: CGFloat = -19   // center the 3-col iso grid
+    private let goy: CGFloat = -22   // push grid into lower half
+
+    /// (col,row) → cityNode local coordinate of tile center
+    private func isoCenter(col: Int, row: Int) -> CGPoint {
+        CGPoint(x: CGFloat(col - row) * tW / 2 + gox,
+                y: -CGFloat(col + row) * tH / 2 + goy)
+    }
 
     private func drawCityView() {
         cityNode.removeAllChildren()
 
         let vw = frame.width - 16
         let vh = cityViewH
-
-        // --- 外枠背景 ---
-        let outerBg = SKShapeNode(rectOf: CGSize(width: vw, height: vh), cornerRadius: 10)
-        outerBg.fillColor = UIColor(red: 0.07, green: 0.08, blue: 0.16, alpha: 1.0)
-        outerBg.strokeColor = UIColor(red: 0.28, green: 0.38, blue: 0.7, alpha: 0.5)
-        outerBg.lineWidth = 1.5
-        cityNode.addChild(outerBg)
 
         // --- グリッドレイアウト計算 ---
         let cols = 3, rows = 2
