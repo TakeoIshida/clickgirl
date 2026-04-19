@@ -18,6 +18,9 @@ class EmployeeCardNode: SKNode {
     private var progressFill: SKSpriteNode?
     private let progressBarMaxWidth: CGFloat = 112
     private let targetCost: Double
+    private var actionBtnPos: CGPoint = .zero
+    private var actionBtnSize: CGSize = .zero
+    private var isGlowing = false
 
     init(employee: Employee) {
         self.employee = employee
@@ -35,11 +38,40 @@ class EmployeeCardNode: SKNode {
         fill.xScale = max(progress, 0.005)
         if progress >= 1.0 {
             fill.color = UIColor(red: 0.2, green: 1.0, blue: 0.4, alpha: 1.0)
+            if !isGlowing {
+                isGlowing = true
+                addAffordableGlow()
+            }
         } else if progress >= 0.7 {
             fill.color = UIColor(red: 1.0, green: 0.88, blue: 0.15, alpha: 1.0)
+            if isGlowing { removeAffordableGlow() }
         } else {
             fill.color = UIColor(red: 0.35, green: 0.55, blue: 1.0, alpha: 1.0)
+            if isGlowing { removeAffordableGlow() }
         }
+    }
+
+    private func addAffordableGlow() {
+        let glow = SKShapeNode(rectOf: CGSize(width: actionBtnSize.width + 8,
+                                               height: actionBtnSize.height + 8),
+                                cornerRadius: 12)
+        glow.fillColor   = .clear
+        glow.strokeColor = UIColor(red: 0.25, green: 1.0, blue: 0.48, alpha: 0.85)
+        glow.lineWidth   = 2.2
+        glow.position    = actionBtnPos
+        glow.zPosition   = 3
+        glow.name        = "affordableGlow"
+        let pulse = SKAction.sequence([
+            SKAction.fadeAlpha(to: 0.12, duration: 0.6),
+            SKAction.fadeAlpha(to: 1.0,  duration: 0.6)
+        ])
+        glow.run(SKAction.repeatForever(pulse))
+        addChild(glow)
+    }
+
+    private func removeAffordableGlow() {
+        isGlowing = false
+        childNode(withName: "affordableGlow")?.removeFromParent()
     }
 
     private func setup() {
