@@ -124,6 +124,22 @@ class CityScene: SKScene {
         bar.zPosition = 10
         addChild(bar)
 
+        // Gold accent line at bottom of top bar
+        let accent = SKShapeNode(rectOf: CGSize(width: frame.width, height: 1.5))
+        accent.fillColor = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.45)
+        accent.strokeColor = .clear
+        accent.position = CGPoint(x: frame.midX, y: frame.height - topBarH)
+        accent.zPosition = 12
+        addChild(accent)
+
+        // Subtle glow under accent
+        let accentGlow = SKShapeNode(rectOf: CGSize(width: frame.width, height: 8))
+        accentGlow.fillColor = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.07)
+        accentGlow.strokeColor = .clear
+        accentGlow.position = CGPoint(x: frame.midX, y: frame.height - topBarH - 2)
+        accentGlow.zPosition = 3
+        addChild(accentGlow)
+
         let back = SKLabelNode(text: "◀ 戻る")
         back.fontName = "HiraginoSans-W5"
         back.fontSize = 15
