@@ -1014,28 +1014,29 @@ class OfficeScene: SKScene {
     }
 
     private func showToast(_ message: String) {
-        let bg = SKShapeNode(rectOf: CGSize(width: frame.width - 40, height: 40), cornerRadius: 10)
-        bg.fillColor = UIColor(red: 0.12, green: 0.05, blue: 0.22, alpha: 0.97)
-        bg.strokeColor = UIColor(red: 0.6, green: 0.3, blue: 0.9, alpha: 0.7)
-        bg.lineWidth = 1
-        bg.position = CGPoint(x: frame.midX, y: frame.midY)
-        bg.zPosition = 60
+        let toastY: CGFloat = 72
+        let bg = SKShapeNode(rectOf: CGSize(width: frame.width - 36, height: 42), cornerRadius: 12)
+        bg.fillColor   = UIColor(red: 0.10, green: 0.04, blue: 0.20, alpha: 0.97)
+        bg.strokeColor = UIColor(red: 0.62, green: 0.30, blue: 0.90, alpha: 0.68)
+        bg.lineWidth   = 1.2
+        bg.position    = CGPoint(x: frame.midX, y: toastY - 20)
+        bg.zPosition   = 60
+        bg.alpha        = 0
         addChild(bg)
 
         let lbl = SKLabelNode(text: message)
-        lbl.fontName = "HiraginoSans-W5"
-        lbl.fontSize = 12
+        lbl.fontName  = "HiraginoSans-W5"
+        lbl.fontSize  = 12
         lbl.fontColor = .white
         lbl.verticalAlignmentMode = .center
-        lbl.position = bg.position
+        lbl.position  = bg.position
         lbl.zPosition = 61
+        lbl.alpha     = 0
         addChild(lbl)
 
-        let seq = SKAction.sequence([
-            SKAction.wait(forDuration: 2.2),
-            SKAction.fadeOut(withDuration: 0.4),
-            SKAction.removeFromParent()
-        ])
+        let slideIn  = SKAction.group([SKAction.moveBy(x: 0, y: 20, duration: 0.22), SKAction.fadeIn(withDuration: 0.22)])
+        let slideOut = SKAction.group([SKAction.moveBy(x: 0, y: 10, duration: 0.32), SKAction.fadeOut(withDuration: 0.32)])
+        let seq = SKAction.sequence([slideIn, SKAction.wait(forDuration: 2.0), slideOut, SKAction.removeFromParent()])
         bg.run(seq)
         lbl.run(seq)
     }
