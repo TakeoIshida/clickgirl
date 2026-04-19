@@ -668,27 +668,44 @@ class OfficeScene: SKScene {
         container.addChild(boostLbl)
 
         let btnW: CGFloat = 130
+        let btnPos = CGPoint(x: w/2 - btnW/2 - 8, y: 0)
+
+        if canAfford {
+            let glow = SKShapeNode(rectOf: CGSize(width: btnW + 8, height: 38), cornerRadius: 12)
+            glow.fillColor   = .clear
+            glow.strokeColor = UIColor(red: 0.4, green: 0.72, blue: 1.0, alpha: 0.7)
+            glow.lineWidth   = 2.2
+            glow.position    = btnPos
+            glow.zPosition   = 1
+            let pulse = SKAction.sequence([
+                SKAction.fadeAlpha(to: 0.12, duration: 0.75),
+                SKAction.fadeAlpha(to: 1.0,  duration: 0.75)
+            ])
+            glow.run(SKAction.repeatForever(pulse))
+            container.addChild(glow)
+        }
+
         let btnBg = SKShapeNode(rectOf: CGSize(width: btnW, height: 30), cornerRadius: 10)
-        btnBg.name = "addFloorBtn"
+        btnBg.name      = "addFloorBtn"
         btnBg.zPosition = 2
         btnBg.fillColor = canAfford
-            ? UIColor(red: 0.22, green: 0.48, blue: 1.0, alpha: 0.9)
-            : UIColor(red: 0.16, green: 0.16, blue: 0.28, alpha: 0.85)
+            ? UIColor(red: 0.20, green: 0.45, blue: 0.95, alpha: 0.92)
+            : UIColor(red: 0.14, green: 0.14, blue: 0.26, alpha: 0.85)
         btnBg.strokeColor = canAfford
-            ? UIColor(red: 0.5, green: 0.75, blue: 1.0, alpha: 0.6)
-            : UIColor(red: 0.28, green: 0.28, blue: 0.48, alpha: 0.5)
+            ? UIColor(red: 0.52, green: 0.76, blue: 1.0, alpha: 0.58)
+            : UIColor(red: 0.26, green: 0.26, blue: 0.46, alpha: 0.48)
         btnBg.lineWidth = 1
-        btnBg.position = CGPoint(x: w/2 - btnW/2 - 8, y: 0)
+        btnBg.position  = btnPos
         container.addChild(btnBg)
 
         let btnLbl = SKLabelNode(text: "¥\(formatMoney(cost))")
-        btnLbl.fontName = "HiraginoSans-W6"
-        btnLbl.fontSize = 12
-        btnLbl.fontColor = canAfford ? .white : UIColor(white: 0.38, alpha: 1.0)
+        btnLbl.fontName  = "HiraginoSans-W6"
+        btnLbl.fontSize  = 12
+        btnLbl.fontColor = canAfford ? .white : UIColor(white: 0.36, alpha: 1.0)
         btnLbl.verticalAlignmentMode = .center
-        btnLbl.position = btnBg.position
+        btnLbl.position  = btnPos
         btnLbl.zPosition = 3
-        btnLbl.name = "addFloorBtn"
+        btnLbl.name      = "addFloorBtn"
         container.addChild(btnLbl)
 
         return container
