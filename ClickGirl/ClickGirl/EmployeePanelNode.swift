@@ -158,13 +158,16 @@ class EmployeeCardNode: SKNode {
             addChild(incLabel)
 
             // アップグレードボタン
-            let upgBtn = SKShapeNode(rectOf: CGSize(width: 120, height: 26), cornerRadius: 8)
+            let upgBtnSize = CGSize(width: 120, height: 26)
+            let upgBtn = SKShapeNode(rectOf: upgBtnSize, cornerRadius: 8)
             upgBtn.fillColor = UIColor(red: 0.15, green: 0.35, blue: 0.7, alpha: 0.9)
             upgBtn.strokeColor = UIColor(red: 0.4, green: 0.6, blue: 1.0, alpha: 0.8)
             upgBtn.lineWidth = 1
             upgBtn.position = CGPoint(x: 0, y: -75)
             upgBtn.name = "empCard_\(employee.id)"
             addChild(upgBtn)
+            actionBtnPos  = upgBtn.position
+            actionBtnSize = upgBtnSize
 
             let upgLabel = SKLabelNode(text: "UP ¥\(formatMoney(employee.upgradeCost))")
             upgLabel.fontName = "HiraginoSans-W6"
