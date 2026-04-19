@@ -272,13 +272,34 @@ class EmployeePanelNode: SKNode {
         bg.position = CGPoint(x: panelWidth / 2, y: panelHeight / 2)
         addChild(bg)
 
-        // 「社員」ラベル
-        let titleLabel = SKLabelNode(text: "── 社員一覧 ──")
-        titleLabel.fontName = "HiraginoSans-W3"
-        titleLabel.fontSize = 12
-        titleLabel.fontColor = UIColor(white: 0.6, alpha: 0.8)
-        titleLabel.position = CGPoint(x: panelWidth / 2, y: panelHeight - 14)
+        // トップゴールドアクセントライン
+        let topAccent = SKShapeNode(rectOf: CGSize(width: panelWidth, height: 1.5))
+        topAccent.fillColor   = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.45)
+        topAccent.strokeColor = .clear
+        topAccent.position    = CGPoint(x: panelWidth / 2, y: panelHeight - 1)
+        addChild(topAccent)
+
+        // ヘッダー: ゴールドの★ + 社員一覧テキスト
+        let leftStar = SKLabelNode(text: "✦")
+        leftStar.fontName  = "HiraginoSans-W6"
+        leftStar.fontSize  = 9
+        leftStar.fontColor = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.8)
+        leftStar.position  = CGPoint(x: panelWidth / 2 - 52, y: panelHeight - 14)
+        addChild(leftStar)
+
+        let titleLabel = SKLabelNode(text: "社員一覧")
+        titleLabel.fontName  = "HiraginoSans-W5"
+        titleLabel.fontSize  = 11
+        titleLabel.fontColor = UIColor(red: 1.0, green: 0.88, blue: 0.3, alpha: 0.85)
+        titleLabel.position  = CGPoint(x: panelWidth / 2, y: panelHeight - 14)
         addChild(titleLabel)
+
+        let rightStar = SKLabelNode(text: "✦")
+        rightStar.fontName  = leftStar.fontName
+        rightStar.fontSize  = 9
+        rightStar.fontColor = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.8)
+        rightStar.position  = CGPoint(x: panelWidth / 2 + 52, y: panelHeight - 14)
+        addChild(rightStar)
 
         // スクロールコンテナ
         addChild(scrollContainer)
