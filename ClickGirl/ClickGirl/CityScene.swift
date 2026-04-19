@@ -694,43 +694,82 @@ class CityScene: SKScene {
                 container.addChild(dot)
             }
 
+            // Income pill badge
+            let incomePill = SKShapeNode(rectOf: CGSize(width: 100, height: 18), cornerRadius: 9)
+            incomePill.fillColor = UIColor(red: 0.08, green: 0.32, blue: 0.12, alpha: 0.85)
+            incomePill.strokeColor = UIColor(red: 0.28, green: 0.88, blue: 0.42, alpha: 0.5)
+            incomePill.lineWidth = 1
+            incomePill.position = CGPoint(x: 0, y: cardH/2 - 84)
+            container.addChild(incomePill)
+
             let incLbl = SKLabelNode(text: "+¥\(formatMoney(bld.incomePerSec))/s")
             incLbl.fontName = "HiraginoSans-W5"
-            incLbl.fontSize = 12
-            incLbl.fontColor = UIColor(red: 0.38, green: 0.98, blue: 0.52, alpha: 0.9)
+            incLbl.fontSize = 11
+            incLbl.fontColor = UIColor(red: 0.38, green: 0.98, blue: 0.52, alpha: 0.95)
             incLbl.verticalAlignmentMode = .center
             incLbl.position = CGPoint(x: 0, y: cardH/2 - 84)
             container.addChild(incLbl)
 
             let btnY: CGFloat = -(cardH/2 - 22)
             if maxed {
+                let maxPill = SKShapeNode(rectOf: CGSize(width: cardW - 18, height: 30), cornerRadius: 10)
+                maxPill.fillColor = UIColor(red: 0.1, green: 0.32, blue: 0.15, alpha: 0.7)
+                maxPill.strokeColor = UIColor(red: 0.3, green: 0.9, blue: 0.42, alpha: 0.5)
+                maxPill.lineWidth = 1
+                maxPill.position = CGPoint(x: 0, y: btnY)
+                container.addChild(maxPill)
                 let badge = SKLabelNode(text: "✅ MAX")
                 badge.fontName = "HiraginoSans-W6"
                 badge.fontSize = 13
                 badge.fontColor = UIColor(red: 0.4, green: 1.0, blue: 0.55, alpha: 1.0)
                 badge.verticalAlignmentMode = .center
                 badge.position = CGPoint(x: 0, y: btnY)
+                badge.zPosition = 1
                 container.addChild(badge)
             } else {
+                // Glow ring when affordable (pulsing)
+                if canAfford {
+                    let glow = SKShapeNode(rectOf: CGSize(width: cardW - 12, height: 36), cornerRadius: 12)
+                    glow.fillColor = .clear
+                    glow.strokeColor = UIColor(red: 0.4, green: 0.72, blue: 1.0, alpha: 0.7)
+                    glow.lineWidth = 2.5
+                    glow.position = CGPoint(x: 0, y: btnY)
+                    glow.zPosition = 1
+                    let pulse = SKAction.sequence([
+                        SKAction.fadeAlpha(to: 0.15, duration: 0.75),
+                        SKAction.fadeAlpha(to: 1.0, duration: 0.75)
+                    ])
+                    glow.run(SKAction.repeatForever(pulse))
+                    container.addChild(glow)
+                }
+
                 let btnBg = SKShapeNode(rectOf: CGSize(width: cardW - 18, height: 30), cornerRadius: 10)
                 btnBg.name = "upgradeBtn_\(plot)"
                 btnBg.zPosition = 2
                 btnBg.fillColor = canAfford
-                    ? UIColor(red: 0.22, green: 0.48, blue: 1.0, alpha: 0.9)
-                    : UIColor(red: 0.16, green: 0.16, blue: 0.28, alpha: 0.85)
+                    ? UIColor(red: 0.18, green: 0.42, blue: 0.92, alpha: 0.92)
+                    : UIColor(red: 0.14, green: 0.14, blue: 0.26, alpha: 0.85)
                 btnBg.strokeColor = canAfford
-                    ? UIColor(red: 0.5, green: 0.75, blue: 1.0, alpha: 0.6)
-                    : UIColor(red: 0.28, green: 0.28, blue: 0.48, alpha: 0.5)
+                    ? UIColor(red: 0.55, green: 0.78, blue: 1.0, alpha: 0.55)
+                    : UIColor(red: 0.26, green: 0.26, blue: 0.46, alpha: 0.45)
                 btnBg.lineWidth = 1
                 btnBg.position = CGPoint(x: 0, y: btnY)
                 container.addChild(btnBg)
 
+                // Arrow icon prefix for upgrade
+                let arrowIcon = SKLabelNode(text: canAfford ? "⬆" : "🔒")
+                arrowIcon.fontSize = 10
+                arrowIcon.verticalAlignmentMode = .center
+                arrowIcon.position = CGPoint(x: -(cardW - 18) / 2 + 14, y: btnY)
+                arrowIcon.zPosition = 3
+                container.addChild(arrowIcon)
+
                 let btnLbl = SKLabelNode(text: "UP ¥\(formatMoney(upgCost))")
                 btnLbl.fontName = "HiraginoSans-W6"
                 btnLbl.fontSize = 12
-                btnLbl.fontColor = canAfford ? .white : UIColor(white: 0.38, alpha: 1.0)
+                btnLbl.fontColor = canAfford ? .white : UIColor(white: 0.36, alpha: 1.0)
                 btnLbl.verticalAlignmentMode = .center
-                btnLbl.position = CGPoint(x: 0, y: btnY)
+                btnLbl.position = CGPoint(x: 6, y: btnY)
                 btnLbl.zPosition = 3
                 btnLbl.name = "upgradeBtn_\(plot)"
                 container.addChild(btnLbl)
