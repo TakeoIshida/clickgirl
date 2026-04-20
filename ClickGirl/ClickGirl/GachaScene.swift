@@ -1097,7 +1097,7 @@ class GachaScene: SKScene {
                 SKAction.moveBy(x: 8,  y: -5, duration: 0.04),
                 SKAction.moveBy(x: -5, y: 4,  duration: 0.04),
                 SKAction.moveBy(x: 4,  y: -2, duration: 0.04),
-                SKAction.moveTo(x: 0, y: 0,   duration: 0.06)
+                SKAction.move(to: .zero, duration: 0.06)
             ]))
         }
     }
