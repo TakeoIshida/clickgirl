@@ -65,5 +65,23 @@ struct Employee {
             description: "鋭い眼差しで会社のブランドを牽引",
             baseCost: 400_000, baseIncomePerSec: 4_000.0
         ),
+        Employee(
+            id: 5, name: "ナナ", role: "財務部長",
+            charPrefix: "nana", imageCount: 5,
+            description: "数字に強く会社の資産を最大化する",
+            baseCost: 5_000_000, baseIncomePerSec: 50_000.0
+        ),
+        Employee(
+            id: 6, name: "レナ", role: "戦略部長",
+            charPrefix: "rena", imageCount: 5,
+            description: "大胆な戦略で会社を業界トップへ導く",
+            baseCost: 50_000_000, baseIncomePerSec: 500_000.0
+        ),
+        Employee(
+            id: 7, name: "シオリ", role: "CEO",
+            charPrefix: "shiori", imageCount: 5,
+            description: "カリスマ的リーダーシップで頂点を極める",
+            baseCost: 500_000_000, baseIncomePerSec: 5_000_000.0
+        ),
     ]
 }
