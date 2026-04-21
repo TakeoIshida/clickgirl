@@ -48,8 +48,8 @@ struct Employee {
             baseCost: 1500, baseIncomePerSec: 15.0
         ),
         Employee(
-            id: 2, name: "ゆき", role: "管理部長",
-            charPrefix: "yuki", imageCount: 10,
+            id: 2, name: "ミク", role: "管理部長",
+            charPrefix: "miku", imageCount: 5,
             description: "ミステリアスな眼差しで会社を統括",
             baseCost: 20000, baseIncomePerSec: 200.0
         ),
