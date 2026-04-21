@@ -4,7 +4,7 @@ struct Employee {
     let id: Int
     let name: String
     let role: String
-    let charPrefix: String   // "airi" / "hana" / "yuki" / "rio" / "saki"
+    let charPrefix: String   // "airi" / "hana" / "miku" / "rio" / "saki"
     let imageCount: Int      // 図鑑の画像枚数
     let description: String
     var level: Int = 0
