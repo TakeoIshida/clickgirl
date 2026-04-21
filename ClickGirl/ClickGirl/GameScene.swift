@@ -347,6 +347,27 @@ class GameScene: SKScene {
         view?.presentScene(scene, transition: SKTransition.push(with: .left, duration: 0.3))
     }
 
+    private func openRanking() {
+        gm.saveGame()
+        let scene = RankingScene(size: frame.size)
+        scene.scaleMode = .resizeFill
+        view?.presentScene(scene, transition: SKTransition.push(with: .left, duration: 0.3))
+    }
+
+    private func openSetting() {
+        gm.saveGame()
+        let scene = SettingScene(size: frame.size)
+        scene.scaleMode = .resizeFill
+        view?.presentScene(scene, transition: SKTransition.push(with: .left, duration: 0.3))
+    }
+
+    private func openCharSelect() {
+        gm.saveGame()
+        let scene = CharSelectScene(size: frame.size)
+        scene.scaleMode = .resizeFill
+        view?.presentScene(scene, transition: SKTransition.push(with: .left, duration: 0.3))
+    }
+
     // MARK: - Game Actions
 
     private func handleMainTap(at loc: CGPoint) {
