@@ -51,6 +51,29 @@ class HUDNode: SKNode {
         incomeLabel.position  = CGPoint(x: 16, y: 38)
         addChild(incomeLabel)
 
+        // 小アイコンボタン（ランキング・設定・キャラ選択）
+        let iconBtns: [(String, String, CGFloat)] = [
+            ("⚙",  "settingBtn",    width - 16),
+            ("🏆", "rankBtn",       width - 44),
+            ("👤", "charSelectBtn", width - 74),
+        ]
+        for (icon, name, x) in iconBtns {
+            let bg = SKShapeNode(circleOfRadius: 13)
+            bg.fillColor   = UIColor(white: 1, alpha: 0.07)
+            bg.strokeColor = UIColor(white: 1, alpha: 0.18)
+            bg.lineWidth   = 1
+            bg.position    = CGPoint(x: x, y: 38)
+            bg.name        = name
+            addChild(bg)
+
+            let lbl = SKLabelNode(text: icon)
+            lbl.fontSize = 14
+            lbl.verticalAlignmentMode = .center
+            lbl.position = CGPoint(x: x, y: 38)
+            lbl.name     = name
+            addChild(lbl)
+        }
+
         // ナビボタン 4つ（2列×2行）
         let btnW: CGFloat = 72
         let btnH: CGFloat = 26
