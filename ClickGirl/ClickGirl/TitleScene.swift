@@ -93,7 +93,7 @@ class TitleScene: SKScene {
     // MARK: - キャラ立ち絵
     private func addCharacter() {
         let gm  = GameManager.shared
-        let imgName = gm.selectedNobgImageName(for: 0).isEmpty ? "airi_0_nobg" : gm.selectedNobgImageName(for: 0)
+        let imgName = "airi_2_nobg"
         let tex = SKTexture(imageNamed: imgName)
         let w   = frame.width * 0.70
         let h   = w * tex.size().height / tex.size().width
