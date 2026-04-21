@@ -147,6 +147,39 @@ class ShopScene: SKScene {
             addChild(card)
             cardNodes.append((node: card, item: item))
         }
+
+        // ブーストタブ限定: 動画で無料ブーストボタン
+        if !isPermanentTab {
+            let rowCount = (items.count + 1) / 2
+            let bottomY = startY - cardH * CGFloat(rowCount) - rowGap * CGFloat(rowCount - 1) - 24
+
+            let freeBtn = SKNode()
+            freeBtn.name     = "freeBoostBtn"
+            freeBtn.position = CGPoint(x: frame.midX, y: bottomY)
+
+            let bg = SKShapeNode(rectOf: CGSize(width: frame.width - 40, height: 46), cornerRadius: 23)
+            bg.fillColor   = UIColor(red: 0.10, green: 0.28, blue: 0.12, alpha: 0.92)
+            bg.strokeColor = UIColor(red: 0.38, green: 0.98, blue: 0.52, alpha: 0.8)
+            bg.lineWidth   = 1.5
+            bg.name        = "freeBoostBtn"
+            freeBtn.addChild(bg)
+
+            let lbl = SKLabelNode(text: "📺  動画を見て収益 ×2（60秒）無料")
+            lbl.fontName  = "HiraginoSans-W6"
+            lbl.fontSize  = 13
+            lbl.fontColor = UIColor(red: 0.38, green: 0.98, blue: 0.52, alpha: 1)
+            lbl.verticalAlignmentMode = .center
+            lbl.name = "freeBoostBtn"
+            freeBtn.addChild(lbl)
+
+            if !AdManager.shared.isRewardedReady {
+                bg.fillColor   = UIColor(white: 0.2, alpha: 0.5)
+                bg.strokeColor = UIColor(white: 0.5, alpha: 0.3)
+                lbl.fontColor  = UIColor(white: 0.5, alpha: 0.7)
+            }
+
+            addChild(freeBtn)
+        }
     }
 
     private func makeCard(item: ShopItem) -> SKNode {
