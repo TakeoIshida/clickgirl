@@ -35,18 +35,13 @@ struct ZukanConditions {
     // ・SSRカード : 3枚で解放
     static let conditions: [Int: [UnlockCondition]] = [
 
-        // カレン (10枚: 0-3=N, 4-6=R, 7-8=SR, 9=SSR)
+        // アイリ (5枚: 0-1=N, 2=R, 3=SR, 4=SSR)
         0: [
             .gachaCard(charId: 0, imageIndex: 0, count: 1),   // N
             .gachaCard(charId: 0, imageIndex: 1, count: 1),   // N
-            .gachaCard(charId: 0, imageIndex: 2, count: 1),   // N
-            .gachaCard(charId: 0, imageIndex: 3, count: 1),   // N
-            .gachaCard(charId: 0, imageIndex: 4, count: 1),   // R
-            .gachaCard(charId: 0, imageIndex: 5, count: 1),   // R
-            .gachaCard(charId: 0, imageIndex: 6, count: 1),   // R
-            .gachaCard(charId: 0, imageIndex: 7, count: 2),   // SR × 2枚
-            .gachaCard(charId: 0, imageIndex: 8, count: 2),   // SR × 2枚
-            .gachaCard(charId: 0, imageIndex: 9, count: 3),   // SSR × 3枚
+            .gachaCard(charId: 0, imageIndex: 2, count: 1),   // R
+            .gachaCard(charId: 0, imageIndex: 3, count: 2),   // SR × 2枚
+            .gachaCard(charId: 0, imageIndex: 4, count: 3),   // SSR × 3枚
         ],
 
         // みさき (8枚: 0-2=N, 3-5=R, 6=SR, 7=SSR)
