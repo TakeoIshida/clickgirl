@@ -83,11 +83,11 @@ enum GachaCatalog {
         add(0, "アイリ", "airi", .sr,  indices: 3...3)
         add(0, "アイリ", "airi", .ssr, indices: 4...4)
 
-        // みさき
-        add(1, "みさき", "misaki", .n,   indices: 0...2)
-        add(1, "みさき", "misaki", .r,   indices: 3...5)
-        add(1, "みさき", "misaki", .sr,  indices: 6...6)
-        add(1, "みさき", "misaki", .ssr, indices: 7...7)
+        // ハナ (7枚: 0-2=N, 3-4=R, 5=SR, 6=SSR)
+        add(1, "ハナ", "hana", .n,   indices: 0...2)
+        add(1, "ハナ", "hana", .r,   indices: 3...4)
+        add(1, "ハナ", "hana", .sr,  indices: 5...5)
+        add(1, "ハナ", "hana", .ssr, indices: 6...6)
 
         // ゆき
         add(2, "ゆき", "yuki", .n,   indices: 0...3)
