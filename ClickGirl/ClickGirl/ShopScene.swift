@@ -460,9 +460,10 @@ class ShopScene: SKScene {
             from: rootVC,
             onRewarded: { [weak self] in
                 guard let self else { return }
+                let gm = GameManager.shared
                 let exp = Date().addingTimeInterval(60)
-                self.gm.activeBoosts["boost_income2"] = exp
-                self.gm.saveGame()
+                gm.activeBoosts["boost_income2"] = exp
+                gm.saveGame()
                 self.buildCards()
                 self.showToast("🎉 収益2倍（60秒）ゲット！")
             },
