@@ -60,11 +60,11 @@ enum GachaCatalog {
     static let singleCost: Double = 50_000
     static let tenCost:    Double = 450_000   // 10枚分まとめて = 1回分お得
 
-    // カレン(0) : 4N + 3R + 2SR + 1SSR = 10枚
+    // アイリ(0) : 2N + 1R + 1SR + 1SSR =  5枚
     // みさき(1) : 3N + 3R + 1SR + 1SSR =  8枚
     // ゆき(2)   : 4N + 3R + 2SR + 1SSR = 10枚
-    // りお(3)   : 3N + 3R + 1SR + 1SSR =  8枚
-    // あかり(4) : 3N + 3R + 1SR + 1SSR =  8枚
+    // りお(3)   : 3N (画像追加予定)
+    // さき(4)   : 2N + 1R + 2SR + 2SSR =  8枚
     static let pool: [GachaCard] = {
         var cards: [GachaCard] = []
 
