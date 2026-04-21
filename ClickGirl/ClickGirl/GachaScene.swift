@@ -448,6 +448,25 @@ class GachaScene: SKScene {
 
     // MARK: - ガチャロジック
 
+    private func pullFreeGacha() {
+        guard let rootVC = view?.window?.rootViewController else { return }
+        AdManager.shared.showRewarded(
+            from: rootVC,
+            onRewarded: { [weak self] in
+                guard let self else { return }
+                let (cards, newPity) = GachaCatalog.draw(count: 1, pityCount: self.gm.gachaPityCount)
+                self.gm.gachaPityCount = newPity
+                for card in cards { self.gm.addCard(card) }
+                self.gm.saveGame()
+                self.isAnimating = true
+                self.showResults(cards)
+            },
+            onNotReady: { [weak self] in
+                self?.showToast("📺 広告の準備中です。少し待ってからもう一度どうぞ")
+            }
+        )
+    }
+
     private func pullGacha(count: Int) {
         let cost = count == 1 ? GachaCatalog.singleCost : GachaCatalog.tenCost
         guard gm.money >= cost else {
