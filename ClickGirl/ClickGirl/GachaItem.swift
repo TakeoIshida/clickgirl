@@ -77,11 +77,11 @@ enum GachaCatalog {
             }
         }
 
-        // カレン
-        add(0, "カレン", "karen", .n,   indices: 0...3)
-        add(0, "カレン", "karen", .r,   indices: 4...6)
-        add(0, "カレン", "karen", .sr,  indices: 7...8)
-        add(0, "カレン", "karen", .ssr, indices: 9...9)
+        // アイリ (5枚: 0-1=N, 2=R, 3=SR, 4=SSR)
+        add(0, "アイリ", "airi", .n,   indices: 0...1)
+        add(0, "アイリ", "airi", .r,   indices: 2...2)
+        add(0, "アイリ", "airi", .sr,  indices: 3...3)
+        add(0, "アイリ", "airi", .ssr, indices: 4...4)
 
         // みさき
         add(1, "みさき", "misaki", .n,   indices: 0...2)
