@@ -36,9 +36,9 @@ struct Employee {
 
     static let allEmployees: [Employee] = [
         Employee(
-            id: 0, name: "カレン", role: "営業部長",
-            charPrefix: "karen", imageCount: 10,
-            description: "クールだけど仕事は誰より熱い",
+            id: 0, name: "アイリ", role: "営業部長",
+            charPrefix: "airi", imageCount: 5,
+            description: "明るい笑顔で誰より売上を叩き出す",
             baseCost: 100, baseIncomePerSec: 1.0
         ),
         Employee(
