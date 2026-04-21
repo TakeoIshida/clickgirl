@@ -394,6 +394,36 @@ class GachaScene: SKScene {
         badgeLbl.verticalAlignmentMode = .center
         badgeLbl.position = badge.position; badgeLbl.zPosition = 9
         addChild(badgeLbl)
+
+        // 無料ガチャボタン（リワード広告）
+        let freeBtn = SKNode()
+        freeBtn.name     = "btnFreeGacha"
+        freeBtn.position = CGPoint(x: frame.midX, y: 58)
+        freeBtn.zPosition = 5
+
+        let freeBg = SKShapeNode(rectOf: CGSize(width: frame.width - 60, height: 36), cornerRadius: 18)
+        freeBg.fillColor   = UIColor(red: 0.10, green: 0.28, blue: 0.12, alpha: 0.92)
+        freeBg.strokeColor = UIColor(red: 0.38, green: 0.98, blue: 0.52, alpha: 0.8)
+        freeBg.lineWidth   = 1.5
+        freeBg.name        = "btnFreeGacha"
+        freeBtn.addChild(freeBg)
+
+        let freeLbl = SKLabelNode(text: "📺  動画を見て無料ガチャ")
+        freeLbl.fontName  = "HiraginoSans-W6"
+        freeLbl.fontSize  = 13
+        freeLbl.fontColor = UIColor(red: 0.38, green: 0.98, blue: 0.52, alpha: 1)
+        freeLbl.verticalAlignmentMode = .center
+        freeLbl.name = "btnFreeGacha"
+        freeBtn.addChild(freeLbl)
+
+        // 広告未準備時はグレーアウト
+        if !AdManager.shared.isRewardedReady {
+            freeBg.fillColor   = UIColor(white: 0.2, alpha: 0.5)
+            freeBg.strokeColor = UIColor(white: 0.5, alpha: 0.3)
+            freeLbl.fontColor  = UIColor(white: 0.5, alpha: 0.7)
+        }
+
+        addChild(freeBtn)
     }
 
     // MARK: - タッチ
