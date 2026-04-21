@@ -290,10 +290,19 @@ class GameScene: SKScene {
 
         // HUD ボタン
         for node in nodes(at: loc) {
-            if node.name == "zukanBtn"  { openZukan();  return }
-            if node.name == "shopBtn"   { openShop();   return }
-            if node.name == "officeBtn" { openOffice(); return }
-            if node.name == "gachaBtn"  { openGacha();  return }
+            if node.name == "zukanBtn"      { openZukan();      return }
+            if node.name == "shopBtn"       { openShop();       return }
+            if node.name == "officeBtn"     { openOffice();     return }
+            if node.name == "gachaBtn"      { openGacha();      return }
+            if node.name == "rankBtn"       { openRanking();    return }
+            if node.name == "settingBtn"    { openSetting();    return }
+            if node.name == "charSelectBtn" { openCharSelect(); return }
+        }
+
+        // メインキャラ長押しでキャラ選択
+        if nodes(at: loc).contains(where: { $0.name == "mainChar" }) {
+            openCharSelect()
+            return
         }
 
         // パネル内タップ → キャラ切替 or 採用/UP
