@@ -108,6 +108,24 @@ enum GachaCatalog {
         add(4, "さき", "saki", .sr,  indices: 4...5)   // シークレットSR
         add(4, "さき", "saki", .ssr, indices: 6...7)   // シークレットSSR
 
+        // ナナ (5枚: 0-1=N, 2=R, 3=SR, 4=SSR)
+        add(5, "ナナ", "nana", .n,   indices: 0...1)
+        add(5, "ナナ", "nana", .r,   indices: 2...2)
+        add(5, "ナナ", "nana", .sr,  indices: 3...3)
+        add(5, "ナナ", "nana", .ssr, indices: 4...4)
+
+        // レナ (5枚: 0-1=N, 2=R, 3=SR, 4=SSR)
+        add(6, "レナ", "rena", .n,   indices: 0...1)
+        add(6, "レナ", "rena", .r,   indices: 2...2)
+        add(6, "レナ", "rena", .sr,  indices: 3...3)
+        add(6, "レナ", "rena", .ssr, indices: 4...4)
+
+        // シオリ (5枚: 0-1=N, 2=R, 3=SR, 4=SSR)
+        add(7, "シオリ", "shiori", .n,   indices: 0...1)
+        add(7, "シオリ", "shiori", .r,   indices: 2...2)
+        add(7, "シオリ", "shiori", .sr,  indices: 3...3)
+        add(7, "シオリ", "shiori", .ssr, indices: 4...4)
+
         return cards
     }()
 
