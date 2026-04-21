@@ -65,6 +65,9 @@ enum GachaCatalog {
     // ミク(2)   : 2N + 1R + 1SR + 1SSR =  5枚
     // りお(3)   : 3N (画像追加予定)
     // さき(4)   : 2N + 1R + 2SR + 2SSR =  8枚
+    // ナナ(5)   : 2N + 1R + 1SR + 1SSR =  5枚
+    // レナ(6)   : 2N + 1R + 1SR + 1SSR =  5枚
+    // シオリ(7) : 2N + 1R + 1SR + 1SSR =  5枚
     static let pool: [GachaCard] = {
         var cards: [GachaCard] = []
 
