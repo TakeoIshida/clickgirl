@@ -315,7 +315,8 @@ class ShopScene: SKScene {
         for node in nodes(at: loc) {
             guard let name = node.name else { continue }
 
-            if name == "backBtn" { goBack(); return }
+            if name == "backBtn"     { goBack(); return }
+            if name == "freeBoostBtn" { showFreeBoostAd(); return }
 
             if name == "tab_0" { isPermanentTab = true;  updateTabAppearance(); buildCards(); return }
             if name == "tab_1" { isPermanentTab = false; updateTabAppearance(); buildCards(); return }
