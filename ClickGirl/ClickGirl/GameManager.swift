@@ -263,6 +263,27 @@ class GameManager {
         return true
     }
 
+    // MARK: - Reset
+
+    func resetAll() {
+        let d = UserDefaults.standard
+        let keys = ["cg_money","cg_totalEarned","cg_lastSave","cg_employees",
+                    "cg_selImg","cg_upgrades","cg_boosts","cg_office",
+                    "cg_floors","cg_gachaPity","cg_gachaCards","cg_city"]
+        keys.forEach { d.removeObject(forKey: $0) }
+        money               = 0
+        totalEarned         = 0
+        employees           = Employee.allEmployees
+        selectedImageIndex  = [:]
+        purchasedUpgrades   = []
+        activeBoosts        = [:]
+        officeUpgrades      = [:]
+        officeFloors        = 1
+        gachaPityCount      = 0
+        gachaCardCounts     = [:]
+        cityBuildings       = [:]
+    }
+
     // MARK: - Save / Load
 
     func saveGame() {
