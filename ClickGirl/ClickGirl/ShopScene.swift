@@ -454,6 +454,24 @@ class ShopScene: SKScene {
 
     // MARK: - 戻る
 
+    private func showFreeBoostAd() {
+        guard let rootVC = view?.window?.rootViewController else { return }
+        AdManager.shared.showRewarded(
+            from: rootVC,
+            onRewarded: { [weak self] in
+                guard let self else { return }
+                let exp = Date().addingTimeInterval(60)
+                self.gm.activeBoosts["boost_income2"] = exp
+                self.gm.saveGame()
+                self.buildCards()
+                self.showToast("🎉 収益2倍（60秒）ゲット！")
+            },
+            onNotReady: { [weak self] in
+                self?.showToast("📺 広告の準備中です。少し待ってからどうぞ")
+            }
+        )
+    }
+
     private func goBack() {
         GameManager.shared.saveGame()
         let scene = GameScene(size: frame.size)
