@@ -21,7 +21,7 @@ class GameScene: SKScene {
     private var autoTapAccum: TimeInterval = 0
     private var mainCharImageName: String {
         gm.selectedNobgImageName(for: 0)
-            .isEmpty ? "karen_4_nobg" : gm.selectedNobgImageName(for: 0)
+            .isEmpty ? "airi_4_nobg" : gm.selectedNobgImageName(for: 0)
     }
 
     // タッチ判別
