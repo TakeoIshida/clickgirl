@@ -10,7 +10,7 @@ class ZukanScene: SKScene {
     private let chars: [CharInfo] = [
         CharInfo(id: 0, name: "アイリ",  prefix: "airi",  count: 5),
         CharInfo(id: 1, name: "ハナ", prefix: "hana", count: 7),
-        CharInfo(id: 2, name: "ゆき",   prefix: "yuki",   count: 10),
+        CharInfo(id: 2, name: "ミク",   prefix: "miku",   count: 5),
         CharInfo(id: 3, name: "りお",   prefix: "rio",    count: 3),
         CharInfo(id: 4, name: "さき",   prefix: "saki",   count: 8),
     ]
