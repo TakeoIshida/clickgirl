@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2442F9CE6D33E770C4AC680D /* Pods_ClickGirl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D952873311BAB5889BFEC7 /* Pods_ClickGirl.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		1427E62D2F5CFEBD001EBA83 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,21 +31,30 @@
 		1427E6132F5CFEB9001EBA83 /* ClickGirl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClickGirl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1427E62C2F5CFEBD001EBA83 /* ClickGirlTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClickGirlTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1427E6362F5CFEBD001EBA83 /* ClickGirlUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClickGirlUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3D952873311BAB5889BFEC7 /* Pods_ClickGirl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClickGirl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CFA9B6654DB1EB0732A87B8A /* Pods-ClickGirl.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClickGirl.debug.xcconfig"; path = "Target Support Files/Pods-ClickGirl/Pods-ClickGirl.debug.xcconfig"; sourceTree = "<group>"; };
+		E71438C6AF76CC0F8478BA28 /* Pods-ClickGirl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClickGirl.release.xcconfig"; path = "Target Support Files/Pods-ClickGirl/Pods-ClickGirl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		1427E6152F5CFEB9001EBA83 /* ClickGirl */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = ClickGirl;
 			sourceTree = "<group>";
 		};
 		1427E62F2F5CFEBD001EBA83 /* ClickGirlTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = ClickGirlTests;
 			sourceTree = "<group>";
 		};
 		1427E6392F5CFEBD001EBA83 /* ClickGirlUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = ClickGirlUITests;
 			sourceTree = "<group>";
 		};
@@ -52,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2442F9CE6D33E770C4AC680D /* Pods_ClickGirl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +93,8 @@
 				1427E62F2F5CFEBD001EBA83 /* ClickGirlTests */,
 				1427E6392F5CFEBD001EBA83 /* ClickGirlUITests */,
 				1427E6142F5CFEB9001EBA83 /* Products */,
+				8200BB479B952E40E2240451 /* Pods */,
+				7E992B75AA4C01132D079C16 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -92,6 +108,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		7E992B75AA4C01132D079C16 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C3D952873311BAB5889BFEC7 /* Pods_ClickGirl.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8200BB479B952E40E2240451 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CFA9B6654DB1EB0732A87B8A /* Pods-ClickGirl.debug.xcconfig */,
+				E71438C6AF76CC0F8478BA28 /* Pods-ClickGirl.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -99,9 +133,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1427E6402F5CFEBD001EBA83 /* Build configuration list for PBXNativeTarget "ClickGirl" */;
 			buildPhases = (
+				0FFC248EFF0591A414A6376C /* [CP] Check Pods Manifest.lock */,
 				1427E60F2F5CFEB9001EBA83 /* Sources */,
 				1427E6102F5CFEB9001EBA83 /* Frameworks */,
 				1427E6112F5CFEB9001EBA83 /* Resources */,
+				E793541BAFF38BA184286353 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -111,8 +147,6 @@
 				1427E6152F5CFEB9001EBA83 /* ClickGirl */,
 			);
 			name = ClickGirl;
-			packageProductDependencies = (
-			);
 			productName = ClickGirl;
 			productReference = 1427E6132F5CFEB9001EBA83 /* ClickGirl.app */;
 			productType = "com.apple.product-type.application";
@@ -134,8 +168,6 @@
 				1427E62F2F5CFEBD001EBA83 /* ClickGirlTests */,
 			);
 			name = ClickGirlTests;
-			packageProductDependencies = (
-			);
 			productName = ClickGirlTests;
 			productReference = 1427E62C2F5CFEBD001EBA83 /* ClickGirlTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -157,8 +189,6 @@
 				1427E6392F5CFEBD001EBA83 /* ClickGirlUITests */,
 			);
 			name = ClickGirlUITests;
-			packageProductDependencies = (
-			);
 			productName = ClickGirlUITests;
 			productReference = 1427E6362F5CFEBD001EBA83 /* ClickGirlUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -230,6 +260,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0FFC248EFF0591A414A6376C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ClickGirl-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E793541BAFF38BA184286353 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ClickGirl/Pods-ClickGirl-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ClickGirl/Pods-ClickGirl-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClickGirl/Pods-ClickGirl-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1427E60F2F5CFEB9001EBA83 /* Sources */ = {
@@ -390,6 +462,7 @@
 		};
 		1427E6412F5CFEBD001EBA83 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CFA9B6654DB1EB0732A87B8A /* Pods-ClickGirl.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -417,6 +490,7 @@
 		};
 		1427E6422F5CFEBD001EBA83 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E71438C6AF76CC0F8478BA28 /* Pods-ClickGirl.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
