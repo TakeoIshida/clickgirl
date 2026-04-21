@@ -409,9 +409,10 @@ class GachaScene: SKScene {
         guard !isAnimating else { return }
         for node in nodes(at: loc) {
             guard let name = node.name else { continue }
-            if name == "backBtn" { goBack();           return }
-            if name == "btn1"    { pullGacha(count: 1);  return }
-            if name == "btn10"   { pullGacha(count: 10); return }
+            if name == "backBtn"      { goBack();              return }
+            if name == "btn1"         { pullGacha(count: 1);   return }
+            if name == "btn10"        { pullGacha(count: 10);  return }
+            if name == "btnFreeGacha" { pullFreeGacha();        return }
         }
     }
 
