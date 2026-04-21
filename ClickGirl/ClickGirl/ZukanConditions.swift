@@ -82,6 +82,33 @@ struct ZukanConditions {
             .gachaCard(charId: 4, imageIndex: 6, count: 5),   // SSR secret × 5枚
             .gachaCard(charId: 4, imageIndex: 7, count: 5),   // SSR secret × 5枚
         ],
+
+        // ナナ (5枚: 0-1=N, 2=R, 3=SR, 4=SSR)
+        5: [
+            .gachaCard(charId: 5, imageIndex: 0, count: 1),   // N
+            .gachaCard(charId: 5, imageIndex: 1, count: 1),   // N
+            .gachaCard(charId: 5, imageIndex: 2, count: 1),   // R
+            .gachaCard(charId: 5, imageIndex: 3, count: 2),   // SR × 2枚
+            .gachaCard(charId: 5, imageIndex: 4, count: 3),   // SSR × 3枚
+        ],
+
+        // レナ (5枚: 0-1=N, 2=R, 3=SR, 4=SSR)
+        6: [
+            .gachaCard(charId: 6, imageIndex: 0, count: 1),   // N
+            .gachaCard(charId: 6, imageIndex: 1, count: 1),   // N
+            .gachaCard(charId: 6, imageIndex: 2, count: 1),   // R
+            .gachaCard(charId: 6, imageIndex: 3, count: 2),   // SR × 2枚
+            .gachaCard(charId: 6, imageIndex: 4, count: 3),   // SSR × 3枚
+        ],
+
+        // シオリ (5枚: 0-1=N, 2=R, 3=SR, 4=SSR)
+        7: [
+            .gachaCard(charId: 7, imageIndex: 0, count: 1),   // N
+            .gachaCard(charId: 7, imageIndex: 1, count: 1),   // N
+            .gachaCard(charId: 7, imageIndex: 2, count: 1),   // R
+            .gachaCard(charId: 7, imageIndex: 3, count: 2),   // SR × 2枚
+            .gachaCard(charId: 7, imageIndex: 4, count: 3),   // SSR × 3枚
+        ],
     ]
 
     static func isImageUnlocked(charId: Int, imageIndex: Int, gm: GameManager) -> Bool {
