@@ -55,14 +55,16 @@ class TitleScene: SKScene {
         title.fontName  = "AvenirNext-Bold"
         title.fontSize  = 36
         title.fontColor = gold
-        title.position  = CGPoint(x: 0, y: 10)
+        title.verticalAlignmentMode = .center
+        title.position  = CGPoint(x: 0, y: 4)
         container.addChild(title)
 
         let sub = SKLabelNode(text: "株式会社")
         sub.fontName  = "HiraginoSans-W3"
         sub.fontSize  = 13
         sub.fontColor = UIColor(white: 1.0, alpha: 0.55)
-        sub.position  = CGPoint(x: 0, y: -18)
+        sub.verticalAlignmentMode = .center
+        sub.position  = CGPoint(x: 0, y: -20)
         container.addChild(sub)
 
         for (dx, dy) in [(-143.0, 35.0), (143.0, 35.0), (-143.0, -35.0), (143.0, -35.0)] {
