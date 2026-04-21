@@ -55,18 +55,13 @@ struct ZukanConditions {
             .gachaCard(charId: 1, imageIndex: 6, count: 3),   // SSR × 3枚
         ],
 
-        // ゆき (10枚: 0-3=N, 4-6=R, 7-8=SR, 9=SSR)
+        // ミク (5枚: 0-1=N, 2=R, 3=SR, 4=SSR)
         2: [
-            .gachaCard(charId: 2, imageIndex: 0, count: 1),
-            .gachaCard(charId: 2, imageIndex: 1, count: 1),
-            .gachaCard(charId: 2, imageIndex: 2, count: 1),
-            .gachaCard(charId: 2, imageIndex: 3, count: 1),
-            .gachaCard(charId: 2, imageIndex: 4, count: 1),
-            .gachaCard(charId: 2, imageIndex: 5, count: 1),
-            .gachaCard(charId: 2, imageIndex: 6, count: 1),
-            .gachaCard(charId: 2, imageIndex: 7, count: 2),
-            .gachaCard(charId: 2, imageIndex: 8, count: 2),
-            .gachaCard(charId: 2, imageIndex: 9, count: 3),
+            .gachaCard(charId: 2, imageIndex: 0, count: 1),   // N
+            .gachaCard(charId: 2, imageIndex: 1, count: 1),   // N
+            .gachaCard(charId: 2, imageIndex: 2, count: 1),   // R
+            .gachaCard(charId: 2, imageIndex: 3, count: 2),   // SR × 2枚
+            .gachaCard(charId: 2, imageIndex: 4, count: 3),   // SSR × 3枚
         ],
 
         // りお (3枚: 0-2=N / 画像追加次第拡張予定)
