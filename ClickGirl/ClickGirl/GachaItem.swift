@@ -89,11 +89,11 @@ enum GachaCatalog {
         add(1, "ハナ", "hana", .sr,  indices: 5...5)
         add(1, "ハナ", "hana", .ssr, indices: 6...6)
 
-        // ゆき
-        add(2, "ゆき", "yuki", .n,   indices: 0...3)
-        add(2, "ゆき", "yuki", .r,   indices: 4...6)
-        add(2, "ゆき", "yuki", .sr,  indices: 7...8)
-        add(2, "ゆき", "yuki", .ssr, indices: 9...9)
+        // ミク (5枚: 0-1=N, 2=R, 3=SR, 4=SSR)
+        add(2, "ミク", "miku", .n,   indices: 0...1)
+        add(2, "ミク", "miku", .r,   indices: 2...2)
+        add(2, "ミク", "miku", .sr,  indices: 3...3)
+        add(2, "ミク", "miku", .ssr, indices: 4...4)
 
         // りお (3枚: 0-2=N / 画像追加次第拡張予定)
         add(3, "りお", "rio", .n,   indices: 0...2)
