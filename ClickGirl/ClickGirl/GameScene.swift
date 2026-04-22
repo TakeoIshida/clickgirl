@@ -237,6 +237,13 @@ class GameScene: SKScene {
         )
     }
 
+    override func willMove(from view: SKView) {
+        bgmPlayer?.stop()
+        bgmPlayer = nil
+        NotificationCenter.default.removeObserver(self)
+        removeAllActions()
+    }
+
     @objc private func appResignActive() {
         gm.saveGame()
     }
