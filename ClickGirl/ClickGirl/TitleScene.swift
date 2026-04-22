@@ -178,6 +178,10 @@ class TitleScene: SKScene {
         }
     }
 
+    override func willMove(from view: SKView) {
+        removeAllActions()
+    }
+
     // MARK: - タップ処理
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let loc = touches.first?.location(in: self) else { return }
