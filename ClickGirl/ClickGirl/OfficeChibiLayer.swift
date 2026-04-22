@@ -184,9 +184,10 @@ class OfficeChibiLayer: SKNode {
     func refresh(employees: [Employee]) {
         let hiredIds = Set(employees.filter { $0.isHired }.map { $0.id })
 
-        for (id, worker) in chibiNodes where !hiredIds.contains(id) {
+        let removedIds = chibiNodes.keys.filter { !hiredIds.contains($0) }
+        for id in removedIds {
+            guard let worker = chibiNodes.removeValue(forKey: id) else { continue }
             worker.dismiss { worker.removeFromParent() }
-            chibiNodes.removeValue(forKey: id)
         }
 
         for emp in employees where emp.isHired {
