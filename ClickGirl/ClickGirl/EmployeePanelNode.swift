@@ -319,7 +319,7 @@ class EmployeePanelNode: SKNode {
     }
 
     func refresh() {
-        buildCards()
+        needsRebuild = true
     }
 
     func updateProgressBars(money: Double) {
