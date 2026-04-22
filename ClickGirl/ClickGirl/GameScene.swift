@@ -50,8 +50,9 @@ class GameScene: SKScene {
 
         if gm.pendingOfflineIncome > 0 {
             run(SKAction.wait(forDuration: 0.5)) { [weak self] in
-                self?.showOfflinePopup(amount: self!.gm.pendingOfflineIncome)
-                self?.gm.pendingOfflineIncome = 0
+                guard let self = self else { return }
+                self.showOfflinePopup(amount: self.gm.pendingOfflineIncome)
+                self.gm.pendingOfflineIncome = 0
             }
         }
     }
