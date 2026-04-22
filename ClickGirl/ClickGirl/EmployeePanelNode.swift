@@ -252,6 +252,7 @@ class EmployeePanelNode: SKNode {
     private var velocity: CGFloat = 0
     private var lastDragX: CGFloat = 0
     private var lastDragTime: TimeInterval = 0
+    private var needsRebuild = false
 
     var onEmployeeTap: ((Int, CardTapArea) -> Void)?
 
