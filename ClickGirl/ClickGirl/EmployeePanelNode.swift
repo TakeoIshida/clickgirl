@@ -360,6 +360,10 @@ class EmployeePanelNode: SKNode {
     }
 
     func applyInertia() {
+        if needsRebuild {
+            needsRebuild = false
+            buildCards()
+        }
         guard !isDragging else { return }
         guard abs(velocity) > 1 else { velocity = 0; return }
         scrollContainer.position.x = clampScroll(scrollContainer.position.x + velocity * 0.016)
