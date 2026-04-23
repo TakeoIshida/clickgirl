@@ -520,7 +520,7 @@ class GameScene: SKScene {
         label.fontName = "HiraginoSans-W6"
         label.fontSize = 16
         label.fontColor = UIColor(red: 1.0, green: 0.9, blue: 0.5, alpha: 1.0)
-        label.position = CGPoint(x: frame.midX, y: frame.height - 130)
+        label.position = CGPoint(x: frame.midX, y: frame.height - hudNode.hudHeight - 10)
         label.zPosition = 25
         label.setScale(0.8)
         addChild(label)
