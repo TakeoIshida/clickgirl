@@ -41,6 +41,7 @@ class GameScene: SKScene {
 
     override func didMove(to view: SKView) {
         backgroundColor = UIColor(red: 0.03, green: 0.03, blue: 0.1, alpha: 1.0)
+        safeAreaTop = view.safeAreaInsets.top
         setupBackground()
         setupMainCharacter()
         setupOfficeChiibis()
