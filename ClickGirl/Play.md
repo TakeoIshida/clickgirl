@@ -566,6 +566,46 @@ totalIncomePerSec
 
 ---
 
+## バグ修正履歴
+
+### 2026-04-23
+
+#### AdMob クラッシュ（EXC_BAD_ACCESS / EXC_I386_GPFLT）
+
+**症状:** 起動直後に Thread 4/8 (concurrent) で `GADApplicationVerifyPublisherInitializedCorrectly` が NSException を投げてクラッシュ。
+
+**原因:** `GENERATE_INFOPLIST_FILE = YES` + `INFOPLIST_KEY_GADApplicationIdentifier` のビルド設定では AdMob SDK v13 が `GADApplicationIdentifier` を Info.plist から読み取れない。
+
+**調査過程:**
+- ThreadSanitizer (TSan) が AdMob の GCD ディスパッチをラップして例外伝播を阻害していた → Xcode: Edit Scheme → Run → Diagnostics → Thread Sanitizer をオフ
+- TSan 無効後も継続 → exception breakpoint + `po $arg1` で例外メッセージ確認
+- メッセージ: `"The Google Mobile Ads SDK was initialized without an application ID."`
+
+**修正内容:**
+1. `AppDelegate.swift` を変更 — `MobileAds.shared.start()` を起動直後に即時呼び出し、ATTracking は 1 秒後に非同期で別途リクエスト
+2. `ClickGirl/Info.plist` を手動作成 — `GADApplicationIdentifier` を直接記載（テスト ID: `ca-app-pub-3940256099942544~1458002511`）。`CFBundleIdentifier` 等の必須 bundle キーも含む
+3. `project.pbxproj` の ClickGirl ターゲット（Debug/Release）を変更:
+   - `GENERATE_INFOPLIST_FILE = NO`
+   - `INFOPLIST_FILE = ClickGirl/Info.plist`
+   - `INFOPLIST_KEY_*` 系キーを削除
+4. `PBXFileSystemSynchronizedBuildFileExceptionSet` を pbxproj に追加し `Info.plist` をリソースコピーから除外（"Multiple commands produce Info.plist" エラーの回避）
+
+**本番リリース時の注意:** `Info.plist` の `GADApplicationIdentifier` を実際の AdMob App ID に変更すること。
+
+---
+
+#### CharSelectScene キャラ画像の歪み
+
+**症状:** キャラ選択画面のカード内キャラ画像が正方形に潰れて歪んで表示される。
+
+**原因:** `SKTexture(imageNamed:)` はシーン遷移直後に `size()` が `(1, 1)` を返すことがある。これによりアスペクト比が 1:1 と誤認識され、縦長画像が正方形に引き延ばされる。また、高さ上限クランプ時に幅を調整しないため比率が崩れていた。
+
+**修正内容（`CharSelectScene.swift` `makeCard` 関数）:**
+- `UIImage(named:)` でアスペクト比を正確に取得（`SKTexture.size()` の代わり）
+- 高さが上限（`h * 0.62`）を超えた場合、幅も縮小してアスペクト比を保持（aspectFit）
+
+---
+
 ## 共通UIデザイン原則
 
 全シーンで統一されているデザインパターン:
