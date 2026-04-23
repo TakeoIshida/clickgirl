@@ -129,8 +129,8 @@ class GameScene: SKScene {
         // メインタップキャラ - UIImage でアスペクト比を確実に取得
         let charTexture = SKTexture(imageNamed: mainCharImageName)
 
-        // HUD(100pt) と 社員パネル(210pt) の間の中央に配置
-        let availableTop: CGFloat    = frame.height - 120
+        // HUD と 社員パネル(210pt) の間の中央に配置
+        let availableTop: CGFloat    = frame.height - hudNode.hudHeight
         let availableBottom: CGFloat = 210
         let maxH = (availableTop - availableBottom) * 0.95
 
