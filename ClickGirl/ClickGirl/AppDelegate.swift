@@ -13,10 +13,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         // SDK v13: UMP consent flow を先に済ませてから MobileAds.start() を呼ぶ
-        let params = UMPRequestParameters()
-        params.tagForUnderAgeOfConsent = false
+        let params = RequestParameters()
+        params.isTaggedForUnderAgeOfConsent = false
 
-        UMPConsentInformation.sharedInstance.requestConsentInfoUpdate(with: params) { [weak self] _ in
+        ConsentInformation.shared.requestConsentInfoUpdate(with: params) { [weak self] _ in
             DispatchQueue.main.async {
                 self?.startMobileAdsIfReady()
             }
