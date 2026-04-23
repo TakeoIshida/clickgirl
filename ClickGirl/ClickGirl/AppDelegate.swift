@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func startMobileAdsIfReady() {
         guard !adMobStarted,
-              UMPConsentInformation.sharedInstance.canRequestAds else { return }
+              ConsentInformation.shared.canRequestAds else { return }
         adMobStarted = true
 
         if #available(iOS 14, *) {
