@@ -1,51 +1,28 @@
 import UIKit
 import GoogleMobileAds
 import AppTrackingTransparency
-import UserMessagingPlatform
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    private var adMobStarted = false
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        // SDK v13: UMP consent flow を先に済ませてから MobileAds.start() を呼ぶ
-        let params = RequestParameters()
-        params.isTaggedForUnderAgeOfConsent = false
-
-        ConsentInformation.shared.requestConsentInfoUpdate(with: params) { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.startMobileAdsIfReady()
-            }
+        // AdMob を即時初期化（検証タイミングより前に start() を済ませる）
+        MobileAds.shared.start { _ in
+            NotificationCenter.default.post(name: .adMobReady, object: nil)
         }
 
-        // 前回セッションで同意済みの場合はすぐに起動
-        startMobileAdsIfReady()
+        // ATTracking はパーソナライズ広告のためだけなので非同期で別途リクエスト
+        if #available(iOS 14, *) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                ATTrackingManager.requestTrackingAuthorization { _ in }
+            }
+        }
 
         return true
-    }
-
-    private func startMobileAdsIfReady() {
-        guard !adMobStarted,
-              ConsentInformation.shared.canRequestAds else { return }
-        adMobStarted = true
-
-        if #available(iOS 14, *) {
-            ATTrackingManager.requestTrackingAuthorization { _ in
-                DispatchQueue.main.async {
-                    MobileAds.shared.start { _ in
-                        NotificationCenter.default.post(name: .adMobReady, object: nil)
-                    }
-                }
-            }
-        } else {
-            MobileAds.shared.start { _ in
-                NotificationCenter.default.post(name: .adMobReady, object: nil)
-            }
-        }
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
