@@ -699,7 +699,7 @@ class GameScene: SKScene {
             confetti.fillColor = colors.randomElement()!
             confetti.strokeColor = .clear
             confetti.position = CGPoint(x: CGFloat.random(in: 60...frame.width - 60),
-                                        y: frame.height - 120)
+                                        y: frame.height - hudNode.hudHeight)
             confetti.zPosition = 24
             confetti.zRotation = CGFloat.random(in: 0...(.pi * 2))
             addChild(confetti)
