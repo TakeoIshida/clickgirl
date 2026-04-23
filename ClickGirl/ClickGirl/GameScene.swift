@@ -200,8 +200,8 @@ class GameScene: SKScene {
     }
 
     private func setupHUD() {
-        hudNode = HUDNode(width: frame.width)
-        hudNode.position = CGPoint(x: 0, y: frame.height - 120)
+        hudNode = HUDNode(width: frame.width, topInset: safeAreaTop)
+        hudNode.position = CGPoint(x: 0, y: frame.height - hudNode.hudHeight)
         hudNode.zPosition = 10
         addChild(hudNode)
         hudNode.update(money: gm.money, incomePerSec: gm.totalIncomePerSec)
