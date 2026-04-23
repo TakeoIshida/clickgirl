@@ -122,15 +122,29 @@ class CharSelectScene: SKScene {
             ])))
         }
 
-        // キャラ画像
-        let imgIdx  = gm.selectedImageIndex[emp.id] ?? 0
-        let imgName = isHired ? emp.nobgImageName(at: imgIdx) : emp.imageName + "_nobg_locked"
-        var tex     = SKTexture(imageNamed: emp.nobgImageName(at: imgIdx))
-        if !isHired { tex = SKTexture(imageNamed: emp.imageNameNobg) }
+        // キャラ画像 - UIImage でアスペクト比を正確に取得（SKTexture はシーン遷移直後にサイズ未取得のことがある）
+        let imgIdx   = gm.selectedImageIndex[emp.id] ?? 0
+        let imgName  = isHired ? emp.nobgImageName(at: imgIdx) : emp.imageNameNobg
+        let tex      = SKTexture(imageNamed: imgName)
 
-        let imgW = w - 10
-        let imgH = min(imgW * tex.size().height / tex.size().width, h * 0.60)
-        let img  = SKSpriteNode(texture: tex, size: CGSize(width: imgW, height: imgH))
+        let aspect: CGFloat
+        if let uiImg = UIImage(named: imgName), uiImg.size.width > 0 {
+            aspect = uiImg.size.height / uiImg.size.width
+        } else {
+            let ts = tex.size()
+            aspect = ts.width > 0 ? ts.height / ts.width : 1.5
+        }
+
+        let maxImgW = w - 10
+        let maxImgH = h * 0.62
+        var imgW = maxImgW
+        var imgH = imgW * aspect
+        if imgH > maxImgH {
+            imgH = maxImgH
+            imgW = imgH / aspect
+        }
+
+        let img = SKSpriteNode(texture: tex, size: CGSize(width: imgW, height: imgH))
         img.position = CGPoint(x: 0, y: h * 0.08)
         img.alpha    = isHired ? 1.0 : 0.28
         img.name     = node.name
