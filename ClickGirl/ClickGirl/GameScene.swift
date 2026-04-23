@@ -15,6 +15,7 @@ class GameScene: SKScene {
 
     // MARK: - State
     private let gm = GameManager.shared
+    private var safeAreaTop: CGFloat = 0
     private var lastUpdateTime: TimeInterval = 0
     private var saveAccum: TimeInterval = 0
     private let saveInterval: TimeInterval = 30
