@@ -893,8 +893,19 @@ class GachaScene: SKScene {
             container.addChild(countLbl)
 
         } else {
-            let charImg = SKSpriteNode(imageNamed: card.galleryImageName)
-            charImg.size     = CGSize(width: w - 4, height: h * 0.54)
+            let smallImgName = card.galleryImageName
+            let smallAspect: CGFloat
+            if let ui = UIImage(named: smallImgName), ui.size.width > 0 {
+                smallAspect = ui.size.height / ui.size.width
+            } else {
+                let ts = SKTexture(imageNamed: smallImgName).size()
+                smallAspect = ts.width > 0 ? ts.height / ts.width : 1.5
+            }
+            let maxSW = w - 4; let maxSH = h * 0.54
+            var sW = maxSW; var sH = sW * smallAspect
+            if sH > maxSH { sH = maxSH; sW = sH / smallAspect }
+            let charImg = SKSpriteNode(imageNamed: smallImgName)
+            charImg.size     = CGSize(width: sW, height: sH)
             charImg.position = CGPoint(x: 0, y: 8 * fs)
             charImg.zPosition = 1
             container.addChild(charImg)
