@@ -92,12 +92,29 @@ class TitleScene: SKScene {
 
     // MARK: - キャラ立ち絵
     private func addCharacter() {
-        let gm  = GameManager.shared
         let imgName = "airi_2_nobg"
         let tex = SKTexture(imageNamed: imgName)
-        let w   = frame.width * 0.70
-        let h   = w * tex.size().height / tex.size().width
-        let char = SKSpriteNode(texture: tex, size: CGSize(width: w, height: min(h, frame.height * 0.46)))
+
+        // UIImageでアスペクト比を正確に取得（SKTexture.size()はシーン遷移直後に(1,1)を返す場合がある）
+        let ratio: CGFloat
+        if let ui = UIImage(named: imgName), ui.size.width > 0 {
+            ratio = ui.size.height / ui.size.width
+        } else {
+            let s = tex.size()
+            ratio = s.width > 0 ? s.height / s.width : 1.47
+        }
+
+        // aspectFit: 幅70%を基準に高さ上限46%でクランプし、はみ出す場合は幅も縮小
+        let maxW = frame.width * 0.70
+        let maxH = frame.height * 0.46
+        var charW = maxW
+        var charH = charW * ratio
+        if charH > maxH {
+            charH = maxH
+            charW = charH / ratio
+        }
+
+        let char = SKSpriteNode(texture: tex, size: CGSize(width: charW, height: charH))
         char.position = CGPoint(x: frame.midX, y: frame.height * 0.45)
         addChild(char)
 
@@ -106,10 +123,10 @@ class TitleScene: SKScene {
             SKAction.moveBy(x: 0, y: -8, duration: 2.5)
         ])))
 
-        let glow = SKShapeNode(ellipseOf: CGSize(width: w * 0.55, height: 14))
+        let glow = SKShapeNode(ellipseOf: CGSize(width: charW * 0.55, height: 14))
         glow.fillColor   = UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 0.10)
         glow.strokeColor = .clear
-        glow.position    = CGPoint(x: frame.midX, y: char.position.y - char.size.height * 0.48)
+        glow.position    = CGPoint(x: frame.midX, y: char.position.y - charH * 0.48)
         addChild(glow)
     }
 
