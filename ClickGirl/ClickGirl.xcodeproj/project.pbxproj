@@ -36,9 +36,8 @@
 		E71438C6AF76CC0F8478BA28 /* Pods-ClickGirl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClickGirl.release.xcconfig"; path = "Target Support Files/Pods-ClickGirl/Pods-ClickGirl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		AA11BB22CC33DD44EE55FF66 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		AA11BB22CC33DD44EE55FF66 /* Exceptions for "ClickGirl" folder in "ClickGirl" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -51,7 +50,7 @@
 		1427E6152F5CFEB9001EBA83 /* ClickGirl */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				AA11BB22CC33DD44EE55FF66 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+				AA11BB22CC33DD44EE55FF66 /* Exceptions for "ClickGirl" folder in "ClickGirl" target */,
 			);
 			path = ClickGirl;
 			sourceTree = "<group>";
@@ -483,13 +482,19 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ClickGirl/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ClickGirl;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = tko.ClickGirl;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tko.ClickGirl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -508,13 +513,19 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ClickGirl/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ClickGirl;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = tko.ClickGirl;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tko.ClickGirl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
