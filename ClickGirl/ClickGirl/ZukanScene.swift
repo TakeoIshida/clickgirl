@@ -220,7 +220,12 @@ class ZukanScene: SKScene {
 
             self.mainImgNode.texture = tex
             let w = self.frame.width - 24
-            let ratio = tex.size().height / max(tex.size().width, 1)
+            let ratio: CGFloat
+            if let ui = UIImage(named: name), ui.size.width > 0 {
+                ratio = ui.size.height / ui.size.width
+            } else {
+                ratio = tex.size().height / max(tex.size().width, 1)
+            }
             let h = min(w * ratio, self.imgAreaH)
             self.mainImgNode.size = CGSize(width: w, height: h)
 
