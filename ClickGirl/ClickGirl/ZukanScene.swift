@@ -244,6 +244,8 @@ class ZukanScene: SKScene {
             self.lockOverlayNode = nil
 
             if !unlocked {
+                self.mainImgNode.alpha = 0
+
                 let overlay = self.makeLockOverlay(
                     size: self.mainImgNode.size,
                     condText: ZukanConditions.conditionText(charId: char.id, imageIndex: self.currentImgIdx)
@@ -252,11 +254,8 @@ class ZukanScene: SKScene {
                 overlay.zPosition = 7
                 self.addChild(overlay)
                 self.lockOverlayNode = overlay
-
-                // ロック時はダーク化
-                self.mainImgNode.color = UIColor.black
-                self.mainImgNode.colorBlendFactor = 0.65
             } else {
+                self.mainImgNode.alpha = 1
                 self.mainImgNode.colorBlendFactor = 0.0
             }
         }
