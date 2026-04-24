@@ -309,12 +309,6 @@ class GameScene: SKScene {
             if node.name == "charSelectBtn" { openCharSelect(); return }
         }
 
-        // メインキャラ長押しでキャラ選択
-        if nodes(at: loc).contains(where: { $0.name == "mainChar" }) {
-            openCharSelect()
-            return
-        }
-
         // パネル内タップ → キャラ切替 or 採用/UP
         let panelLoc = touch.location(in: employeePanel)
         if panelLoc.y >= 0 && panelLoc.y <= 210 {
