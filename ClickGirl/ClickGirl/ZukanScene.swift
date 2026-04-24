@@ -69,7 +69,7 @@ class ZukanScene: SKScene {
         buildThumbBar()
 
         // 採用済みの最初のキャラを選択
-        let firstHired = chars.firstIndex(where: { isCharHired($0.id) }) ?? 0
+        let firstHired = chars.indices.first(where: { isCharHired($0) }) ?? 0
         currentCharIdx = firstHired
         currentImgIdx  = GameManager.shared.selectedImageIndex[chars[currentCharIdx].id] ?? 0
         refreshAll()
