@@ -811,9 +811,19 @@ class GachaScene: SKScene {
 
         if large {
             let imgY: CGFloat = 20
-            let imgH: CGFloat = h * 0.52
-            let imgW: CGFloat = w - 8
-            let charImg = SKSpriteNode(imageNamed: card.galleryImageName)
+            let maxImgW: CGFloat = w - 8
+            let maxImgH: CGFloat = h * 0.52
+            let imgName = card.galleryImageName
+            let aspect: CGFloat
+            if let ui = UIImage(named: imgName), ui.size.width > 0 {
+                aspect = ui.size.height / ui.size.width
+            } else {
+                aspect = SKTexture(imageNamed: imgName).size().height / max(1, SKTexture(imageNamed: imgName).size().width)
+            }
+            var imgW = maxImgW
+            var imgH = imgW * aspect
+            if imgH > maxImgH { imgH = maxImgH; imgW = imgH / aspect }
+            let charImg = SKSpriteNode(imageNamed: imgName)
             charImg.size     = CGSize(width: imgW, height: imgH)
             charImg.position = CGPoint(x: 0, y: imgY)
             charImg.zPosition = 1
