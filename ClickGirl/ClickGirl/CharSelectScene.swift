@@ -213,7 +213,7 @@ class CharSelectScene: SKScene {
         }
 
         if name.hasPrefix("card_"), let id = Int(name.dropFirst(5)) {
-            guard Employee.allEmployees.first(where: { $0.id == id })?.isHired == true else {
+            guard gm.employees.first(where: { $0.id == id })?.isHired == true else {
                 showLockedToast()
                 return
             }
