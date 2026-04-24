@@ -975,9 +975,9 @@ class GachaScene: SKScene {
 
     // MARK: - カード裏面
 
-    private func makeCardBackNode(large: Bool, smallW: CGFloat = 58, smallH: CGFloat = 88) -> SKNode {
-        let w: CGFloat  = large ? 185 : smallW
-        let h: CGFloat  = large ? 260 : smallH
+    private func makeCardBackNode(large: Bool, smallW: CGFloat = 58, smallH: CGFloat = 88, largeW: CGFloat = 185, largeH: CGFloat = 260) -> SKNode {
+        let w: CGFloat  = large ? largeW : smallW
+        let h: CGFloat  = large ? largeH : smallH
         let fs: CGFloat = large ? 1.0 : smallW / 58
         let container   = SKNode()
 
