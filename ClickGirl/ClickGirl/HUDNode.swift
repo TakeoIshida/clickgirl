@@ -129,7 +129,7 @@ class HUDNode: SKNode {
         ])
         gachaGlow.run(SKAction.repeatForever(glowPulse))
 
-        addGlowDecor()
+        addGlowDecor(topInset: topInset)
     }
 
     private func addGlowDecor(topInset t: CGFloat) {
