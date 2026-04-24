@@ -55,8 +55,7 @@ class CharSelectScene: SKScene {
 
     // MARK: - カードグリッド
     private func addCards() {
-        let employees = Employee.allEmployees.filter { $0.isHired }
-        let allEmps   = Employee.allEmployees
+        let allEmps = gm.employees
 
         let cols: Int   = 3
         let pad:  CGFloat = 12
