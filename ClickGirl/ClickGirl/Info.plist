@@ -21,7 +21,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<string>ca-app-pub-8244563543256981~2074299497</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>より関連性の高い広告を表示するために使用します</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
