@@ -298,9 +298,20 @@ class ZukanScene: SKScene {
         thumbContainer.removeAllChildren()
         let char  = chars[currentCharIdx]
         let gm    = GameManager.shared
-        let thumbW: CGFloat = 70
-        let thumbH: CGFloat = thumbW * (9.0 / 16.0)
+        let maxThumbH: CGFloat = thumbBarH - 10
         let gap:    CGFloat = 6
+
+        // UIImageでアスペクト比を正確に取得（代表画像で統一）
+        let sampleName = "\(char.prefix)_0"
+        let thumbAspect: CGFloat
+        if let ui = UIImage(named: sampleName), ui.size.height > 0 {
+            thumbAspect = ui.size.width / ui.size.height
+        } else {
+            thumbAspect = 2.0 / 3.0
+        }
+        let thumbH: CGFloat = maxThumbH
+        let thumbW: CGFloat = thumbH * thumbAspect
+
         let totalW = CGFloat(char.count) * (thumbW + gap) - gap
         let startX = max(thumbW / 2 + 8, (frame.width - totalW) / 2 + thumbW / 2)
         let thumbY: CGFloat = thumbBarH / 2
