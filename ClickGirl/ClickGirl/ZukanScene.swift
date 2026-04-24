@@ -332,10 +332,7 @@ class ZukanScene: SKScene {
             thumb.name     = "thumb_\(i)"
 
             if !unlocked {
-                // ロック: 暗くする
-                thumb.color = UIColor.black
-                thumb.colorBlendFactor = 0.7
-                thumb.alpha = 0.5
+                thumb.alpha = 0
             } else {
                 thumb.alpha = i == currentImgIdx ? 1.0 : 0.5
             }
