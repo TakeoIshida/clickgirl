@@ -518,15 +518,18 @@ class GachaScene: SKScene {
     }
 
     private func showSingleResult(_ card: GachaCard, in overlay: SKNode) {
+        // 画面幅に応じてカードサイズをスケール（iPhone: ~185pt / iPad: ~280pt）
+        let largeW = min(frame.width * 0.48, 280)
+        let largeH = largeW * (260.0 / 185.0)
         let pos = CGPoint(x: frame.midX, y: frame.midY + 50)
-        let cardSize = CGSize(width: 185, height: 260)
+        let cardSize = CGSize(width: largeW, height: largeH)
 
-        let backNode = makeCardBackNode(large: true)
+        let backNode = makeCardBackNode(large: true, largeW: largeW, largeH: largeH)
         backNode.position = pos
         backNode.setScale(0)
         overlay.addChild(backNode)
 
-        let frontNode = makeCardNode(card: card, large: true)
+        let frontNode = makeCardNode(card: card, large: true, largeW: largeW, largeH: largeH)
         frontNode.position = pos
         frontNode.alpha = 0
         overlay.addChild(frontNode)
