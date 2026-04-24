@@ -264,7 +264,13 @@ class ZukanScene: SKScene {
             mainImgNode.run(SKAction.sequence([
                 SKAction.fadeAlpha(to: 0, duration: 0.12),
                 SKAction.run(apply),
-                SKAction.fadeAlpha(to: 1.0, duration: 0.12)
+                SKAction.run { [weak self] in
+                    guard let self else { return }
+                    if unlocked {
+                        self.mainImgNode.run(SKAction.fadeAlpha(to: 1.0, duration: 0.12))
+                    }
+                    // ロック時は alpha = 0 のまま（apply で設定済み）
+                }
             ]))
             lockOverlayNode?.removeFromParent()
             lockOverlayNode = nil
