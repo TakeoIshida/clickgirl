@@ -470,7 +470,7 @@ class GachaScene: SKScene {
     private func pullGacha(count: Int) {
         let cost = count == 1 ? GachaCatalog.singleCost : GachaCatalog.tenCost
         guard gm.money >= cost else {
-            showToast("💸 お金が足りません (¥\(formatMoney(cost)) 必要)")
+            showToast("💸 お金が足りません (✦\(formatMoney(cost)) 必要)")
             return
         }
         isAnimating = true
