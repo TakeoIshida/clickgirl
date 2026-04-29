@@ -6,7 +6,7 @@
 
 - **プラットフォーム**: iOS
 - **技術**: Swift / SpriteKit
-- **通貨単位**: 円（¥）
+- **通貨単位**: ✦（スター）※ 実在通貨は使用しない
 
 ---
 
@@ -14,12 +14,16 @@
 
 | シーン | 役割 |
 |--------|------|
+| TitleScene | タイトル画面 |
+| CharSelectScene | キャラ選択画面 |
 | GameScene | メイン画面（タップ・社員パネル・HUD） |
 | ShopScene | アップグレード・ブースト購入 |
 | OfficeScene | オフィス拡張・設備強化 |
 | GachaScene | ガチャ（カード収集） |
 | ZukanScene | 図鑑（キャラ画像コレクション） |
 | CityScene | 都市開発（建物建設・収益） |
+| RankingScene | ランキング |
+| SettingScene | 設定 |
 
 ---
 
@@ -27,10 +31,15 @@
 
 | ID | 名前 | 役職 | 採用コスト | 基本収益/秒 | 画像枚数 |
 |----|------|------|-----------|------------|---------|
-| 0 | カレン | 営業部長 | ¥100 | 1.0 | 10枚 |
-| 1 | みさき | 開発部長 | ¥1,500 | 15.0 | 8枚 |
-| 2 | ゆき | 管理部長 | ¥20,000 | 200.0 | 10枚 |
-| 3 | りお | マーケティング部長 | ¥300,000 | 3,000.0 | 3枚（追加予定） |
+| 0 | アイリ | 営業部長 | ✦100 | 1.0 | 5枚 |
+| 1 | ハナ | 開発部長 | ✦1,500 | 15.0 | 7枚 |
+| 2 | ミク | 管理部長 | ✦20,000 | 200.0 | 5枚 |
+| 4 | さき | 広報部長 | ✦400,000 | 4,000.0 | 8枚 |
+| 5 | ナナ | 財務部長 | ✦5,000,000 | 50,000.0 | 5枚 |
+| 6 | レナ | 戦略部長 | ✦50,000,000 | 500,000.0 | 5枚 |
+| 7 | シオリ | CEO | ✦500,000,000 | 5,000,000.0 | 5枚 |
+
+> **Note**: ID 3 は欠番（旧キャラ削除済み）
 
 ### 社員レベルアップ
 
@@ -50,21 +59,20 @@
 
 | 種別 | 命名パターン | 例 |
 |------|------------|-----|
-| 背景ありJPG（図鑑用） | `{prefix}_{index}.jpg` | `karen_0.jpg` |
-| 背景なしPNG（ゲーム表示用） | `{prefix}_{index}_nobg.png` | `karen_0_nobg.png` |
+| 背景ありJPG（図鑑用） | `{prefix}_{index}.jpg` | `airi_0.jpg` |
+| 背景なしPNG（ゲーム表示用） | `{prefix}_{index}_nobg.png` | `airi_0_nobg.png` |
 
 ### 各キャラ画像一覧
 
-| キャラ | prefix | _nobg枚数 | 備考 |
-|--------|--------|----------|------|
-| カレン | karen | 10枚（0-9） | |
-| みさき | misaki | 8枚（0-7） | |
-| ゆき | yuki | 10枚（0-9） | |
-| りお | rio | 3枚（0-2） | AIで背景除去済み |
-
-### 既存画像の処理（元が16:9横長だった場合）
-
-元の画像が16:9（1368×768等）だった_nobg PNGは、784×441にリサイズして784×1176キャンバスの**縦中央**に配置済み（上下各368px透明余白）。
+| キャラ | prefix | 枚数 | 内訳 |
+|--------|--------|------|------|
+| アイリ | airi | 5枚（0-4） | N×2 / R×1 / SR×1 / SSR×1 |
+| ハナ | hana | 7枚（0-6） | N×3 / R×2 / SR×1 / SSR×1 |
+| ミク | miku | 5枚（0-4） | N×2 / R×1 / SR×1 / SSR×1 |
+| さき | saki | 8枚（0-7） | N×2 / R×1 / SR×3 / SSR×2（シークレットあり） |
+| ナナ | nana | 5枚（0-4） | N×2 / R×1 / SR×1 / SSR×1 |
+| レナ | rena | 5枚（0-4） | N×2 / R×1 / SR×1 / SSR×1 |
+| シオリ | shiori | 5枚（0-4） | N×2 / R×1 / SR×1 / SSR×1 |
 
 ---
 
@@ -76,7 +84,7 @@
 
 ```
 ┌─────────────────────┐ ← frame.height
-│  HUD（120pt）        │   所持金・収益表示、ナビボタン
+│  HUD（120pt）        │   所持✦・収益表示、ナビボタン
 ├─────────────────────┤ ← frame.height - 120
 │                     │
 │  メインキャラ表示     │   _nobg PNG を使用
@@ -96,7 +104,7 @@
 - **背景**: ダーク紺 `(0.05, 0.05, 0.15, 0.92)` + 金枠 `lineWidth=1.5`
 - **ゴールドアクセントライン**: HUD下端（y=0）に高さ1.5ptの金色ライン + 薄いグロー層
 - **会社名**: "株式会社 ClickGirl"、左上にパルスする ✦ デコ（金色）
-- **所持金**: 金色、fontSize=30、左寄せ
+- **所持✦**: 金色、fontSize=30、左寄せ
 - **毎秒収益**: 緑色、fontSize=13、左寄せ
 
 #### HUD ナビボタン（4つ、2列×2行）
@@ -127,7 +135,6 @@
 - 画像: 背景ありJPG（`employee.imageName`）を使用
 - 幅: 最大138pt
 - 高さ: アスペクト比維持、**最大110pt**（超過時は幅を自動縮小）
-- 縦長画像（りお 784×1176）は幅が自動的に縮小される
 
 #### 社員カードのアフォーダブルグロー
 
@@ -162,7 +169,7 @@
 
 #### 設備カード（makeCard）
 
-- **グリーン収益ピル**: 90×17pt（cornerRadius=8）、+¥N/s 表示
+- **グリーン収益ピル**: 90×17pt（cornerRadius=8）、+✦N/s 表示
 - **アフォーダブルグロー**: 購入可能時に外側パルス青グローリング
 - **MAXピル**: 背景付き（緑系）
 
@@ -182,7 +189,7 @@
 #### TopBar
 
 - ゴールドアクセントライン（height=1.5pt）+ グロー層
-- 左: ◀ 戻る、中央: 🌆 都市開発、右: 所持金 / 都市収益
+- 左: ◀ 戻る、中央: 🌆 都市開発、右: 所持✦ / 都市収益
 
 #### 都市ビュー（アイソメトリック、215pt高）
 
@@ -241,13 +248,13 @@ isoCenter(col, row) = (
 
 | ID | 名前 | 建設コスト | 基本収益/秒 | 収益倍率 | 最大Lv |
 |----|------|----------|-----------|--------|--------|
-| cafe | カフェ | ¥50,000 | 50 | ×1.6 | 5 |
-| restaurant | レストラン | ¥300,000 | 300 | ×1.7 | 4 |
-| hotel | ホテル | ¥2,000,000 | 2,000 | ×1.8 | 4 |
-| mall | ショッピングモール | ¥10,000,000 | 10,000 | ×1.9 | 3 |
-| tower | タワー | ¥80,000,000 | 80,000 | ×2.0 | 3 |
+| cafe | カフェ | ✦50,000 | 50 | ×1.6 | 5 |
+| restaurant | レストラン | ✦300,000 | 300 | ×1.7 | 4 |
+| hotel | ホテル | ✦2,000,000 | 2,000 | ×1.8 | 4 |
+| mall | ショッピングモール | ✦10,000,000 | 10,000 | ×1.9 | 3 |
+| tower | タワー | ✦80,000,000 | 80,000 | ×2.0 | 3 |
 
-- アップグレードコスト: `placeCost × upgradeMult^level`
+- アップグレードコスト: `placeCost × upgradeMult^level`（cafe/restaurant: ×3.5、hotel/mall: ×4.0、tower: ×5.0）
 - 収益: `baseIncome × incomeMult^(level-1)`
 
 #### プロット一覧UI（スクロールリスト）
@@ -301,23 +308,25 @@ totalIncomePerSec = (社員収益合計 × incomeMultiplier × officeIncomeMulti
 
 | ID | 名前 | 効果 | コスト | 前提条件 |
 |----|------|------|--------|----------|
-| tap_lv1 | タップ強化 Lv.1 | タップ収益 +50% | ¥30,000 | なし |
-| tap_lv2 | タップ強化 Lv.2 | タップ収益 さらに+100% | ¥200,000 | tap_lv1 |
+| tap_lv1 | タップ強化 Lv.1 | タップ収益 +50% | ✦30,000 | なし |
+| tap_lv2 | タップ強化 Lv.2 | タップ収益 さらに+100% | ✦200,000 | tap_lv1 |
 | tap_lv3 | タップ強化 Lv.3 | タップ収益 さらに+150% | ガチャSR限定 | tap_lv2 |
-| income_lv1 | 収益強化 Lv.1 | 自動収益 +30% | ¥100,000 | なし |
-| income_lv2 | 収益強化 Lv.2 | 自動収益 さらに+70% | ¥500,000 | income_lv1 |
+| income_lv1 | 収益強化 Lv.1 | 自動収益 +30% | ✦100,000 | なし |
+| income_lv2 | 収益強化 Lv.2 | 自動収益 さらに+70% | ✦500,000 | income_lv1 |
 | income_lv3 | 収益強化 Lv.3 | 自動収益 さらに+200% | ガチャSSR限定 | income_lv2 |
-| auto_tap | 自動タップ | 毎秒 自動で1タップ | ¥80,000 | なし |
-| offline_ext | 夜勤延長 | 放置上限 8h → 16h | ¥300,000 | なし |
+| auto_tap | 自動タップ | 毎秒 自動で1タップ | ✦80,000 | なし |
+| offline_ext | 夜勤延長 | 放置上限 8h → 16h | ✦300,000 | なし |
+
+> **Note**: tap_lv3・income_lv3 はショップ非表示、ガチャ入手でのみ効果が発動する
 
 ### 時限ブースト（何度でも購入可）
 
 | ID | 名前 | 効果 | コスト | 時間 |
 |----|------|------|--------|------|
-| boost_tap2 | タップ 2倍 | タップ収益 ×2 | ¥10,000 | 30秒 |
-| boost_income2 | 収益 2倍 | 自動収益 ×2 | ¥50,000 | 60秒 |
-| boost_income5 | 収益 5倍 | 自動収益 ×5 | ¥300,000 | 30秒 |
-| boost_all3 | 全力 3倍 | 全収益 ×3 | ¥200,000 | 60秒 |
+| boost_tap2 | タップ 2倍 | タップ収益 ×2 | ✦10,000 | 30秒 |
+| boost_income2 | 収益 2倍 | 自動収益 ×2 | ✦50,000 | 60秒 |
+| boost_income5 | 収益 5倍 | 自動収益 ×5 | ✦300,000 | 30秒 |
+| boost_all3 | 全力 3倍 | 全収益 ×3 | ✦200,000 | 60秒 |
 
 ---
 
@@ -327,8 +336,8 @@ totalIncomePerSec = (社員収益合計 × incomeMultiplier × officeIncomeMulti
 
 | 種別 | コスト |
 |------|--------|
-| シングル | ¥50,000 |
-| 10連 | ¥450,000（1回分お得） |
+| シングル | ✦50,000 |
+| 10連 | ✦450,000（1回分お得） |
 
 ### レアリティ・排出率
 
@@ -373,8 +382,6 @@ totalIncomePerSec = (社員収益合計 × incomeMultiplier × officeIncomeMulti
 
 **配置: 3+3+3+1**（3列×3行 + 最後の1枚を画面中央）
 
-カードサイズを画面幅・高さから動的に計算し、4行が利用可能領域に収まるよう上限クランプを適用する。
-
 ```
 cardW = floor((画面幅 - 24 - 10×2) / 3)
 cardH = min(floor(cardW × 1.58), floor((利用可能高さ - 8×3) / 4))
@@ -388,11 +395,8 @@ cardH = min(floor(cardW × 1.58), floor((利用可能高さ - 8×3) / 4))
 - 余白: 左右各 12pt、カード間 10pt、行間 8pt
 - 縦位置: 「全てめくる」ボタン領域（下115pt）と上部マージン（65pt）の間でグリッド全体を縦中央寄せ
 - 最終10枚目は単独で画面横中央に配置
-- フォント・バッジ・NEWラベルはカードサイズに比例してスケール
 
 ### カード収益倍率
-
-同じキャラのカードを複数枚所持するほど、そのキャラの収益に倍率が加算される。
 
 ```
 cardIncomeMultiplier = 1.0 + Σ(rarity.incomeBonus × 所持枚数)
@@ -406,10 +410,13 @@ cardIncomeMultiplier = 1.0 + Σ(rarity.incomeBonus × 所持枚数)
 
 | キャラ | 総画像数 | 内訳 |
 |--------|---------|------|
-| カレン | 10枚 | N×4 / R×3 / SR×2 / SSR×1 |
-| みさき | 8枚 | N×3 / R×3 / SR×1 / SSR×1 |
-| ゆき | 10枚 | N×4 / R×3 / SR×2 / SSR×1 |
-| りお | 3枚（追加予定） | N×3 |
+| アイリ | 5枚 | N×2 / R×1 / SR×1 / SSR×1 |
+| ハナ | 7枚 | N×3 / R×2 / SR×1 / SSR×1 |
+| ミク | 5枚 | N×2 / R×1 / SR×1 / SSR×1 |
+| さき | 8枚 | N×2 / R×1 / SR×3 / SSR×2（シークレットあり） |
+| ナナ | 5枚 | N×2 / R×1 / SR×1 / SSR×1 |
+| レナ | 5枚 | N×2 / R×1 / SR×1 / SSR×1 |
+| シオリ | 5枚 | N×2 / R×1 / SR×1 / SSR×1 |
 
 ### 解放条件
 
@@ -419,6 +426,8 @@ cardIncomeMultiplier = 1.0 + Σ(rarity.incomeBonus × 所持枚数)
 | R | 1枚 |
 | SR | 2枚 |
 | SSR | 3枚 |
+
+さき（シークレット）のみ SR/SSR ともに **5枚** 必要。
 
 解放した画像はメインキャラとして設定可能。社員パネルのキャラ画像エリアをタップすることで切り替える。
 
@@ -431,9 +440,18 @@ cardIncomeMultiplier = 1.0 + Σ(rarity.incomeBonus × 所持枚数)
 - フロアを増やすごとに自動収益 **+30%**
 - フロア拡張コスト: `80,000 × 5^(現フロア数 − 1)`
 
-### オフィス設備
+### オフィス設備（8種）
 
-各種設備をアップグレードすることで自動収益にボーナスが加算される。
+| ID | 名前 | 基本コスト | コスト倍率 | 収益ボーナス/Lv | 最大Lv |
+|----|------|-----------|-----------|--------------|--------|
+| size | オフィス拡張 | ✦5,000 | ×20 | +20% | 3 |
+| floor | フローリング | ✦300 | ×8 | +5% | 3 |
+| window | 窓 | ✦1,000 | ×8 | +8% | 3 |
+| desk | デスク | ✦500 | ×6 | +6% | 4 |
+| chair | チェア | ✦400 | ×6 | +4% | 3 |
+| lighting | 照明 | ✦2,000 | ×10 | +8% | 3 |
+| plant | 観葉植物 | ✦800 | ×6 | +4% | 3 |
+| meeting | 会議室 | ✦12,000 | ×15 | +15% | 2 |
 
 ```
 officeIncomeMultiplier = 1.0 + Σ(level × incomeBoostPerLevel)
@@ -468,7 +486,7 @@ officeIncomeMultiplier = 1.0 + Σ(level × incomeBoostPerLevel)
 
 | データ | キー |
 |--------|------|
-| 所持金 | cg_money |
+| 所持✦ | cg_money |
 | 累計収益 | cg_totalEarned |
 | 最終セーブ日時 | cg_lastSave |
 | 社員状態 | cg_employees |
@@ -480,8 +498,6 @@ officeIncomeMultiplier = 1.0 + Σ(level × incomeBoostPerLevel)
 | ガチャ天井カウント | cg_gachaPity |
 | ガチャカード枚数 | cg_gachaCards |
 | 都市建物 | cg_city |
-
-> **Note**: あかり（id: 4）は削除済み。社員は4名（カレン・みさき・ゆき・りお）。
 
 ---
 
@@ -519,10 +535,13 @@ rainbow hair, multicolored hair, color noise, chromatic aberration
 
 | キャラ | 髪色 | 特徴 |
 |--------|------|------|
-| karen | ピンク（短め） | 明るい笑顔、営業部長 |
-| misaki | 黒（ロング）+ 眼鏡 | クールな表情、開発部長 |
-| yuki | シルバーホワイト | クールビューティ、管理部長 |
-| rio | ピンク（ショート） | 元気な笑顔、マーケティング部長 |
+| airi | オレンジ〜茶（ショート） | 明るい笑顔、営業部長 |
+| hana | ピンク（ミディアム） | 元気で可愛い笑顔、開発部長 |
+| miku | 黒〜濃い青（ロング） | ミステリアスな表情、管理部長 |
+| saki | 紫〜藤色（ポニーテール） | 鋭い眼差し、広報部長 |
+| nana | 金髪（ウェーブ） | 落ち着いた笑顔、財務部長 |
+| rena | 赤（ショート） | 大胆で自信に満ちた表情、戦略部長 |
+| shiori | 銀白（ロング） | カリスマ的な佇まい、CEO |
 
 **レアリティ別背景・衣装:**
 
@@ -535,9 +554,9 @@ rainbow hair, multicolored hair, color noise, chromatic aberration
 
 ### 画像追加手順
 
-1. **Leonardo.ai Web画面**（[leonardo.ai](https://leonardo.ai)）で上記設定で生成
+1. **Leonardo.ai Web画面**で上記設定で生成
 2. 画像をダウンロードし、命名規則に従ってリネーム
-   - 例: `rio_3.jpg`, `akari_0.jpg`
+   - 例: `airi_5.jpg`, `hana_7.jpg`
 3. 以下のフォルダに配置:
    ```
    swiftgame/clickgirl/downloaded_images/
@@ -566,46 +585,6 @@ totalIncomePerSec
 
 ---
 
-## バグ修正履歴
-
-### 2026-04-23
-
-#### AdMob クラッシュ（EXC_BAD_ACCESS / EXC_I386_GPFLT）
-
-**症状:** 起動直後に Thread 4/8 (concurrent) で `GADApplicationVerifyPublisherInitializedCorrectly` が NSException を投げてクラッシュ。
-
-**原因:** `GENERATE_INFOPLIST_FILE = YES` + `INFOPLIST_KEY_GADApplicationIdentifier` のビルド設定では AdMob SDK v13 が `GADApplicationIdentifier` を Info.plist から読み取れない。
-
-**調査過程:**
-- ThreadSanitizer (TSan) が AdMob の GCD ディスパッチをラップして例外伝播を阻害していた → Xcode: Edit Scheme → Run → Diagnostics → Thread Sanitizer をオフ
-- TSan 無効後も継続 → exception breakpoint + `po $arg1` で例外メッセージ確認
-- メッセージ: `"The Google Mobile Ads SDK was initialized without an application ID."`
-
-**修正内容:**
-1. `AppDelegate.swift` を変更 — `MobileAds.shared.start()` を起動直後に即時呼び出し、ATTracking は 1 秒後に非同期で別途リクエスト
-2. `ClickGirl/Info.plist` を手動作成 — `GADApplicationIdentifier` を直接記載（テスト ID: `ca-app-pub-3940256099942544~1458002511`）。`CFBundleIdentifier` 等の必須 bundle キーも含む
-3. `project.pbxproj` の ClickGirl ターゲット（Debug/Release）を変更:
-   - `GENERATE_INFOPLIST_FILE = NO`
-   - `INFOPLIST_FILE = ClickGirl/Info.plist`
-   - `INFOPLIST_KEY_*` 系キーを削除
-4. `PBXFileSystemSynchronizedBuildFileExceptionSet` を pbxproj に追加し `Info.plist` をリソースコピーから除外（"Multiple commands produce Info.plist" エラーの回避）
-
-**本番リリース時の注意:** `Info.plist` の `GADApplicationIdentifier` を実際の AdMob App ID に変更すること。
-
----
-
-#### CharSelectScene キャラ画像の歪み
-
-**症状:** キャラ選択画面のカード内キャラ画像が正方形に潰れて歪んで表示される。
-
-**原因:** `SKTexture(imageNamed:)` はシーン遷移直後に `size()` が `(1, 1)` を返すことがある。これによりアスペクト比が 1:1 と誤認識され、縦長画像が正方形に引き延ばされる。また、高さ上限クランプ時に幅を調整しないため比率が崩れていた。
-
-**修正内容（`CharSelectScene.swift` `makeCard` 関数）:**
-- `UIImage(named:)` でアスペクト比を正確に取得（`SKTexture.size()` の代わり）
-- 高さが上限（`h * 0.62`）を超えた場合、幅も縮小してアスペクト比を保持（aspectFit）
-
----
-
 ## 共通UIデザイン原則
 
 全シーンで統一されているデザインパターン:
@@ -617,6 +596,52 @@ totalIncomePerSec
 | グリーン収益色 | `(0.38, 0.98, 0.52)` |
 | TopBarアクセントライン | height=1.5pt、金色、下端に配置 |
 | アフォーダブルグロー | 青系パルスリング（0.75〜1.0s周期） |
-| 収益ピル | 緑背景 + 緑枠、"+¥N/s" 表示 |
+| 収益ピル | 緑背景 + 緑枠、"+✦N/s" 表示 |
 | エラートースト | 画面下部スライドアップ、2秒表示 |
 | 建設完了バナー | 中央ポップイン + 金パーティクル |
+
+---
+
+## バグ・既知の問題
+
+### ZukanConditions に charId:3 が残存
+
+`ZukanConditions.swift` に charId:3（旧りお）のエントリが残っているが、`Employee.allEmployees` に id:3 は存在しない（欠番）。図鑑表示上は問題ないが、整合性のため将来的に削除を検討。
+
+---
+
+## バグ修正履歴
+
+### 2026-04-23
+
+#### AdMob クラッシュ（EXC_BAD_ACCESS / EXC_I386_GPFLT）
+
+**症状:** 起動直後に Thread 4/8 (concurrent) で `GADApplicationVerifyPublisherInitializedCorrectly` が NSException を投げてクラッシュ。
+
+**原因:** `GENERATE_INFOPLIST_FILE = YES` + `INFOPLIST_KEY_GADApplicationIdentifier` のビルド設定では AdMob SDK v13 が `GADApplicationIdentifier` を Info.plist から読み取れない。
+
+**修正内容:**
+1. `AppDelegate.swift` を変更 — `MobileAds.shared.start()` を起動直後に即時呼び出し、ATTracking は 1 秒後に非同期で別途リクエスト
+2. `ClickGirl/Info.plist` を手動作成 — `GADApplicationIdentifier` を直接記載（テスト ID: `ca-app-pub-3940256099942544~1458002511`）
+3. `GENERATE_INFOPLIST_FILE = NO` に変更、`INFOPLIST_FILE = ClickGirl/Info.plist` を明示
+
+**本番リリース時の注意:** `Info.plist` の `GADApplicationIdentifier` を実際の AdMob App ID に変更すること。
+
+---
+
+#### CharSelectScene キャラ画像の歪み
+
+**症状:** キャラ選択画面のカード内キャラ画像が正方形に潰れて歪んで表示される。
+
+**原因:** `SKTexture(imageNamed:)` はシーン遷移直後に `size()` が `(1, 1)` を返すことがある。
+
+**修正内容（`CharSelectScene.swift` `makeCard` 関数）:**
+- `UIImage(named:)` でアスペクト比を正確に取得
+- 高さが上限を超えた場合、幅も縮小してアスペクト比を保持（aspectFit）
+
+### 2026-04-30
+
+#### App Store リジェクト対応（v1.0）
+
+- **1.1.6**: ゲーム内通貨 `¥` → `✦`（スター）に変更（全8ファイル）
+- **4.2**: コンテンツ不足指摘 → 対応検討中
