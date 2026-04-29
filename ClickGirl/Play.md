@@ -604,9 +604,9 @@ totalIncomePerSec
 
 ## バグ・既知の問題
 
-### ZukanConditions に charId:3 が残存
+### ~~ZukanConditions に charId:3 が残存~~（2026-04-30 修正済み）
 
-`ZukanConditions.swift` に charId:3（旧りお）のエントリが残っているが、`Employee.allEmployees` に id:3 は存在しない（欠番）。図鑑表示上は問題ないが、整合性のため将来的に削除を検討。
+`ZukanConditions.swift` の charId:3（旧りお）エントリを削除。
 
 ---
 
