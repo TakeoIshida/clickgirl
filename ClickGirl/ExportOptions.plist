@@ -3,9 +3,18 @@
 <plist version="1.0">
 <dict>
     <key>method</key>
-    <string>app-store</string>
+    <string>app-store-connect</string>
     <key>teamID</key>
     <string>JS3245KG7Q</string>
+    <key>signingStyle</key>
+    <string>manual</string>
+    <key>signingCertificate</key>
+    <string>Apple Distribution</string>
+    <key>provisioningProfiles</key>
+    <dict>
+        <key>com.tko.ClickGirl</key>
+        <string>ClickGirl AppStore</string>
+    </dict>
     <key>uploadSymbols</key>
     <true/>
     <key>compileBitcode</key>
