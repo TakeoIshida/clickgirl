@@ -147,7 +147,7 @@ class OfficeScene: SKScene {
         moneyLabel.verticalAlignmentMode   = .center
         moneyLabel.position = CGPoint(x: frame.width - 12, y: frame.height - topBarH / 2)
         moneyLabel.zPosition = 11
-        moneyLabel.text = "¥\(formatMoney(gm.money))"
+        moneyLabel.text = "✦\(formatMoney(gm.money))"
         addChild(moneyLabel)
     }
 
@@ -721,7 +721,7 @@ class OfficeScene: SKScene {
         btnBg.position  = btnPos
         container.addChild(btnBg)
 
-        let btnLbl = SKLabelNode(text: "¥\(formatMoney(cost))")
+        let btnLbl = SKLabelNode(text: "✦\(formatMoney(cost))")
         btnLbl.fontName  = "HiraginoSans-W6"
         btnLbl.fontSize  = 12
         btnLbl.fontColor = canAfford ? .white : UIColor(white: 0.36, alpha: 1.0)
@@ -862,7 +862,7 @@ class OfficeScene: SKScene {
             btnBg.position  = CGPoint(x: 0, y: btnY)
             container.addChild(btnBg)
 
-            let btnLbl = SKLabelNode(text: "¥\(formatMoney(cost))")
+            let btnLbl = SKLabelNode(text: "✦\(formatMoney(cost))")
             btnLbl.fontName  = "HiraginoSans-W6"
             btnLbl.fontSize  = 12
             btnLbl.fontColor = canAfford ? .white : UIColor(white: 0.36, alpha: 1.0)
@@ -922,7 +922,7 @@ class OfficeScene: SKScene {
                 velocity = 0
             }
         }
-        moneyLabel.text = "¥\(formatMoney(gm.money))"
+        moneyLabel.text = "✦\(formatMoney(gm.money))"
     }
 
     // MARK: - Tap
@@ -950,7 +950,7 @@ class OfficeScene: SKScene {
     private func attemptAddFloor() {
         let cost = gm.floorCost(gm.officeFloors)
         guard gm.money >= cost else {
-            showToast("💸 お金が足りません (¥\(formatMoney(cost)) 必要)")
+            showToast("💸 お金が足りません (✦\(formatMoney(cost)) 必要)")
             return
         }
         if gm.addOfficeFloor() {
@@ -958,7 +958,7 @@ class OfficeScene: SKScene {
             updateBoostLabel()
             drawRoom()
             showUpgradeEffect(name: "\(gm.officeFloors)F に拡張", newLevel: gm.officeFloors)
-            moneyLabel.text = "¥\(formatMoney(gm.money))"
+            moneyLabel.text = "✦\(formatMoney(gm.money))"
         }
     }
 
@@ -975,7 +975,7 @@ class OfficeScene: SKScene {
         guard current < item.maxLevel else { return }
         let cost = item.costForNextLevel(current)
         guard gm.money >= cost else {
-            showToast("💸 お金が足りません (¥\(formatMoney(cost)) 必要)")
+            showToast("💸 お金が足りません (✦\(formatMoney(cost)) 必要)")
             return
         }
         if gm.upgradeOffice(id: id) {
@@ -983,7 +983,7 @@ class OfficeScene: SKScene {
             updateBoostLabel()
             drawRoom()
             showUpgradeEffect(name: item.name, newLevel: current + 1)
-            moneyLabel.text = "¥\(formatMoney(gm.money))"
+            moneyLabel.text = "✦\(formatMoney(gm.money))"
         }
     }
 
