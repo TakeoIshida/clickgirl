@@ -146,7 +146,7 @@ class GachaScene: SKScene {
         moneyLabel.horizontalAlignmentMode = .right; moneyLabel.verticalAlignmentMode = .center
         moneyLabel.position = CGPoint(x: frame.width - 12, y: frame.height - h / 2)
         moneyLabel.zPosition = 11; moneyLabel.name = "moneyLabel"
-        moneyLabel.text = "¥\(formatMoney(gm.money))"
+        moneyLabel.text = "✦\(formatMoney(gm.money))"
         addChild(moneyLabel)
     }
 
