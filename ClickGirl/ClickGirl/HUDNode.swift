@@ -162,7 +162,7 @@ class HUDNode: SKNode {
     }
 
     func update(money: Double, incomePerSec: Double) {
-        moneyLabel.text = "¥ \(formatMoney(money))"
+        moneyLabel.text = "✦ \(formatMoney(money))"
         if incomePerSec > 0 {
             incomeLabel.text = "毎秒 +¥\(formatMoney(incomePerSec))"
         } else {
