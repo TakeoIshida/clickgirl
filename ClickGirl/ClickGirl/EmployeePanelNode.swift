@@ -148,7 +148,7 @@ class EmployeeCardNode: SKNode {
             addChild(lvLabel)
 
             // 収益表示
-            let incLabel = SKLabelNode(text: "+¥\(formatMoney(employee.currentIncomePerSec))/s")
+            let incLabel = SKLabelNode(text: "+✦\(formatMoney(employee.currentIncomePerSec))/s")
             incLabel.fontName = "HiraginoSans-W3"
             incLabel.fontSize = 10
             incLabel.fontColor = UIColor(red: 0.4, green: 1.0, blue: 0.5, alpha: 0.9)
