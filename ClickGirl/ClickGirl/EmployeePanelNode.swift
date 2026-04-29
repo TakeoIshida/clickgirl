@@ -193,7 +193,7 @@ class EmployeeCardNode: SKNode {
             actionBtnPos  = hireBtn.position
             actionBtnSize = hireBtnSize
 
-            let hireLabel = SKLabelNode(text: "採用 ¥\(formatMoney(employee.hireCost))")
+            let hireLabel = SKLabelNode(text: "採用 ✦\(formatMoney(employee.hireCost))")
             hireLabel.fontName = "HiraginoSans-W6"
             hireLabel.fontSize = 11
             hireLabel.fontColor = .white
