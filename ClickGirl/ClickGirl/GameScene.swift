@@ -535,7 +535,7 @@ class GameScene: SKScene {
     // MARK: - Animations
 
     private func showFloatingMoney(_ amount: Double, at pos: CGPoint) {
-        let text = "+¥\(formatMoney(amount))"
+        let text = "+✦\(formatMoney(amount))"
         let label = SKLabelNode(text: text)
         label.fontName = "HiraginoSans-W8"
         label.fontSize = 26
@@ -755,7 +755,7 @@ class GameScene: SKScene {
         title.position = CGPoint(x: -20, y: 70)
         popup.addChild(title)
 
-        let amtLabel = SKLabelNode(text: "¥\(formatMoney(amount)) 獲得！")
+        let amtLabel = SKLabelNode(text: "✦\(formatMoney(amount)) 獲得！")
         amtLabel.fontName = "HiraginoSans-W8"
         amtLabel.fontSize = 22
         amtLabel.fontColor = UIColor(red: 1.0, green: 0.92, blue: 0.2, alpha: 1.0)
