@@ -77,7 +77,7 @@ class ShopScene: SKScene {
         moneyLabel.position = CGPoint(x: frame.width - 12, y: frame.height - topBarH / 2)
         moneyLabel.zPosition = 11
         moneyLabel.name = "moneyLabel"
-        moneyLabel.text = "¥\(formatMoney(GameManager.shared.money))"
+        moneyLabel.text = "✦\(formatMoney(GameManager.shared.money))"
         addChild(moneyLabel)
     }
 
@@ -271,9 +271,9 @@ class ShopScene: SKScene {
             let costText: String
             if boostActive {
                 let remain = Int(gm.boostTimeRemaining(item.id))
-                costText = "⏱ \(remain)秒 / ¥\(formatMoney(item.cost))"
+                costText = "⏱ \(remain)秒 / ✦\(formatMoney(item.cost))"
             } else {
-                costText = "¥\(formatMoney(item.cost))"
+                costText = "✦\(formatMoney(item.cost))"
             }
             let btnLbl = SKLabelNode(text: costText)
             btnLbl.fontName = "HiraginoSans-W6"
@@ -350,7 +350,7 @@ class ShopScene: SKScene {
             return
         }
         guard gm.money >= item.cost else {
-            showToast("💸 お金が足りません (¥\(formatMoney(item.cost)) 必要)")
+            showToast("💸 お金が足りません (✦\(formatMoney(item.cost)) 必要)")
             return
         }
 
@@ -364,7 +364,7 @@ class ShopScene: SKScene {
 
     private func updateMoneyLabel() {
         if let lbl = childNode(withName: "moneyLabel") as? SKLabelNode {
-            lbl.text = "¥\(formatMoney(GameManager.shared.money))"
+            lbl.text = "✦\(formatMoney(GameManager.shared.money))"
         }
     }
 
@@ -383,7 +383,7 @@ class ShopScene: SKScene {
                 func updateLabel(_ node: SKNode) {
                     for child in node.children {
                         if let lbl = child as? SKLabelNode, lbl.name == "buyBtn_\(item.id)" {
-                            lbl.text = "⏱ \(remain)秒 / ¥\(formatMoney(item.cost))"
+                            lbl.text = "⏱ \(remain)秒 / ✦\(formatMoney(item.cost))"
                         }
                         updateLabel(child)
                     }
