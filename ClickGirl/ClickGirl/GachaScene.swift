@@ -362,7 +362,7 @@ class GachaScene: SKScene {
             for (pos, text, font, size, color): (CGPoint, String, String, CGFloat, UIColor) in [
                 (CGPoint(x: cfg.x, y: btnY + 16), cfg.icon, "",                 28, UIColor.white),
                 (CGPoint(x: cfg.x, y: btnY - 2),  cfg.title, "HiraginoSans-W7", 14, UIColor.white),
-                (CGPoint(x: cfg.x, y: btnY - 19), "¥\(formatMoney(cfg.cost))",
+                (CGPoint(x: cfg.x, y: btnY - 19), "✦\(formatMoney(cfg.cost))",
                  "HiraginoSans-W5", 12, UIColor(red: 1.0, green: 0.92, blue: 0.2, alpha: 1.0)),
             ] {
                 let lbl = SKLabelNode(text: text)
