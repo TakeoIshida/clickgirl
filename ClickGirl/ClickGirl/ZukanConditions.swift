@@ -64,13 +64,6 @@ struct ZukanConditions {
             .gachaCard(charId: 2, imageIndex: 4, count: 3),   // SSR × 3枚
         ],
 
-        // りお (3枚: 0-2=N / 画像追加次第拡張予定)
-        3: [
-            .gachaCard(charId: 3, imageIndex: 0, count: 1),
-            .gachaCard(charId: 3, imageIndex: 1, count: 1),
-            .gachaCard(charId: 3, imageIndex: 2, count: 1),
-        ],
-
         // さき (8枚: 0-1=N, 2=R, 3=SR, 4-5=SR secret, 6-7=SSR secret)
         4: [
             .gachaCard(charId: 4, imageIndex: 0, count: 1),   // N
