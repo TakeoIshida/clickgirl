@@ -169,7 +169,7 @@ class EmployeeCardNode: SKNode {
             actionBtnPos  = upgBtn.position
             actionBtnSize = upgBtnSize
 
-            let upgLabel = SKLabelNode(text: "UP ¥\(formatMoney(employee.upgradeCost))")
+            let upgLabel = SKLabelNode(text: "UP ✦\(formatMoney(employee.upgradeCost))")
             upgLabel.fontName = "HiraginoSans-W6"
             upgLabel.fontSize = 11
             upgLabel.fontColor = .white
