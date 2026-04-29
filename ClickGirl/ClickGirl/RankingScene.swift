@@ -87,7 +87,7 @@ class RankingScene: SKScene {
         rankLbl.position  = CGPoint(x: 0, y: 9)
         banner.addChild(rankLbl)
 
-        let scoreLbl = SKLabelNode(text: "累計収益: ¥\(formatNum(myScore))")
+        let scoreLbl = SKLabelNode(text: "累計収益: ✦\(formatNum(myScore))")
         scoreLbl.fontName  = "HiraginoSans-W3"
         scoreLbl.fontSize  = 12
         scoreLbl.fontColor = UIColor(white: 1, alpha: 0.55)
@@ -162,7 +162,7 @@ class RankingScene: SKScene {
         nameLbl.position = CGPoint(x: -w / 2 + 62, y: 0)
         node.addChild(nameLbl)
 
-        let scoreLbl = SKLabelNode(text: "¥\(formatNum(entry.score))")
+        let scoreLbl = SKLabelNode(text: "✦\(formatNum(entry.score))")
         scoreLbl.fontName  = "HiraginoSans-W6"
         scoreLbl.fontSize  = 14
         scoreLbl.fontColor = entry.rank == 1 ? gold : UIColor(white: 0.9, alpha: 1)
