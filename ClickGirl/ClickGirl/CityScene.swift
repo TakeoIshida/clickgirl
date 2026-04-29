@@ -359,7 +359,7 @@ class CityScene: SKScene {
         // ===== Income label =====
         let cityInc = gm.cityIncomePerSec
         let incLbl = SKLabelNode(
-            text: cityInc > 0 ? "都市収益  +¥\(formatMoney(cityInc))/s" : "建物を建てて都市を発展させよう"
+            text: cityInc > 0 ? "都市収益  +✦\(formatMoney(cityInc))/s" : "建物を建てて都市を発展させよう"
         )
         incLbl.fontName = "HiraginoSans-W4"
         incLbl.fontSize = 11
@@ -694,7 +694,7 @@ class CityScene: SKScene {
             incomePill.position = CGPoint(x: 0, y: cardH/2 - 84)
             container.addChild(incomePill)
 
-            let incLbl = SKLabelNode(text: "+¥\(formatMoney(bld.incomePerSec))/s")
+            let incLbl = SKLabelNode(text: "+✦\(formatMoney(bld.incomePerSec))/s")
             incLbl.fontName = "HiraginoSans-W5"
             incLbl.fontSize = 11
             incLbl.fontColor = UIColor(red: 0.38, green: 0.98, blue: 0.52, alpha: 0.95)
@@ -756,7 +756,7 @@ class CityScene: SKScene {
                 arrowIcon.zPosition = 3
                 container.addChild(arrowIcon)
 
-                let btnLbl = SKLabelNode(text: "UP ¥\(formatMoney(upgCost))")
+                let btnLbl = SKLabelNode(text: "UP ✦\(formatMoney(upgCost))")
                 btnLbl.fontName = "HiraginoSans-W6"
                 btnLbl.fontSize = 12
                 btnLbl.fontColor = canAfford ? .white : UIColor(white: 0.36, alpha: 1.0)
@@ -912,7 +912,7 @@ class CityScene: SKScene {
             ]))
             overlay.addChild(nameLbl)
 
-            let costLbl = SKLabelNode(text: "¥\(formatMoney(t.placeCost))  /  +¥\(formatMoney(t.baseIncome))/s")
+            let costLbl = SKLabelNode(text: "✦\(formatMoney(t.placeCost))  /  +✦\(formatMoney(t.baseIncome))/s")
             costLbl.fontName = "HiraginoSans-W4"
             costLbl.fontSize = 11
             costLbl.fontColor = canAfford
@@ -1014,9 +1014,9 @@ class CityScene: SKScene {
     }
 
     private func updateLabels() {
-        moneyLabel.text  = "¥\(formatMoney(gm.money))"
+        moneyLabel.text  = "✦\(formatMoney(gm.money))"
         let cityInc = gm.cityIncomePerSec
-        incomeLabel.text = cityInc > 0 ? "都市: +¥\(formatMoney(cityInc))/s" : ""
+        incomeLabel.text = cityInc > 0 ? "都市: +✦\(formatMoney(cityInc))/s" : ""
     }
 
     // MARK: - Tap Handling
@@ -1077,7 +1077,7 @@ class CityScene: SKScene {
         dismissOverlay()
         guard let t = CityBuildingType.all.first(where: { $0.id == typeId }) else { return }
         guard gm.money >= t.placeCost else {
-            showToast("💸 お金が足りません (¥\(formatMoney(t.placeCost)) 必要)")
+            showToast("💸 お金が足りません (✦\(formatMoney(t.placeCost)) 必要)")
             return
         }
         if gm.placeBuilding(plot: plot, typeId: typeId) {
@@ -1093,7 +1093,7 @@ class CityScene: SKScene {
         guard bld.level < t.maxLevel else { return }
         let cost = t.upgradeCost(level: bld.level)
         guard gm.money >= cost else {
-            showToast("💸 お金が足りません (¥\(formatMoney(cost)) 必要)")
+            showToast("💸 お金が足りません (✦\(formatMoney(cost)) 必要)")
             return
         }
         if gm.upgradeBuilding(plot: plot) {
