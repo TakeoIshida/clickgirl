@@ -1178,7 +1178,7 @@ class GachaScene: SKScene {
 
     // MARK: - Helpers
 
-    private func refreshMoneyLabel() { moneyLabel?.text = "¥\(formatMoney(gm.money))" }
+    private func refreshMoneyLabel() { moneyLabel?.text = "✦\(formatMoney(gm.money))" }
     private func refreshPityLabel() {
         let remain = 10 - (gm.gachaPityCount % 10)
         pityLabel?.text = "天井まで あと \(remain) 回  (10回でR以上確定)"
