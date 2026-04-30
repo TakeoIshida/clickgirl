@@ -75,6 +75,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2442F9CE6D33E770C4AC680D /* Pods_ClickGirl.framework in Frameworks */,
+				B2C3A1005566778899001122 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
