@@ -644,4 +644,40 @@ totalIncomePerSec
 #### App Store リジェクト対応（v1.0）
 
 - **1.1.6**: ゲーム内通貨 `¥` → `✦`（スター）に変更（全8ファイル）
-- **4.2**: コンテンツ不足指摘 → 対応検討中
+- **4.2**: コンテンツ不足指摘 → Game Center ランキング実装で対応（下記参照）
+
+---
+
+## Game Center 連携
+
+### ファイル構成
+
+| ファイル | 変更内容 |
+|---------|---------|
+| `GameCenterManager.swift` | 新規作成。認証・スコア送信・リーダーボード取得 |
+| `GameViewController.swift` | 起動時に `GameCenterManager.shared.authenticate()` を呼び出し |
+| `GameManager.swift` | `saveGame()` 末尾でスコアを Game Center に送信 |
+| `RankingScene.swift` | ダミーデータ廃止。GC から上位10件 + 自分の順位を取得・表示 |
+
+### リーダーボード設定
+
+| 項目 | 値 |
+|------|-----|
+| **リーダーボード ID** | `com.tko.ClickGirl.totalearned` |
+| **スコア** | `totalEarned`（Int 変換、小数切り捨て） |
+| **スコア形式** | 整数・高いほど上位 |
+
+### Xcode プロジェクト設定（要手動）
+
+1. ターゲット → **General** → **Frameworks** → `GameKit.framework` を追加
+2. ターゲット → **Signing & Capabilities** → `+ Capability` → **Game Center** を有効化
+3. App Store Connect → ClickGirl → **Game Center** → リーダーボード新規作成（ID: `com.tko.ClickGirl.totalearned`）
+
+### RankingScene の表示仕様
+
+| 状態 | 表示 |
+|------|------|
+| 未認証 | バナー: "Game Center 未接続 / 設定アプリからサインインしてください"、リスト: 未接続メッセージ |
+| 認証済み・データなし | バナー: 順位 —、リスト: "まだ記録がありません" |
+| 認証済み・データあり | 上位10件をスライドイン表示、自分の順位をバナーに表示 |
+| 読み込み中 | "読み込み中..." ラベル表示 |
