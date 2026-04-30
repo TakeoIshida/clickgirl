@@ -121,6 +121,7 @@
 		7E992B75AA4C01132D079C16 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A1B2C3004455667788990011 /* GameKit.framework */,
 				C3D952873311BAB5889BFEC7 /* Pods_ClickGirl.framework */,
 			);
 			name = Frameworks;
