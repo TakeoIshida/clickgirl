@@ -1,30 +1,20 @@
 import SpriteKit
+import GameKit
 
 class RankingScene: SKScene {
 
     private let gold   = UIColor(red: 1.0,  green: 0.85, blue: 0.2,  alpha: 1)
-    private let silver = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1)
-    private let bronze = UIColor(red: 0.8,  green: 0.5,  blue: 0.2,  alpha: 1)
     private let darkBg = UIColor(red: 0.04, green: 0.04, blue: 0.12, alpha: 1)
 
-    // ダミーデータ（実装時はGameCenterまたはサーバーから取得）
-    private let rankings: [(rank: Int, name: String, score: Double)] = [
-        (1, "ゲスト_7823", 999_999_999),
-        (2, "ゲスト_4512", 754_320_000),
-        (3, "ゲスト_1190", 512_000_000),
-        (4, "ゲスト_3301", 388_000_000),
-        (5, "ゲスト_9900", 200_000_000),
-        (6, "ゲスト_0042", 150_000_000),
-        (7, "ゲスト_5511",  80_000_000),
-    ]
-    private var myRank:  Int    { 42 }
-    private var myScore: Double { GameManager.shared.totalEarned }
+    private var listContainer: SKNode?
+    private var loadingLabel: SKLabelNode?
 
     override func didMove(to view: SKView) {
         backgroundColor = darkBg
         addTopBar()
-        addMyRankBanner()
-        addRankList()
+        addMyRankBanner(entry: nil)
+        showLoading()
+        fetchAndDisplay()
     }
 
     // MARK: - TopBar
@@ -58,10 +48,13 @@ class RankingScene: SKScene {
         addChild(back)
     }
 
-    // MARK: - 自分の順位バナー
-    private func addMyRankBanner() {
+    // MARK: - 自分のランクバナー
+    private func addMyRankBanner(entry: GKLeaderboard.Entry?) {
+        childNode(withName: "myBanner")?.removeFromParent()
+
         let w = frame.width - 32
         let banner = SKNode()
+        banner.name     = "myBanner"
         banner.position = CGPoint(x: frame.midX, y: frame.height - 88)
 
         let bg = SKShapeNode(rectOf: CGSize(width: w, height: 52), cornerRadius: 12)
@@ -80,14 +73,27 @@ class RankingScene: SKScene {
             SKAction.fadeAlpha(to: 0.28, duration: 1.0)
         ])))
 
-        let rankLbl = SKLabelNode(text: "🏅 あなたの順位: \(myRank)位")
+        let rankText: String
+        let scoreText: String
+        if let e = entry {
+            rankText  = "🏅 あなたの順位: \(e.rank)位"
+            scoreText = "累計収益: ✦\(formatNum(Double(e.score)))"
+        } else if GKLocalPlayer.local.isAuthenticated {
+            rankText  = "🏅 あなたの順位: —"
+            scoreText = "累計収益: ✦\(formatNum(GameManager.shared.totalEarned))"
+        } else {
+            rankText  = "🏅 Game Center 未接続"
+            scoreText = "設定アプリからサインインしてください"
+        }
+
+        let rankLbl = SKLabelNode(text: rankText)
         rankLbl.fontName  = "HiraginoSans-W6"
         rankLbl.fontSize  = 15
         rankLbl.fontColor = UIColor(red: 0.85, green: 0.6, blue: 1.0, alpha: 1)
         rankLbl.position  = CGPoint(x: 0, y: 9)
         banner.addChild(rankLbl)
 
-        let scoreLbl = SKLabelNode(text: "累計収益: ✦\(formatNum(myScore))")
+        let scoreLbl = SKLabelNode(text: scoreText)
         scoreLbl.fontName  = "HiraginoSans-W3"
         scoreLbl.fontSize  = 12
         scoreLbl.fontColor = UIColor(white: 1, alpha: 0.55)
@@ -97,18 +103,71 @@ class RankingScene: SKScene {
         addChild(banner)
     }
 
+    // MARK: - ローディング
+    private func showLoading() {
+        listContainer?.removeFromParent()
+
+        let lbl = SKLabelNode(text: "読み込み中...")
+        lbl.name      = "loadingLabel"
+        lbl.fontName  = "HiraginoSans-W3"
+        lbl.fontSize  = 14
+        lbl.fontColor = UIColor(white: 1, alpha: 0.45)
+        lbl.position  = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(lbl)
+        loadingLabel = lbl
+    }
+
+    private func hideLoading() {
+        loadingLabel?.removeFromParent()
+        loadingLabel = nil
+    }
+
+    // MARK: - データ取得・表示
+    private func fetchAndDisplay() {
+        GameCenterManager.shared.loadTopEntries { [weak self] entries, myEntry in
+            guard let self = self else { return }
+            self.hideLoading()
+            self.addMyRankBanner(entry: myEntry)
+
+            if entries.isEmpty {
+                self.showEmptyState()
+            } else {
+                self.addRankList(entries: entries)
+            }
+        }
+    }
+
+    private func showEmptyState() {
+        let lbl = SKLabelNode(text: GKLocalPlayer.local.isAuthenticated
+            ? "まだ記録がありません"
+            : "Game Center にサインインしてください")
+        lbl.fontName  = "HiraginoSans-W3"
+        lbl.fontSize  = 14
+        lbl.fontColor = UIColor(white: 1, alpha: 0.45)
+        lbl.position  = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(lbl)
+    }
+
     // MARK: - ランクリスト
-    private func addRankList() {
-        let w    = frame.width - 32
+    private func addRankList(entries: [GKLeaderboard.Entry]) {
+        let container = SKNode()
+        container.name = "rankList"
+        addChild(container)
+        listContainer = container
+
+        let w      = frame.width - 32
         let rowH: CGFloat = 54
         let startY = frame.height - 156
 
-        for (i, entry) in rankings.enumerated() {
-            let row = makeRankRow(entry: entry, w: w, h: rowH)
+        for (i, entry) in entries.enumerated() {
+            let row = makeRankRow(rank: entry.rank,
+                                  name: entry.player.displayName,
+                                  score: Double(entry.score),
+                                  w: w, h: rowH)
             let finalY = startY - CGFloat(i) * (rowH + 6)
             row.position = CGPoint(x: frame.midX, y: finalY + 20)
             row.alpha = 0
-            addChild(row)
+            container.addChild(row)
 
             row.run(SKAction.sequence([
                 SKAction.wait(forDuration: Double(i) * 0.07),
@@ -120,12 +179,12 @@ class RankingScene: SKScene {
         }
     }
 
-    private func makeRankRow(entry: (rank: Int, name: String, score: Double),
+    private func makeRankRow(rank: Int, name: String, score: Double,
                               w: CGFloat, h: CGFloat) -> SKNode {
         let node = SKNode()
 
         let (fillCol, strokeCol): (UIColor, UIColor) = {
-            switch entry.rank {
+            switch rank {
             case 1: return (UIColor(red: 1.0,  green: 0.85, blue: 0.2,  alpha: 0.14),
                             UIColor(red: 1.0,  green: 0.85, blue: 0.2,  alpha: 0.75))
             case 2: return (UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.10),
@@ -144,16 +203,16 @@ class RankingScene: SKScene {
         node.addChild(bg)
 
         let medals = ["🥇", "🥈", "🥉"]
-        let medalText = entry.rank <= 3 ? medals[entry.rank - 1] : "\(entry.rank)位"
+        let medalText = rank <= 3 ? medals[rank - 1] : "\(rank)位"
         let rankLbl = SKLabelNode(text: medalText)
         rankLbl.fontName  = "HiraginoSans-W6"
-        rankLbl.fontSize  = entry.rank <= 3 ? 22 : 13
+        rankLbl.fontSize  = rank <= 3 ? 22 : 13
         rankLbl.verticalAlignmentMode   = .center
         rankLbl.horizontalAlignmentMode = .left
         rankLbl.position = CGPoint(x: -w / 2 + 16, y: 0)
         node.addChild(rankLbl)
 
-        let nameLbl = SKLabelNode(text: entry.name)
+        let nameLbl = SKLabelNode(text: name)
         nameLbl.fontName  = "HiraginoSans-W3"
         nameLbl.fontSize  = 14
         nameLbl.fontColor = .white
@@ -162,10 +221,10 @@ class RankingScene: SKScene {
         nameLbl.position = CGPoint(x: -w / 2 + 62, y: 0)
         node.addChild(nameLbl)
 
-        let scoreLbl = SKLabelNode(text: "✦\(formatNum(entry.score))")
+        let scoreLbl = SKLabelNode(text: "✦\(formatNum(score))")
         scoreLbl.fontName  = "HiraginoSans-W6"
         scoreLbl.fontSize  = 14
-        scoreLbl.fontColor = entry.rank == 1 ? gold : UIColor(white: 0.9, alpha: 1)
+        scoreLbl.fontColor = rank == 1 ? gold : UIColor(white: 0.9, alpha: 1)
         scoreLbl.verticalAlignmentMode   = .center
         scoreLbl.horizontalAlignmentMode = .right
         scoreLbl.position = CGPoint(x: w / 2 - 14, y: 0)
