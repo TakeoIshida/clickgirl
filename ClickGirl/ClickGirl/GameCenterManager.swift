@@ -1,3 +1,4 @@
+import UIKit
 import GameKit
 
 class GameCenterManager: NSObject {
