@@ -318,6 +318,7 @@ class GameManager {
         d.set(cityData, forKey: "cg_city")
 
         lastSaveDate = Date()
+        GameCenterManager.shared.submitScore(totalEarned)
     }
 
     func loadGame() {
