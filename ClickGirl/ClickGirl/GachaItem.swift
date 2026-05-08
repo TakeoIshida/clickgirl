@@ -57,8 +57,8 @@ struct GachaCard {
 
 enum GachaCatalog {
 
-    static let singleCost: Double = 50_000
-    static let tenCost:    Double = 450_000   // 10枚分まとめて = 1回分お得
+    static let singleCost: Double = 800
+    static let tenCost:    Double = 7_200   // 10枚分まとめて = 1回分お得
 
     // アイリ(0) : 2N + 1R + 1SR + 1SSR =  5枚
     // ハナ(1)   : 3N + 2R + 1SR + 1SSR =  7枚

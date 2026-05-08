@@ -1,11 +1,22 @@
 import Foundation
 
+struct Mission {
+    let id: String
+    let title: String
+    let detail: String
+    let reward: Double
+    let progress: (GameManager) -> Int
+    let target: Int
+}
+
 class GameManager {
     static let shared = GameManager()
 
     // MARK: - State
     var money: Double = 0
     var totalEarned: Double = 0
+    var lifetimeTaps: Int = 0
+    var gachaTickets: Int = 0
     var employees: [Employee] = Employee.allEmployees
     var pendingOfflineIncome: Double = 0
     // 図鑑: キャラごとに選択した画像インデックス [charId: imageIndex]
@@ -24,6 +35,12 @@ class GameManager {
     var gachaCardCounts: [String: Int] = [:]
     // 都市: 建設済み建物 [プロット番号: CityBuilding]
     var cityBuildings: [Int: CityBuilding] = [:]
+    var didGrantStarterPack: Bool = false
+    var completedMissionIDs: Set<String> = []
+    var shopPurchaseCount: Int = 0
+    var gachaPullCount: Int = 0
+    var officeUpgradeCount: Int = 0
+    var cityBuildCount: Int = 0
 
     private var lastSaveDate: Date = Date()
 
@@ -33,6 +50,62 @@ class GameManager {
     }
 
     // MARK: - Computed
+
+    static let starterMoney: Double = 1_500
+    static let starterTickets: Int = 1
+
+    var missions: [Mission] {
+        [
+            Mission(id: "tap_10", title: "営業スタート", detail: "キャラを10回タップする",
+                    reward: 300, progress: { min($0.lifetimeTaps, 10) }, target: 10),
+            Mission(id: "hire_airi", title: "初めての採用", detail: "アイリを採用する",
+                    reward: 500,
+                    progress: { ($0.employees.first(where: { $0.id == 0 })?.isHired ?? false) ? 1 : 0 },
+                    target: 1),
+            Mission(id: "upgrade_airi", title: "社員育成", detail: "アイリをLv.3にする",
+                    reward: 900,
+                    progress: { min($0.employees.first(where: { $0.id == 0 })?.level ?? 0, 3) },
+                    target: 3),
+            Mission(id: "first_shop", title: "会社の仕組み化", detail: "ショップで強化を1つ購入する",
+                    reward: 1_200, progress: { min($0.shopPurchaseCount, 1) }, target: 1),
+            Mission(id: "first_gacha", title: "人材カード発掘", detail: "ガチャを1回引く",
+                    reward: 1_500, progress: { min($0.gachaPullCount, 1) }, target: 1),
+            Mission(id: "first_office", title: "働く場所づくり", detail: "オフィス設備を1つ強化する",
+                    reward: 2_000, progress: { min($0.officeUpgradeCount, 1) }, target: 1),
+            Mission(id: "first_city", title: "街へ進出", detail: "都市に建物を1つ建てる",
+                    reward: 3_000, progress: { min($0.cityBuildCount, 1) }, target: 1),
+        ]
+    }
+
+    var currentMission: Mission? {
+        missions.first { !completedMissionIDs.contains($0.id) }
+    }
+
+    @discardableResult
+    func grantStarterPackIfNeeded() -> Bool {
+        guard !didGrantStarterPack else { return false }
+        didGrantStarterPack = true
+        money += Self.starterMoney
+        totalEarned += Self.starterMoney
+        gachaTickets += Self.starterTickets
+        saveGame()
+        return true
+    }
+
+    @discardableResult
+    func claimCompletedMissions() -> [Mission] {
+        let newlyCompleted = missions.filter {
+            !completedMissionIDs.contains($0.id) && $0.progress(self) >= $0.target
+        }
+        guard !newlyCompleted.isEmpty else { return [] }
+
+        let reward = newlyCompleted.reduce(0.0) { $0 + $1.reward }
+        money += reward
+        totalEarned += reward
+        newlyCompleted.forEach { completedMissionIDs.insert($0.id) }
+        saveGame()
+        return newlyCompleted
+    }
 
     var tapMultiplier: Double {
         var m = 1.0
@@ -144,8 +217,13 @@ class GameManager {
         } else {
             purchasedUpgrades.insert(item.id)
         }
+        shopPurchaseCount += 1
         saveGame()
         return true
+    }
+
+    func recordGachaPull(count: Int) {
+        gachaPullCount += count
     }
 
     // MARK: - Actions
@@ -153,6 +231,7 @@ class GameManager {
     @discardableResult
     func tap() -> Double {
         let earned = max(1.0, tapValue)
+        lifetimeTaps += 1
         money += earned
         totalEarned += earned
         return earned
@@ -165,6 +244,7 @@ class GameManager {
         money -= employees[index].hireCost
         employees[index].isHired = true
         employees[index].level = 1
+        saveGame()
         return true
     }
 
@@ -174,6 +254,7 @@ class GameManager {
               money >= employees[index].upgradeCost else { return false }
         money -= employees[index].upgradeCost
         employees[index].level += 1
+        saveGame()
         return true
     }
 
@@ -209,7 +290,7 @@ class GameManager {
 
     // MARK: - Office Floors
 
-    func floorCost(_ floors: Int) -> Double { 80_000 * pow(5.0, Double(floors - 1)) }
+    func floorCost(_ floors: Int) -> Double { 3_000 * pow(4.0, Double(floors - 1)) }
 
     @discardableResult
     func addOfficeFloor() -> Bool {
@@ -217,6 +298,7 @@ class GameManager {
         guard money >= cost else { return false }
         money -= cost
         officeFloors += 1
+        officeUpgradeCount += 1
         saveGame()
         return true
     }
@@ -230,6 +312,7 @@ class GameManager {
               money >= t.placeCost else { return false }
         money -= t.placeCost
         cityBuildings[plot] = CityBuilding(typeId: typeId, level: 1)
+        cityBuildCount += 1
         saveGame()
         return true
     }
@@ -259,6 +342,7 @@ class GameManager {
         guard money >= cost else { return false }
         money -= cost
         officeUpgrades[id] = current + 1
+        officeUpgradeCount += 1
         saveGame()
         return true
     }
@@ -269,10 +353,15 @@ class GameManager {
         let d = UserDefaults.standard
         let keys = ["cg_money","cg_totalEarned","cg_lastSave","cg_employees",
                     "cg_selImg","cg_upgrades","cg_boosts","cg_office",
-                    "cg_floors","cg_gachaPity","cg_gachaCards","cg_city"]
+                    "cg_floors","cg_gachaPity","cg_gachaCards","cg_city",
+                    "cg_lifetimeTaps","cg_gachaTickets","cg_starterPack",
+                    "cg_completedMissions","cg_shopPurchases","cg_gachaPulls",
+                    "cg_officeUpgradeCount","cg_cityBuildCount"]
         keys.forEach { d.removeObject(forKey: $0) }
         money               = 0
         totalEarned         = 0
+        lifetimeTaps        = 0
+        gachaTickets        = 0
         employees           = Employee.allEmployees
         selectedImageIndex  = [:]
         purchasedUpgrades   = []
@@ -282,6 +371,12 @@ class GameManager {
         gachaPityCount      = 0
         gachaCardCounts     = [:]
         cityBuildings       = [:]
+        didGrantStarterPack = false
+        completedMissionIDs = []
+        shopPurchaseCount   = 0
+        gachaPullCount      = 0
+        officeUpgradeCount  = 0
+        cityBuildCount      = 0
     }
 
     // MARK: - Save / Load
@@ -290,6 +385,14 @@ class GameManager {
         let d = UserDefaults.standard
         d.set(money, forKey: "cg_money")
         d.set(totalEarned, forKey: "cg_totalEarned")
+        d.set(lifetimeTaps, forKey: "cg_lifetimeTaps")
+        d.set(gachaTickets, forKey: "cg_gachaTickets")
+        d.set(didGrantStarterPack, forKey: "cg_starterPack")
+        d.set(Array(completedMissionIDs), forKey: "cg_completedMissions")
+        d.set(shopPurchaseCount, forKey: "cg_shopPurchases")
+        d.set(gachaPullCount, forKey: "cg_gachaPulls")
+        d.set(officeUpgradeCount, forKey: "cg_officeUpgradeCount")
+        d.set(cityBuildCount, forKey: "cg_cityBuildCount")
         d.set(Date(), forKey: "cg_lastSave")
 
         let empData = employees.map { e -> [String: Any] in
@@ -325,6 +428,16 @@ class GameManager {
         let d = UserDefaults.standard
         money = d.double(forKey: "cg_money")
         totalEarned = d.double(forKey: "cg_totalEarned")
+        lifetimeTaps = d.integer(forKey: "cg_lifetimeTaps")
+        gachaTickets = d.integer(forKey: "cg_gachaTickets")
+        didGrantStarterPack = d.bool(forKey: "cg_starterPack")
+        if let ids = d.array(forKey: "cg_completedMissions") as? [String] {
+            completedMissionIDs = Set(ids)
+        }
+        shopPurchaseCount = d.integer(forKey: "cg_shopPurchases")
+        gachaPullCount = d.integer(forKey: "cg_gachaPulls")
+        officeUpgradeCount = d.integer(forKey: "cg_officeUpgradeCount")
+        cityBuildCount = d.integer(forKey: "cg_cityBuildCount")
         lastSaveDate = d.object(forKey: "cg_lastSave") as? Date ?? Date()
 
         if let empData = d.array(forKey: "cg_employees") as? [[String: Any]] {

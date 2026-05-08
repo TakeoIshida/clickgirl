@@ -146,7 +146,7 @@ class GachaScene: SKScene {
         moneyLabel.horizontalAlignmentMode = .right; moneyLabel.verticalAlignmentMode = .center
         moneyLabel.position = CGPoint(x: frame.width - 12, y: frame.height - h / 2)
         moneyLabel.zPosition = 11; moneyLabel.name = "moneyLabel"
-        moneyLabel.text = "✦\(formatMoney(gm.money))"
+        moneyLabel.text = "✦\(formatMoney(gm.money))  券\(gm.gachaTickets)"
         addChild(moneyLabel)
     }
 
@@ -310,9 +310,10 @@ class GachaScene: SKScene {
         let btnW = (frame.width - 48.0) / 2
         let btnH: CGFloat = 62
         let btnY: CGFloat = 120
-        let configs: [(x: CGFloat, icon: String, title: String, cost: Double, name: String)] = [
-            (frame.width / 4.0,       "🎲", "1回ガチャ",  GachaCatalog.singleCost, "btn1"),
-            (frame.width * 3.0 / 4.0, "🎰", "10連ガチャ", GachaCatalog.tenCost,   "btn10"),
+        let singleCostText = gm.gachaTickets > 0 ? "ガチャ券\(gm.gachaTickets)枚" : "✦\(formatMoney(GachaCatalog.singleCost))"
+        let configs: [(x: CGFloat, icon: String, title: String, costText: String, name: String)] = [
+            (frame.width / 4.0,       "🎲", "1回ガチャ",  singleCostText, "btn1"),
+            (frame.width * 3.0 / 4.0, "🎰", "10連ガチャ", "✦\(formatMoney(GachaCatalog.tenCost))", "btn10"),
         ]
         for cfg in configs {
             // ドロップシャドウ
@@ -362,7 +363,7 @@ class GachaScene: SKScene {
             for (pos, text, font, size, color): (CGPoint, String, String, CGFloat, UIColor) in [
                 (CGPoint(x: cfg.x, y: btnY + 16), cfg.icon, "",                 28, UIColor.white),
                 (CGPoint(x: cfg.x, y: btnY - 2),  cfg.title, "HiraginoSans-W7", 14, UIColor.white),
-                (CGPoint(x: cfg.x, y: btnY - 19), "✦\(formatMoney(cfg.cost))",
+                (CGPoint(x: cfg.x, y: btnY - 19), cfg.costText,
                  "HiraginoSans-W5", 12, UIColor(red: 1.0, green: 0.92, blue: 0.2, alpha: 1.0)),
             ] {
                 let lbl = SKLabelNode(text: text)
@@ -457,6 +458,7 @@ class GachaScene: SKScene {
                 let (cards, newPity) = GachaCatalog.draw(count: 1, pityCount: self.gm.gachaPityCount)
                 self.gm.gachaPityCount = newPity
                 for card in cards { self.gm.addCard(card) }
+                self.gm.recordGachaPull(count: 1)
                 self.gm.saveGame()
                 self.isAnimating = true
                 self.showResults(cards)
@@ -468,18 +470,25 @@ class GachaScene: SKScene {
     }
 
     private func pullGacha(count: Int) {
+        let usesTicket = count == 1 && gm.gachaTickets > 0
         let cost = count == 1 ? GachaCatalog.singleCost : GachaCatalog.tenCost
-        guard gm.money >= cost else {
+        guard usesTicket || gm.money >= cost else {
             showToast("💸 お金が足りません (✦\(formatMoney(cost)) 必要)")
             return
         }
         isAnimating = true
-        gm.money -= cost
+        if usesTicket {
+            gm.gachaTickets -= 1
+        } else {
+            gm.money -= cost
+        }
 
         let (cards, newPity) = GachaCatalog.draw(count: count, pityCount: gm.gachaPityCount)
         gm.gachaPityCount = newPity
         for card in cards { gm.addCard(card) }
+        gm.recordGachaPull(count: count)
         gm.saveGame()
+        moneyLabel.text = "✦\(formatMoney(gm.money))  券\(gm.gachaTickets)"
 
         if let orb = childNode(withName: "orbNode") as? SKShapeNode {
             orb.run(SKAction.sequence([

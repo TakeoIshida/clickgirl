@@ -24,14 +24,14 @@ enum ShopCatalog {
                  icon: "👊",
                  name: "タップ強化 Lv.1",
                  description: "タップ収益 +50%",
-                 cost: 30_000,
+                 cost: 300,
                  boostDuration: 0),
 
         ShopItem(id: "tap_lv2",
                  icon: "💥",
                  name: "タップ強化 Lv.2",
                  description: "タップ収益 さらに+100%",
-                 cost: 200_000,
+                 cost: 1_200,
                  boostDuration: 0,
                  requiresId: "tap_lv1"),
 
@@ -39,14 +39,14 @@ enum ShopCatalog {
                  icon: "📈",
                  name: "収益強化 Lv.1",
                  description: "自動収益 +30%",
-                 cost: 100_000,
+                 cost: 800,
                  boostDuration: 0),
 
         ShopItem(id: "income_lv2",
                  icon: "🚀",
                  name: "収益強化 Lv.2",
                  description: "自動収益 さらに+70%",
-                 cost: 500_000,
+                 cost: 2_400,
                  boostDuration: 0,
                  requiresId: "income_lv1"),
 
@@ -54,14 +54,14 @@ enum ShopCatalog {
                  icon: "🤖",
                  name: "自動タップ",
                  description: "毎秒 自動で1タップ",
-                 cost: 80_000,
+                 cost: 1_500,
                  boostDuration: 0),
 
         ShopItem(id: "offline_ext",
                  icon: "🌙",
                  name: "夜勤延長",
                  description: "放置上限 8h → 16h",
-                 cost: 300_000,
+                 cost: 2_000,
                  boostDuration: 0),
     ]
 
@@ -71,28 +71,28 @@ enum ShopCatalog {
                  icon: "⚡",
                  name: "タップ 2倍",
                  description: "タップ収益が2倍に (30秒)",
-                 cost: 10_000,
+                 cost: 250,
                  boostDuration: 30),
 
         ShopItem(id: "boost_income2",
                  icon: "💰",
                  name: "収益 2倍",
                  description: "自動収益が2倍に (60秒)",
-                 cost: 50_000,
+                 cost: 800,
                  boostDuration: 60),
 
         ShopItem(id: "boost_income5",
                  icon: "💎",
                  name: "収益 5倍",
                  description: "自動収益が5倍に (30秒)",
-                 cost: 300_000,
+                 cost: 2_000,
                  boostDuration: 30),
 
         ShopItem(id: "boost_all3",
                  icon: "🌟",
                  name: "全力 3倍",
                  description: "全収益が3倍に (60秒)",
-                 cost: 200_000,
+                 cost: 1_800,
                  boostDuration: 60),
     ]
 }

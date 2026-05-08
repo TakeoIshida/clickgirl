@@ -43,19 +43,19 @@ struct CityBuildingType {
 
     static let all: [CityBuildingType] = [
         CityBuildingType(id: "cafe",       name: "カフェ",           icon: "☕",
-                         placeCost: 50_000,     upgradeMult: 3.5, baseIncome: 50,
+                         placeCost: 1_500,      upgradeMult: 3.0, baseIncome: 50,
                          incomeMult: 1.6, maxLevel: 5, cr: 0.85, cg: 0.5,  cb: 0.22),
         CityBuildingType(id: "restaurant", name: "レストラン",        icon: "🍜",
-                         placeCost: 300_000,    upgradeMult: 3.5, baseIncome: 300,
+                         placeCost: 6_000,      upgradeMult: 3.2, baseIncome: 300,
                          incomeMult: 1.7, maxLevel: 4, cr: 0.78, cg: 0.22, cb: 0.22),
         CityBuildingType(id: "hotel",      name: "ホテル",            icon: "🏨",
-                         placeCost: 2_000_000,  upgradeMult: 4.0, baseIncome: 2_000,
+                         placeCost: 25_000,     upgradeMult: 3.5, baseIncome: 2_000,
                          incomeMult: 1.8, maxLevel: 4, cr: 0.22, cg: 0.42, cb: 0.82),
         CityBuildingType(id: "mall",       name: "ショッピングモール", icon: "🏬",
-                         placeCost: 10_000_000, upgradeMult: 4.0, baseIncome: 10_000,
+                         placeCost: 120_000,    upgradeMult: 3.7, baseIncome: 10_000,
                          incomeMult: 1.9, maxLevel: 3, cr: 0.58, cg: 0.18, cb: 0.80),
         CityBuildingType(id: "tower",      name: "タワー",            icon: "🗼",
-                         placeCost: 80_000_000, upgradeMult: 5.0, baseIncome: 80_000,
+                         placeCost: 800_000,    upgradeMult: 4.0, baseIncome: 80_000,
                          incomeMult: 2.0, maxLevel: 3, cr: 0.18, cg: 0.72, cb: 0.72),
     ]
 }

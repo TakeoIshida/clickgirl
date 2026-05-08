@@ -11,6 +11,7 @@ class GameScene: SKScene {
     private var officeChibiLayer: OfficeChibiLayer!
     private var tapHintLabel: SKLabelNode!
     private var offlinePopup: SKNode?
+    private var missionPanel: SKNode?
     private var bgmPlayer: AVAudioPlayer?
 
     // MARK: - State
@@ -47,8 +48,17 @@ class GameScene: SKScene {
         setupOfficeChiibis()
         setupHUD()
         setupEmployeePanel()
+        setupMissionPanel()
         setupNotifications()
         playBGM()
+
+        if gm.grantStarterPackIfNeeded() {
+            hudNode.update(money: gm.money, incomePerSec: gm.totalIncomePerSec)
+            showStarterPackPopup()
+            setupMissionPanel()
+        } else {
+            showCompletedMissionRewards()
+        }
 
         if gm.pendingOfflineIncome > 0 {
             run(SKAction.wait(forDuration: 0.5)) { [weak self] in
@@ -396,6 +406,7 @@ class GameScene: SKScene {
         spawnCoins(at: loc, count: min(3 + comboCount, 12))
         updateComboDisplay()
         hudNode.update(money: gm.money, incomePerSec: gm.totalIncomePerSec)
+        showCompletedMissionRewards()
     }
 
     private func updateComboDisplay() {
@@ -484,9 +495,106 @@ class GameScene: SKScene {
         if success {
             employeePanel.refresh()
             hudNode.update(money: gm.money, incomePerSec: gm.totalIncomePerSec)
+            showCompletedMissionRewards()
         } else {
             showNotEnoughMoneyEffect()
         }
+    }
+
+    private func setupMissionPanel() {
+        missionPanel?.removeFromParent()
+
+        let panel = SKNode()
+        panel.zPosition = 9
+        panel.position = CGPoint(x: frame.midX, y: frame.height - hudNode.hudHeight - 34)
+
+        let w = frame.width - 28
+        let bg = SKShapeNode(rectOf: CGSize(width: w, height: 52), cornerRadius: 12)
+        bg.fillColor = UIColor(red: 0.04, green: 0.06, blue: 0.18, alpha: 0.88)
+        bg.strokeColor = UIColor(red: 0.35, green: 0.72, blue: 1.0, alpha: 0.55)
+        bg.lineWidth = 1.2
+        panel.addChild(bg)
+
+        let current = gm.currentMission
+        let titleText = current.map { "MISSION  \($0.title)" } ?? "MISSION  会社成長ロードマップ達成"
+        let detailText: String
+        if let mission = current {
+            detailText = "\(mission.detail)  \(mission.progress(gm))/\(mission.target)  報酬 ✦\(formatMoney(mission.reward))"
+        } else {
+            detailText = "ランキング上位を目指して会社をさらに大きくしよう"
+        }
+
+        let title = SKLabelNode(text: titleText)
+        title.fontName = "HiraginoSans-W7"
+        title.fontSize = 12
+        title.fontColor = UIColor(red: 0.88, green: 0.95, blue: 1.0, alpha: 1)
+        title.horizontalAlignmentMode = .left
+        title.verticalAlignmentMode = .center
+        title.position = CGPoint(x: -w / 2 + 14, y: 10)
+        panel.addChild(title)
+
+        let detail = SKLabelNode(text: detailText)
+        detail.fontName = "HiraginoSans-W4"
+        detail.fontSize = 10.5
+        detail.fontColor = UIColor(white: 0.86, alpha: 0.9)
+        detail.horizontalAlignmentMode = .left
+        detail.verticalAlignmentMode = .center
+        detail.position = CGPoint(x: -w / 2 + 14, y: -11)
+        panel.addChild(detail)
+
+        addChild(panel)
+        missionPanel = panel
+    }
+
+    private func showCompletedMissionRewards() {
+        let completed = gm.claimCompletedMissions()
+        guard !completed.isEmpty else {
+            setupMissionPanel()
+            return
+        }
+
+        hudNode.update(money: gm.money, incomePerSec: gm.totalIncomePerSec)
+        setupMissionPanel()
+        let reward = completed.reduce(0.0) { $0 + $1.reward }
+        let names = completed.map(\.title).joined(separator: " / ")
+        showToast("ミッション達成: \(names)  +✦\(formatMoney(reward))")
+    }
+
+    private func showStarterPackPopup() {
+        showToast("初回ボーナス: ✦\(formatMoney(GameManager.starterMoney)) とガチャ券\(GameManager.starterTickets)枚")
+    }
+
+    private func showToast(_ message: String) {
+        let bg = SKShapeNode(rectOf: CGSize(width: frame.width - 32, height: 42), cornerRadius: 12)
+        bg.fillColor = UIColor(red: 0.05, green: 0.07, blue: 0.20, alpha: 0.96)
+        bg.strokeColor = UIColor(red: 0.45, green: 0.82, blue: 1.0, alpha: 0.70)
+        bg.lineWidth = 1.2
+        bg.position = CGPoint(x: frame.midX, y: frame.height - hudNode.hudHeight - 94)
+        bg.zPosition = 45
+        bg.alpha = 0
+        addChild(bg)
+
+        let label = SKLabelNode(text: message)
+        label.fontName = "HiraginoSans-W6"
+        label.fontSize = 12
+        label.fontColor = .white
+        label.verticalAlignmentMode = .center
+        label.position = bg.position
+        label.zPosition = 46
+        label.alpha = 0
+        addChild(label)
+
+        let show = SKAction.group([
+            SKAction.fadeIn(withDuration: 0.18),
+            SKAction.moveBy(x: 0, y: 10, duration: 0.18)
+        ])
+        let hide = SKAction.group([
+            SKAction.fadeOut(withDuration: 0.35),
+            SKAction.moveBy(x: 0, y: 16, duration: 0.35)
+        ])
+        let seq = SKAction.sequence([show, SKAction.wait(forDuration: 2.0), hide, SKAction.removeFromParent()])
+        bg.run(seq)
+        label.run(seq.copy() as! SKAction)
     }
 
     private func switchMainChar(to imageName: String, name: String) {
