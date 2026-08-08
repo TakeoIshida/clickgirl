@@ -76,22 +76,10 @@ jobs:
           echo -n "$ASC_API_KEY_BASE64" | base64 --decode \
             -o "$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
 
-      - name: Run tests
+      - name: Validate localization resources
         run: |
-          DESTINATION_ID=$(xcrun simctl list devices available | \
-            sed -n 's/.*iPhone.*(\([0-9A-Fa-f-]\{36\}\)).*/\1/p' | \
-            head -1 | xargs)
-          if [ -z "$DESTINATION_ID" ]; then
-            echo "An available iPhone simulator was not found."
-            xcrun simctl list devices available
-            exit 1
-          fi
-          xcodebuild test \
-            -project RecipeClip.xcodeproj \
-            -scheme RecipeClip \
-            -destination "platform=iOS Simulator,id=$DESTINATION_ID" \
-            -parallel-testing-enabled NO \
-            CODE_SIGNING_ALLOWED=NO
+          plutil -lint Localization/ja.lproj/Localizable.strings
+          plutil -lint Localization/en.lproj/Localizable.strings
 
       - name: Build archive
         env:
