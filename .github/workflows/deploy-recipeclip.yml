@@ -76,6 +76,42 @@ jobs:
           echo -n "$ASC_API_KEY_BASE64" | base64 --decode \
             -o "$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
 
+      - name: Install RecipeClip provisioning profiles
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          API_KEY_PATH="$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
+          JWT=$(ruby -ropenssl -rjson -e '
+            def base64url(value)
+              [value].pack("m0").tr("+/", "-_").delete("=")
+            end
+            now = Time.now.to_i
+            header = base64url({ alg: "ES256", kid: ARGV[0], typ: "JWT" }.to_json)
+            payload = base64url({ iss: ARGV[1], iat: now, exp: now + 1200, aud: "appstoreconnect-v1" }.to_json)
+            unsigned = "#{header}.#{payload}"
+            key = OpenSSL::PKey.read(File.read(ARGV[2]))
+            sequence = OpenSSL::ASN1.decode(key.sign(OpenSSL::Digest::SHA256.new, unsigned))
+            raw = sequence.value.map { |item| item.value.to_s(2).rjust(32, "\0") }.join
+            puts "#{unsigned}.#{base64url(raw)}"
+          ' "$ASC_KEY_ID" "$ASC_ISSUER_ID" "$API_KEY_PATH")
+
+          curl --fail --silent --show-error \
+            -H "Authorization: Bearer $JWT" \
+            'https://api.appstoreconnect.apple.com/v1/profiles?limit=200' \
+            -o "$RUNNER_TEMP/profiles.json"
+
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          jq -er '.data[] | select(.attributes.name == "com.ishidatakeo.RecipeClip AppStore") | .attributes.profileContent' \
+            "$RUNNER_TEMP/profiles.json" | base64 --decode \
+            -o "$HOME/Library/MobileDevice/Provisioning Profiles/RecipeClip.mobileprovision"
+          jq -er '.data[] | select(.attributes.name == "com.ishidatakeo.RecipeClip.ShareExtension AppStore") | .attributes.profileContent' \
+            "$RUNNER_TEMP/profiles.json" | base64 --decode \
+            -o "$HOME/Library/MobileDevice/Provisioning Profiles/RecipeClipShare.mobileprovision"
+
+          test -s "$HOME/Library/MobileDevice/Provisioning Profiles/RecipeClip.mobileprovision"
+          test -s "$HOME/Library/MobileDevice/Provisioning Profiles/RecipeClipShare.mobileprovision"
+
       - name: Validate localization resources
         run: |
           plutil -lint Localization/ja.lproj/Localizable.strings
@@ -100,18 +136,15 @@ jobs:
             CODE_SIGNING_ALLOWED=NO
 
       - name: Export IPA
-        env:
-          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
         run: |
+          cp ExportOptions.plist "$RUNNER_TEMP/ExportOptions.plist"
+          plutil -replace signingStyle -string manual "$RUNNER_TEMP/ExportOptions.plist"
+          plutil -insert signingCertificate -string "Apple Distribution" "$RUNNER_TEMP/ExportOptions.plist"
+          plutil -insert provisioningProfiles -json '{"com.ishidatakeo.RecipeClip":"com.ishidatakeo.RecipeClip AppStore","com.ishidatakeo.RecipeClip.ShareExtension":"com.ishidatakeo.RecipeClip.ShareExtension AppStore"}' "$RUNNER_TEMP/ExportOptions.plist"
           xcodebuild -exportArchive \
             -archivePath "$RUNNER_TEMP/RecipeClip.xcarchive" \
-            -exportOptionsPlist ExportOptions.plist \
-            -exportPath "$RUNNER_TEMP/output" \
-            -allowProvisioningUpdates \
-            -authenticationKeyID "$ASC_KEY_ID" \
-            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
-            -authenticationKeyPath "$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+            -exportPath "$RUNNER_TEMP/output"
 
       - name: Upload to App Store Connect
         env:
