@@ -13,6 +13,7 @@ jobs:
         with:
           repository: TakeoIshida/othello
           path: Reversigirls
+          ssh-key: ${{ secrets.OTHELLO_DEPLOY_KEY }}
 
       - name: Select Xcode 26
         run: |
