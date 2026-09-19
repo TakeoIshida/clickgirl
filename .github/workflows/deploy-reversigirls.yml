@@ -1,0 +1,95 @@
+name: Deploy Reversigirls to App Store
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout Reversigirls
+        uses: actions/checkout@v4
+        with:
+          repository: TakeoIshida/othello
+          path: Reversigirls
+
+      - name: Select Xcode 26
+        run: |
+          ls /Applications/ | grep Xcode
+          XCODE26=$(ls /Applications/ | grep "Xcode_26" | head -1)
+          if [ -n "$XCODE26" ]; then
+            sudo xcode-select -s /Applications/$XCODE26
+          else
+            echo "Xcode 26 not found, using default"
+            xcode-select -p
+          fi
+          xcodebuild -version
+
+      - name: Import Distribution Certificate
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o certificate.p12
+          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security import certificate.p12 -k build.keychain -P "$P12_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+
+      - name: Setup App Store Connect API Key
+        env:
+          ASC_API_KEY_BASE64: ${{ secrets.ASC_API_KEY_BASE64 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        run: |
+          mkdir -p ~/.appstoreconnect/private_keys
+          echo -n "$ASC_API_KEY_BASE64" | base64 --decode -o ~/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8
+
+      - name: Install CocoaPods dependencies
+        run: |
+          cd Reversigirls/OthelloGirls
+          pod install
+
+      - name: Build Archive
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          xcodebuild archive \
+            -workspace Reversigirls/OthelloGirls/OthelloGirls.xcworkspace \
+            -scheme OthelloGirls \
+            -configuration Release \
+            -destination generic/platform=iOS \
+            -archivePath $RUNNER_TEMP/Reversigirls.xcarchive \
+            -allowProvisioningUpdates \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            -authenticationKeyPath "$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8" \
+            DEVELOPMENT_TEAM=JS3245KG7Q
+
+      - name: Export IPA
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath $RUNNER_TEMP/Reversigirls.xcarchive \
+            -exportOptionsPlist ReversigirlsExportOptions.plist \
+            -exportPath $RUNNER_TEMP/output \
+            -allowProvisioningUpdates \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            -authenticationKeyPath "$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
+
+      - name: Upload to App Store Connect
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          xcrun altool --upload-app \
+            --type ios \
+            --file $RUNNER_TEMP/output/OthelloGirls.ipa \
+            --apiKey "$ASC_KEY_ID" \
+            --apiIssuer "$ASC_ISSUER_ID"
