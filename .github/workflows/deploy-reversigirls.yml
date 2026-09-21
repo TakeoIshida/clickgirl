@@ -48,6 +48,54 @@ jobs:
           mkdir -p ~/.appstoreconnect/private_keys
           echo -n "$ASC_API_KEY_BASE64" | base64 --decode -o ~/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8
 
+      - name: Install Reversigirls Provisioning Profile
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          python3 -m pip install --quiet PyJWT cryptography
+          python3 <<'PY'
+          import base64
+          import json
+          import os
+          import pathlib
+          import time
+          import urllib.parse
+          import urllib.request
+
+          import jwt
+
+          key_id = os.environ["ASC_KEY_ID"]
+          issuer_id = os.environ["ASC_ISSUER_ID"]
+          key_path = pathlib.Path.home() / ".appstoreconnect" / "private_keys" / f"AuthKey_{key_id}.p8"
+          token = jwt.encode(
+              {
+                  "iss": issuer_id,
+                  "iat": int(time.time()),
+                  "exp": int(time.time()) + 1200,
+                  "aud": "appstoreconnect-v1",
+              },
+              key_path.read_text(),
+              algorithm="ES256",
+              headers={"kid": key_id, "typ": "JWT"},
+          )
+          query = urllib.parse.urlencode({"filter[name]": "OthelloGirls_AppStore_2026"})
+          request = urllib.request.Request(
+              f"https://api.appstoreconnect.apple.com/v1/profiles?{query}",
+              headers={"Authorization": f"Bearer {token}"},
+          )
+          with urllib.request.urlopen(request) as response:
+              profiles = json.load(response)["data"]
+          if not profiles:
+              raise SystemExit("OthelloGirls_AppStore_2026 was not found")
+          profile = profiles[0]
+          raw_profile = base64.b64decode(profile["attributes"]["profileContent"])
+          profiles_dir = pathlib.Path.home() / "Library" / "MobileDevice" / "Provisioning Profiles"
+          profiles_dir.mkdir(parents=True, exist_ok=True)
+          (profiles_dir / f"{profile['id']}.mobileprovision").write_bytes(raw_profile)
+          print("Installed OthelloGirls_AppStore_2026")
+          PY
+
       - name: Install CocoaPods dependencies
         run: |
           cd Reversigirls/OthelloGirls
@@ -78,11 +126,7 @@ jobs:
           xcodebuild -exportArchive \
             -archivePath $RUNNER_TEMP/Reversigirls.xcarchive \
             -exportOptionsPlist ReversigirlsExportOptions.plist \
-            -exportPath $RUNNER_TEMP/output \
-            -allowProvisioningUpdates \
-            -authenticationKeyID "$ASC_KEY_ID" \
-            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
-            -authenticationKeyPath "$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
+            -exportPath $RUNNER_TEMP/output
 
       - name: Upload to App Store Connect
         env:

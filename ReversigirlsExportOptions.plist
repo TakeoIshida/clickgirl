@@ -7,7 +7,12 @@
 	<key>method</key>
 	<string>app-store-connect</string>
 	<key>signingStyle</key>
-	<string>automatic</string>
+	<string>manual</string>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>com.takeo.Reversigirls</key>
+		<string>OthelloGirls_AppStore_2026</string>
+	</dict>
 	<key>teamID</key>
 	<string>JS3245KG7Q</string>
 	<key>uploadSymbols</key>
