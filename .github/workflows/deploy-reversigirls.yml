@@ -8,6 +8,11 @@ jobs:
     runs-on: macos-15
 
     steps:
+      - name: Checkout Deployment Configuration
+        uses: actions/checkout@v4
+        with:
+          path: Deployment
+
       - name: Checkout Reversigirls
         uses: actions/checkout@v4
         with:
@@ -126,7 +131,7 @@ jobs:
         run: |
           xcodebuild -exportArchive \
             -archivePath $RUNNER_TEMP/Reversigirls.xcarchive \
-            -exportOptionsPlist ReversigirlsExportOptions.plist \
+            -exportOptionsPlist Deployment/ReversigirlsExportOptions.plist \
             -exportPath $RUNNER_TEMP/output
 
       - name: Upload to App Store Connect
