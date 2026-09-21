@@ -53,8 +53,9 @@ jobs:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
         run: |
-          python3 -m pip install --quiet PyJWT cryptography
-          python3 <<'PY'
+          python3 -m venv "$RUNNER_TEMP/profile-venv"
+          "$RUNNER_TEMP/profile-venv/bin/pip" install --quiet PyJWT cryptography
+          "$RUNNER_TEMP/profile-venv/bin/python" <<'PY'
           import base64
           import json
           import os
