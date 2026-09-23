@@ -1,0 +1,158 @@
+name: Deploy ShogiGirls to App Store Connect
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: shogigirls-app-store-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: macos-15
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 26
+        shell: bash
+        run: |
+          XCODE_PATH=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort | tail -1)
+          if [ -z "$XCODE_PATH" ]; then
+            echo "Xcode 26 is required but was not found on this runner."
+            ls /Applications | grep Xcode || true
+            exit 1
+          fi
+          sudo xcode-select -s "$XCODE_PATH"
+          xcodebuild -version
+
+      - name: Validate deployment configuration
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          ASC_API_KEY_BASE64: ${{ secrets.ASC_API_KEY_BASE64 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          for value in BUILD_CERTIFICATE_BASE64 P12_PASSWORD KEYCHAIN_PASSWORD ASC_API_KEY_BASE64 ASC_KEY_ID ASC_ISSUER_ID; do
+            if [ -z "${!value}" ]; then
+              echo "Required secret is missing: $value"
+              exit 1
+            fi
+          done
+          test "$(plutil -extract ShogiAdsProductionReady raw ShogiGirls/App/Info.plist)" = "true"
+          test "$(plutil -extract CFBundleIdentifier raw ShogiGirls/App/Info.plist)" = '$(PRODUCT_BUNDLE_IDENTIFIER)'
+          grep -q 'PRODUCT_BUNDLE_IDENTIFIER = com.takeo.ShogiGirls;' ShogiGirls/ShogiGirls.xcodeproj/project.pbxproj
+
+      - name: Import distribution certificate
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o "$RUNNER_TEMP/certificate.p12"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$RUNNER_TEMP/build.keychain-db"
+          security default-keychain -s "$RUNNER_TEMP/build.keychain-db"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$RUNNER_TEMP/build.keychain-db"
+          security import "$RUNNER_TEMP/certificate.p12" \
+            -k "$RUNNER_TEMP/build.keychain-db" \
+            -P "$P12_PASSWORD" \
+            -T /usr/bin/codesign
+          security set-key-partition-list \
+            -S apple-tool:,apple: \
+            -s \
+            -k "$KEYCHAIN_PASSWORD" \
+            "$RUNNER_TEMP/build.keychain-db"
+
+      - name: Set up App Store Connect API key
+        env:
+          ASC_API_KEY_BASE64: ${{ secrets.ASC_API_KEY_BASE64 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        run: |
+          mkdir -p "$HOME/.appstoreconnect/private_keys"
+          echo -n "$ASC_API_KEY_BASE64" | base64 --decode \
+            -o "$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
+
+      - name: Install ShogiGirls provisioning profile
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          API_KEY_PATH="$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
+          JWT=$(ruby -ropenssl -rjson -e '
+            def base64url(value)
+              [value].pack("m0").tr("+/", "-_").delete("=")
+            end
+            now = Time.now.to_i
+            header = base64url({ alg: "ES256", kid: ARGV[0], typ: "JWT" }.to_json)
+            payload = base64url({ iss: ARGV[1], iat: now, exp: now + 1200, aud: "appstoreconnect-v1" }.to_json)
+            unsigned = "#{header}.#{payload}"
+            key = OpenSSL::PKey.read(File.read(ARGV[2]))
+            sequence = OpenSSL::ASN1.decode(key.sign(OpenSSL::Digest::SHA256.new, unsigned))
+            raw = sequence.value.map { |item| item.value.to_s(2).rjust(32, "\0") }.join
+            puts "#{unsigned}.#{base64url(raw)}"
+          ' "$ASC_KEY_ID" "$ASC_ISSUER_ID" "$API_KEY_PATH")
+
+          curl --fail --silent --show-error \
+            -H "Authorization: Bearer $JWT" \
+            'https://api.appstoreconnect.apple.com/v1/profiles?limit=200' \
+            -o "$RUNNER_TEMP/profiles.json"
+
+          PROFILE_NAME='iOS Team Store Provisioning Profile: com.takeo.ShogiGirls'
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          jq -er --arg name "$PROFILE_NAME" \
+            '.data[] | select(.attributes.name == $name) | .attributes.profileContent' \
+            "$RUNNER_TEMP/profiles.json" | base64 --decode \
+            -o "$HOME/Library/MobileDevice/Provisioning Profiles/ShogiGirls.mobileprovision"
+          test -s "$HOME/Library/MobileDevice/Provisioning Profiles/ShogiGirls.mobileprovision"
+
+      - name: Resolve Swift packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project ShogiGirls/ShogiGirls.xcodeproj \
+            -scheme ShogiGirls
+
+      - name: Build archive
+        run: |
+          xcodebuild archive \
+            -project ShogiGirls/ShogiGirls.xcodeproj \
+            -scheme ShogiGirls \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/ShogiGirls.xcarchive" \
+            DEVELOPMENT_TEAM=JS3245KG7Q \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Export IPA
+        run: |
+          cp ShogiGirls/ExportOptions.plist "$RUNNER_TEMP/ExportOptions.plist"
+          plutil -replace signingStyle -string manual "$RUNNER_TEMP/ExportOptions.plist"
+          plutil -insert signingCertificate -string "Apple Distribution" "$RUNNER_TEMP/ExportOptions.plist"
+          plutil -insert provisioningProfiles -json '{"com.takeo.ShogiGirls":"iOS Team Store Provisioning Profile: com.takeo.ShogiGirls"}' "$RUNNER_TEMP/ExportOptions.plist"
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/ShogiGirls.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+            -exportPath "$RUNNER_TEMP/output"
+
+      - name: Upload to App Store Connect
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          IPA_PATH=$(find "$RUNNER_TEMP/output" -maxdepth 1 -name '*.ipa' -print -quit)
+          if [ -z "$IPA_PATH" ]; then
+            echo "Exported IPA was not found."
+            exit 1
+          fi
+          xcrun altool --upload-app \
+            --type ios \
+            --file "$IPA_PATH" \
+            --apiKey "$ASC_KEY_ID" \
+            --apiIssuer "$ASC_ISSUER_ID"
+
+      - name: Clean temporary keychain
+        if: always()
+        run: security delete-keychain "$RUNNER_TEMP/build.keychain-db" || true
