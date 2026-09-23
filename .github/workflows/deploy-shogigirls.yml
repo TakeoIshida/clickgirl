@@ -93,6 +93,9 @@ jobs:
             -scheme ShogiGirls
 
       - name: Build archive
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
         run: |
           xcodebuild archive \
             -project ShogiGirls/ShogiGirls.xcodeproj \
@@ -100,18 +103,17 @@ jobs:
             -configuration Release \
             -destination 'generic/platform=iOS' \
             -archivePath "$RUNNER_TEMP/ShogiGirls.xcarchive" \
-            DEVELOPMENT_TEAM=JS3245KG7Q \
-            CODE_SIGNING_ALLOWED=NO
+            -allowProvisioningUpdates \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            -authenticationKeyPath "$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8" \
+            DEVELOPMENT_TEAM=JS3245KG7Q
 
       - name: Export IPA
         run: |
-          cp ShogiGirls/ExportOptions.plist "$RUNNER_TEMP/ExportOptions.plist"
-          plutil -replace signingStyle -string manual "$RUNNER_TEMP/ExportOptions.plist"
-          plutil -insert signingCertificate -string "Apple Distribution" "$RUNNER_TEMP/ExportOptions.plist"
-          plutil -insert provisioningProfiles -json '{"com.takeo.ShogiGirls":"iOS Team Store Provisioning Profile: com.takeo.ShogiGirls"}' "$RUNNER_TEMP/ExportOptions.plist"
           xcodebuild -exportArchive \
             -archivePath "$RUNNER_TEMP/ShogiGirls.xcarchive" \
-            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+            -exportOptionsPlist ShogiGirls/ExportOptions.plist \
             -exportPath "$RUNNER_TEMP/output"
 
       - name: Upload to App Store Connect
