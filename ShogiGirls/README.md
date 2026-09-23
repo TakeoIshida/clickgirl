@@ -34,7 +34,7 @@ DebugはGoogle公式テスト広告を使用します。Releaseは `ShogiAdsProd
 
 UMPの同意情報更新・必要なフォーム表示・広告リクエスト可否・設定からのプライバシー選択に対応しています。App Store Connectへ「将棋ガールズ」を登録済みです。審査提出前に、広告SDKを含めたデータ収集申告、年齢区分、ストア説明、スクリーンショットを設定してください。
 
-2026年9月23日にバージョン1.0.0（ビルド1）の本番広告有効版をアーカイブし、App Store配布署名付きIPAを書き出しました。アップロード検証では、作成に使ったXcode 16.4／iOS 18.5 SDKがAppleの受付要件を満たさないため却下されました。Xcode 26以降へ更新後、同じバージョンを再アーカイブしてアップロードしてください。
+2026年9月23日にGitHub ActionsのXcode 26.3／iOS 26.2 SDKで、バージョン1.0.0（ビルド1）の本番広告有効版をアーカイブし、App Store配布署名付きIPAをApp Store Connectへアップロードしました。実行結果は [GitHub Actions run 35866476008](https://github.com/TakeoIshida/clickgirl/actions/runs/35866476008) で確認できます。ローカルMacのXcode更新は不要です。
 
 参照：[Googleの初期設定](https://developers.google.com/admob/ios/quick-start)、[UMP](https://developers.google.com/admob/ios/privacy)、[リワード広告](https://developers.google.com/admob/ios/rewarded)。
 
