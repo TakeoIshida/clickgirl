@@ -36,8 +36,9 @@ jobs:
           ASC_API_KEY_BASE64: ${{ secrets.ASC_API_KEY_BASE64 }}
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          SHOGIGIRLS_PROFILE_BASE64: ${{ secrets.SHOGIGIRLS_PROFILE_BASE64 }}
         run: |
-          for value in BUILD_CERTIFICATE_BASE64 P12_PASSWORD KEYCHAIN_PASSWORD ASC_API_KEY_BASE64 ASC_KEY_ID ASC_ISSUER_ID; do
+          for value in BUILD_CERTIFICATE_BASE64 P12_PASSWORD KEYCHAIN_PASSWORD ASC_API_KEY_BASE64 ASC_KEY_ID ASC_ISSUER_ID SHOGIGIRLS_PROFILE_BASE64; do
             if [ -z "${!value}" ]; then
               echo "Required secret is missing: $value"
               exit 1
@@ -78,34 +79,10 @@ jobs:
 
       - name: Install ShogiGirls provisioning profile
         env:
-          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          SHOGIGIRLS_PROFILE_BASE64: ${{ secrets.SHOGIGIRLS_PROFILE_BASE64 }}
         run: |
-          API_KEY_PATH="$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
-          JWT=$(ruby -ropenssl -rjson -e '
-            def base64url(value)
-              [value].pack("m0").tr("+/", "-_").delete("=")
-            end
-            now = Time.now.to_i
-            header = base64url({ alg: "ES256", kid: ARGV[0], typ: "JWT" }.to_json)
-            payload = base64url({ iss: ARGV[1], iat: now, exp: now + 1200, aud: "appstoreconnect-v1" }.to_json)
-            unsigned = "#{header}.#{payload}"
-            key = OpenSSL::PKey.read(File.read(ARGV[2]))
-            sequence = OpenSSL::ASN1.decode(key.sign(OpenSSL::Digest::SHA256.new, unsigned))
-            raw = sequence.value.map { |item| item.value.to_s(2).rjust(32, "\0") }.join
-            puts "#{unsigned}.#{base64url(raw)}"
-          ' "$ASC_KEY_ID" "$ASC_ISSUER_ID" "$API_KEY_PATH")
-
-          curl --fail --silent --show-error \
-            -H "Authorization: Bearer $JWT" \
-            'https://api.appstoreconnect.apple.com/v1/profiles?limit=200' \
-            -o "$RUNNER_TEMP/profiles.json"
-
-          PROFILE_NAME='iOS Team Store Provisioning Profile: com.takeo.ShogiGirls'
           mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
-          jq -er --arg name "$PROFILE_NAME" \
-            '.data[] | select(.attributes.name == $name) | .attributes.profileContent' \
-            "$RUNNER_TEMP/profiles.json" | base64 --decode \
+          echo -n "$SHOGIGIRLS_PROFILE_BASE64" | base64 --decode \
             -o "$HOME/Library/MobileDevice/Provisioning Profiles/ShogiGirls.mobileprovision"
           test -s "$HOME/Library/MobileDevice/Provisioning Profiles/ShogiGirls.mobileprovision"
 
