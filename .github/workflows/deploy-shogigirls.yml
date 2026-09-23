@@ -93,9 +93,6 @@ jobs:
             -scheme ShogiGirls
 
       - name: Build archive
-        env:
-          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
         run: |
           xcodebuild archive \
             -project ShogiGirls/ShogiGirls.xcodeproj \
@@ -103,11 +100,8 @@ jobs:
             -configuration Release \
             -destination 'generic/platform=iOS' \
             -archivePath "$RUNNER_TEMP/ShogiGirls.xcarchive" \
-            -allowProvisioningUpdates \
-            -authenticationKeyID "$ASC_KEY_ID" \
-            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
-            -authenticationKeyPath "$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8" \
-            DEVELOPMENT_TEAM=JS3245KG7Q
+            DEVELOPMENT_TEAM=JS3245KG7Q \
+            CODE_SIGNING_ALLOWED=NO
 
       - name: Export IPA
         run: |
