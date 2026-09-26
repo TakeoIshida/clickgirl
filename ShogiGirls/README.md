@@ -32,9 +32,11 @@
 
 DebugはGoogle公式テスト広告を使用します。Releaseは `ShogiAdsProductionReady` がtrueのため、新作専用の本番広告を使用します。2026年9月13日にAdMobアプリ「将棋ガールズ」と広告ユニット `ShogiGirls_Rewarded`・`ShogiGirls_Interstitial` を作成し、3つの本番IDを `App/Info.plist` に設定済みです。2026年9月21日に「将棋ガールズ 欧州同意」を公開し、本番広告を有効化しました。既存ゲームの広告IDは流用していません。
 
-UMPの同意情報更新・必要なフォーム表示・広告リクエスト可否・設定からのプライバシー選択に対応しています。App Store Connectへ「将棋ガールズ」を登録済みです。審査提出前に、広告SDKを含めたデータ収集申告、年齢区分、ストア説明、スクリーンショットを設定してください。
+UMPの同意情報更新・必要なフォーム表示・広告リクエスト可否・設定からのプライバシー選択に対応しています。App Store Connectへ「将棋ガールズ」を登録済みです。2026年9月26日に広告SDKを含む6種類のデータ収集申告を公開し、年齢区分4+、ストア説明、スクリーンショット3枚、カテゴリ、審査メモ、ビルド1の選択まで完了しました。
 
 2026年9月23日にGitHub ActionsのXcode 26.3／iOS 26.2 SDKで、バージョン1.0.0（ビルド1）の本番広告有効版をアーカイブし、App Store配布署名付きIPAをApp Store Connectへアップロードしました。実行結果は [GitHub Actions run 35866476008](https://github.com/TakeoIshida/clickgirl/actions/runs/35866476008) で確認できます。ローカルMacのXcode更新は不要です。
+
+`ITSAppUsesNonExemptEncryption` は `false` に設定済みです。ビルド1の輸出コンプライアンス回答も「非該当」で完了しています。2026年9月26日にApp Store Connectの「審査用に追加」を実行しましたが、13インチiPad用スクリーンショット、価格帯、App Review連絡先（名・姓・メール・電話番号）が未設定のため追加には至っていません。
 
 参照：[Googleの初期設定](https://developers.google.com/admob/ios/quick-start)、[UMP](https://developers.google.com/admob/ios/privacy)、[リワード広告](https://developers.google.com/admob/ios/rewarded)。
 
