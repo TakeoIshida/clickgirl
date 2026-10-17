@@ -17,6 +17,7 @@ Podfile.lock
 # SPM
 .swiftpm/
 *.resolved
+!ShogiGirls/ShogiGirls.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 
 # macOS
 .DS_Store
