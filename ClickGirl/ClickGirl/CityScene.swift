@@ -1,4 +1,5 @@
 import SpriteKit
+import StoreKit
 
 // MARK: - City Data
 
@@ -1080,10 +1081,21 @@ class CityScene: SKScene {
             showToast("💸 お金が足りません (✦\(formatMoney(t.placeCost)) 必要)")
             return
         }
+        let isFirstBuilding = gm.cityBuildCount == 0
         if gm.placeBuilding(plot: plot, typeId: typeId) {
             buildCards()
             drawCityView()
             showBuildEffect(name: t.name)
+            if isFirstBuilding {
+                requestReviewAfterFirstCityMilestone()
+            }
+        }
+    }
+
+    private func requestReviewAfterFirstCityMilestone() {
+        run(SKAction.wait(forDuration: 1.8)) { [weak self] in
+            guard let windowScene = self?.view?.window?.windowScene else { return }
+            SKStoreReviewController.requestReview(in: windowScene)
         }
     }
 

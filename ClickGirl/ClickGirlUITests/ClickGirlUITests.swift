@@ -32,6 +32,22 @@ final class ClickGirlUITests: XCTestCase {
     }
 
     @MainActor
+    func testTitleToMainSceneSmoke() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        // SpriteKit nodes are not exposed as accessibility elements, so tap the
+        // centre of the title screen's primary button by normalized coordinate.
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.80)).tap()
+
+        XCTAssertEqual(app.state, .runningForeground)
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = "Main scene after title"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         // This measures how long it takes to launch your application.
         measure(metrics: [XCTApplicationLaunchMetric()]) {

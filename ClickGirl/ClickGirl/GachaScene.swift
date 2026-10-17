@@ -409,7 +409,10 @@ class GachaScene: SKScene {
         freeBg.name        = "btnFreeGacha"
         freeBtn.addChild(freeBg)
 
-        let freeLbl = SKLabelNode(text: "📺  動画を見て無料ガチャ")
+        let freeText = gm.canClaimDailyGachaAd
+            ? "📺  1日1回・動画を見て無料ガチャ"
+            : "✓  本日の無料ガチャは受取済み"
+        let freeLbl = SKLabelNode(text: freeText)
         freeLbl.fontName  = "HiraginoSans-W6"
         freeLbl.fontSize  = 13
         freeLbl.fontColor = UIColor(red: 0.38, green: 0.98, blue: 0.52, alpha: 1)
@@ -418,7 +421,7 @@ class GachaScene: SKScene {
         freeBtn.addChild(freeLbl)
 
         // 広告未準備時はグレーアウト
-        if !AdManager.shared.isRewardedReady {
+        if !gm.canClaimDailyGachaAd || !AdManager.shared.isRewardedReady {
             freeBg.fillColor   = UIColor(white: 0.2, alpha: 0.5)
             freeBg.strokeColor = UIColor(white: 0.5, alpha: 0.3)
             freeLbl.fontColor  = UIColor(white: 0.5, alpha: 0.7)
@@ -450,7 +453,12 @@ class GachaScene: SKScene {
     // MARK: - ガチャロジック
 
     private func pullFreeGacha() {
+        guard gm.canClaimDailyGachaAd else {
+            showToast("無料ガチャは明日また受け取れます")
+            return
+        }
         guard let rootVC = view?.window?.rootViewController else { return }
+        gm.recordRewardedOpportunity("daily_gacha")
         AdManager.shared.showRewarded(
             from: rootVC,
             onRewarded: { [weak self] in
@@ -459,6 +467,8 @@ class GachaScene: SKScene {
                 self.gm.gachaPityCount = newPity
                 for card in cards { self.gm.addCard(card) }
                 self.gm.recordGachaPull(count: 1)
+                self.gm.claimDailyGachaAd()
+                self.gm.recordRewardedCompletion("daily_gacha")
                 self.gm.saveGame()
                 self.isAnimating = true
                 self.showResults(cards)

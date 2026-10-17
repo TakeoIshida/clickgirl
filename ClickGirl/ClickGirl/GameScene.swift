@@ -11,7 +11,9 @@ class GameScene: SKScene {
     private var officeChibiLayer: OfficeChibiLayer!
     private var tapHintLabel: SKLabelNode!
     private var offlinePopup: SKNode?
+    private var displayedOfflineIncome: Double = 0
     private var missionPanel: SKNode?
+    private var rewardBoostLabel: SKLabelNode?
     private var bgmPlayer: AVAudioPlayer?
 
     // MARK: - State
@@ -49,6 +51,7 @@ class GameScene: SKScene {
         setupHUD()
         setupEmployeePanel()
         setupMissionPanel()
+        setupRewardBoostButton()
         setupNotifications()
         playBGM()
 
@@ -298,13 +301,12 @@ class GameScene: SKScene {
 
         guard dist < tapThreshold && dt < tapTimeThreshold else { return }
 
-        // オフラインポップアップを閉じる
-        if let popup = offlinePopup {
-            popup.run(SKAction.sequence([
-                SKAction.scale(to: 0, duration: 0.2),
-                SKAction.removeFromParent()
-            ]))
-            offlinePopup = nil
+        // オフライン報酬は通常受取か、任意の動画視聴で2倍にする
+        if offlinePopup != nil {
+            for node in nodes(at: loc) {
+                if node.name == "offlineDoubleBtn" { showOfflineDoubleAd(); return }
+                if node.name == "offlineCollectBtn" { closeOfflinePopup(); return }
+            }
             return
         }
 
@@ -317,6 +319,7 @@ class GameScene: SKScene {
             if node.name == "rankBtn"       { openRanking();    return }
             if node.name == "settingBtn"    { openSetting();    return }
             if node.name == "charSelectBtn" { openCharSelect(); return }
+            if node.name == "mainRewardBoostBtn" { showMainRewardBoostAd(); return }
         }
 
         // パネル内タップ → キャラ切替 or 採用/UP
@@ -544,6 +547,62 @@ class GameScene: SKScene {
 
         addChild(panel)
         missionPanel = panel
+    }
+
+    private func setupRewardBoostButton() {
+        let button = SKNode()
+        button.name = "mainRewardBoostBtn"
+        button.position = CGPoint(x: frame.midX, y: frame.height - hudNode.hudHeight - 72)
+        button.zPosition = 12
+
+        let bg = SKShapeNode(rectOf: CGSize(width: min(frame.width - 42, 310), height: 34), cornerRadius: 17)
+        bg.fillColor = UIColor(red: 0.08, green: 0.26, blue: 0.12, alpha: 0.94)
+        bg.strokeColor = UIColor(red: 0.38, green: 0.98, blue: 0.52, alpha: 0.85)
+        bg.lineWidth = 1.5
+        bg.name = "mainRewardBoostBtn"
+        button.addChild(bg)
+
+        let label = SKLabelNode(text: "動画で自動収益2倍・5分")
+        label.fontName = "HiraginoSans-W6"
+        label.fontSize = 12.5
+        label.fontColor = UIColor(red: 0.55, green: 1.0, blue: 0.65, alpha: 1)
+        label.verticalAlignmentMode = .center
+        label.name = "mainRewardBoostBtn"
+        button.addChild(label)
+        rewardBoostLabel = label
+        addChild(button)
+        refreshRewardBoostButton()
+    }
+
+    private func refreshRewardBoostButton() {
+        let remaining = gm.boostTimeRemaining("boost_income2")
+        if remaining > 0 {
+            rewardBoostLabel?.text = "収益2倍中  残り\(Int(ceil(remaining / 60)))分"
+        } else {
+            rewardBoostLabel?.text = "動画で自動収益2倍・5分"
+        }
+    }
+
+    private func showMainRewardBoostAd() {
+        guard gm.boostTimeRemaining("boost_income2") <= 0 else {
+            showToast("収益2倍ブーストが有効です")
+            return
+        }
+        guard let rootVC = view?.window?.rootViewController else { return }
+        gm.recordRewardedOpportunity("main_boost")
+        AdManager.shared.showRewarded(
+            from: rootVC,
+            onRewarded: { [weak self] in
+                guard let self else { return }
+                self.gm.activateRewardedIncomeBoost(duration: 300)
+                self.gm.recordRewardedCompletion("main_boost")
+                self.refreshRewardBoostButton()
+                self.showToast("自動収益2倍を5分間スタート")
+            },
+            onNotReady: { [weak self] in
+                self?.showToast("広告の準備中です。少し待ってからどうぞ")
+            }
+        )
     }
 
     private func showCompletedMissionRewards() {
@@ -840,6 +899,7 @@ class GameScene: SKScene {
     }
 
     private func showOfflinePopup(amount: Double) {
+        displayedOfflineIncome = amount
         let popup = SKNode()
         popup.zPosition = 50
         popup.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -877,14 +937,13 @@ class GameScene: SKScene {
         sub.position = CGPoint(x: -20, y: 5)
         popup.addChild(sub)
 
-        let hint = SKLabelNode(text: "タップで閉じる")
-        hint.fontName = "HiraginoSans-W3"
-        hint.fontSize = 13
-        hint.fontColor = UIColor(white: 0.5, alpha: 1.0)
-        hint.position = CGPoint(x: 0, y: -75)
-        popup.addChild(hint)
-        let blinkHint = SKAction.sequence([SKAction.fadeAlpha(to: 0.2, duration: 0.8), SKAction.fadeAlpha(to: 1.0, duration: 0.8)])
-        hint.run(SKAction.repeatForever(blinkHint))
+        let collect = makeOfflineButton(name: "offlineCollectBtn", text: "そのまま受取", width: 118)
+        collect.position = CGPoint(x: -67, y: -70)
+        popup.addChild(collect)
+
+        let double = makeOfflineButton(name: "offlineDoubleBtn", text: "動画で2倍", width: 118)
+        double.position = CGPoint(x: 67, y: -70)
+        popup.addChild(double)
 
         popup.setScale(0)
         popup.run(SKAction.sequence([
@@ -892,6 +951,63 @@ class GameScene: SKScene {
             SKAction.scale(to: 1.0, duration: 0.1)
         ]))
         offlinePopup = popup
+    }
+
+    private func makeOfflineButton(name: String, text: String, width: CGFloat) -> SKNode {
+        let button = SKNode()
+        button.name = name
+        let bg = SKShapeNode(rectOf: CGSize(width: width, height: 38), cornerRadius: 19)
+        bg.fillColor = name == "offlineDoubleBtn"
+            ? UIColor(red: 0.10, green: 0.30, blue: 0.14, alpha: 1)
+            : UIColor(red: 0.15, green: 0.15, blue: 0.28, alpha: 1)
+        bg.strokeColor = name == "offlineDoubleBtn"
+            ? UIColor(red: 0.38, green: 0.98, blue: 0.52, alpha: 0.9)
+            : UIColor(white: 0.7, alpha: 0.5)
+        bg.name = name
+        button.addChild(bg)
+        let label = SKLabelNode(text: text)
+        label.fontName = "HiraginoSans-W6"
+        label.fontSize = 12
+        label.fontColor = .white
+        label.verticalAlignmentMode = .center
+        label.name = name
+        button.addChild(label)
+        return button
+    }
+
+    private func closeOfflinePopup() {
+        offlinePopup?.run(SKAction.sequence([
+            SKAction.scale(to: 0, duration: 0.2),
+            SKAction.removeFromParent()
+        ]))
+        offlinePopup = nil
+        displayedOfflineIncome = 0
+    }
+
+    private func showOfflineDoubleAd() {
+        guard displayedOfflineIncome > 0,
+              let rootVC = view?.window?.rootViewController else {
+            closeOfflinePopup()
+            return
+        }
+        let bonus = displayedOfflineIncome
+        gm.recordRewardedOpportunity("offline_double")
+        AdManager.shared.showRewarded(
+            from: rootVC,
+            onRewarded: { [weak self] in
+                guard let self else { return }
+                self.gm.money += bonus
+                self.gm.totalEarned += bonus
+                self.gm.recordRewardedCompletion("offline_double")
+                self.gm.saveGame()
+                self.hudNode.update(money: self.gm.money, incomePerSec: self.gm.totalIncomePerSec)
+                self.closeOfflinePopup()
+                self.showToast("放置報酬が2倍になりました  +✦\(self.formatMoney(bonus))")
+            },
+            onNotReady: { [weak self] in
+                self?.showToast("広告の準備中です。そのまま受け取れます")
+            }
+        )
     }
 
     // MARK: - Update Loop
@@ -914,6 +1030,7 @@ class GameScene: SKScene {
         }
 
         hudNode.update(money: gm.money, incomePerSec: gm.totalIncomePerSec)
+        refreshRewardBoostButton()
 
         officeChibiLayer.refresh(employees: gm.employees)
         employeePanel.applyInertia()

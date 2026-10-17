@@ -41,6 +41,9 @@ class GameManager {
     var gachaPullCount: Int = 0
     var officeUpgradeCount: Int = 0
     var cityBuildCount: Int = 0
+    var lastDailyGachaAdDate: Date?
+
+    private let calendar = Calendar.current
 
     private var lastSaveDate: Date = Date()
 
@@ -79,6 +82,32 @@ class GameManager {
 
     var currentMission: Mission? {
         missions.first { !completedMissionIDs.contains($0.id) }
+    }
+
+    var canClaimDailyGachaAd: Bool {
+        guard let last = lastDailyGachaAdDate else { return true }
+        return !calendar.isDateInToday(last)
+    }
+
+    func claimDailyGachaAd() {
+        lastDailyGachaAdDate = Date()
+        saveGame()
+    }
+
+    func activateRewardedIncomeBoost(duration: TimeInterval = 300) {
+        let base = max(Date(), activeBoosts["boost_income2"] ?? Date())
+        activeBoosts["boost_income2"] = base.addingTimeInterval(duration)
+        saveGame()
+    }
+
+    func recordRewardedOpportunity(_ placement: String) {
+        let key = "cg_metric_rewarded_opportunity_\(placement)"
+        UserDefaults.standard.set(UserDefaults.standard.integer(forKey: key) + 1, forKey: key)
+    }
+
+    func recordRewardedCompletion(_ placement: String) {
+        let key = "cg_metric_rewarded_completion_\(placement)"
+        UserDefaults.standard.set(UserDefaults.standard.integer(forKey: key) + 1, forKey: key)
     }
 
     @discardableResult
@@ -356,7 +385,7 @@ class GameManager {
                     "cg_floors","cg_gachaPity","cg_gachaCards","cg_city",
                     "cg_lifetimeTaps","cg_gachaTickets","cg_starterPack",
                     "cg_completedMissions","cg_shopPurchases","cg_gachaPulls",
-                    "cg_officeUpgradeCount","cg_cityBuildCount"]
+                    "cg_officeUpgradeCount","cg_cityBuildCount","cg_dailyGachaAd"]
         keys.forEach { d.removeObject(forKey: $0) }
         money               = 0
         totalEarned         = 0
@@ -377,6 +406,7 @@ class GameManager {
         gachaPullCount      = 0
         officeUpgradeCount  = 0
         cityBuildCount      = 0
+        lastDailyGachaAdDate = nil
     }
 
     // MARK: - Save / Load
@@ -393,6 +423,7 @@ class GameManager {
         d.set(gachaPullCount, forKey: "cg_gachaPulls")
         d.set(officeUpgradeCount, forKey: "cg_officeUpgradeCount")
         d.set(cityBuildCount, forKey: "cg_cityBuildCount")
+        d.set(lastDailyGachaAdDate, forKey: "cg_dailyGachaAd")
         d.set(Date(), forKey: "cg_lastSave")
 
         let empData = employees.map { e -> [String: Any] in
@@ -438,6 +469,7 @@ class GameManager {
         gachaPullCount = d.integer(forKey: "cg_gachaPulls")
         officeUpgradeCount = d.integer(forKey: "cg_officeUpgradeCount")
         cityBuildCount = d.integer(forKey: "cg_cityBuildCount")
+        lastDailyGachaAdDate = d.object(forKey: "cg_dailyGachaAd") as? Date
         lastSaveDate = d.object(forKey: "cg_lastSave") as? Date ?? Date()
 
         if let empData = d.array(forKey: "cg_employees") as? [[String: Any]] {

@@ -164,7 +164,7 @@ class ShopScene: SKScene {
             bg.name        = "freeBoostBtn"
             freeBtn.addChild(bg)
 
-            let lbl = SKLabelNode(text: "📺  動画を見て収益 ×2（60秒）無料")
+            let lbl = SKLabelNode(text: "📺  動画を見て収益 ×2（5分）無料")
             lbl.fontName  = "HiraginoSans-W6"
             lbl.fontSize  = 13
             lbl.fontColor = UIColor(red: 0.38, green: 0.98, blue: 0.52, alpha: 1)
@@ -456,16 +456,16 @@ class ShopScene: SKScene {
 
     private func showFreeBoostAd() {
         guard let rootVC = view?.window?.rootViewController else { return }
+        GameManager.shared.recordRewardedOpportunity("shop_boost")
         AdManager.shared.showRewarded(
             from: rootVC,
             onRewarded: { [weak self] in
                 guard let self else { return }
                 let gm = GameManager.shared
-                let exp = Date().addingTimeInterval(60)
-                gm.activeBoosts["boost_income2"] = exp
-                gm.saveGame()
+                gm.activateRewardedIncomeBoost(duration: 300)
+                gm.recordRewardedCompletion("shop_boost")
                 self.buildCards()
-                self.showToast("🎉 収益2倍（60秒）ゲット！")
+                self.showToast("🎉 収益2倍（5分）ゲット！")
             },
             onNotReady: { [weak self] in
                 self?.showToast("📺 広告の準備中です。少し待ってからどうぞ")
