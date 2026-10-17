@@ -42,8 +42,12 @@ jobs:
         run: |
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+          PROFILE_PLIST=$RUNNER_TEMP/build_pp.plist
+          security cms -D -i $PP_PATH > $PROFILE_PLIST
+          PROFILE_UUID=$(/usr/libexec/PlistBuddy -c 'Print UUID' $PROFILE_PLIST)
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$PROFILE_UUID.mobileprovision
+          echo "PROFILE_UUID=$PROFILE_UUID" >> $GITHUB_ENV
 
       - name: Setup App Store Connect API Key
         env:
@@ -73,7 +77,10 @@ jobs:
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             -authenticationKeyPath "$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8" \
-            DEVELOPMENT_TEAM=JS3245KG7Q
+            DEVELOPMENT_TEAM=JS3245KG7Q \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            PROVISIONING_PROFILE="$PROFILE_UUID"
 
       - name: Export IPA
         run: |
