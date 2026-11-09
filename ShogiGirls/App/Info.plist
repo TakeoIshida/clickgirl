@@ -15,6 +15,8 @@
 <key>UISupportedInterfaceOrientations~ipad</key><array><string>UIInterfaceOrientationPortrait</string></array>
 <key>UIRequiresFullScreen</key><true/>
 <key>GADApplicationIdentifier</key><string>ca-app-pub-8244563543256981~7420878296</string>
+<key>GADDelayAppMeasurementInit</key><true/>
+<key>NSUserTrackingUsageDescription</key><string>より適切な広告の配信と広告効果の測定のため、端末の広告識別子を使用する場合があります。</string>
 <key>ShogiAdsProductionReady</key><true/>
 <key>ShogiRewardedAdUnitID</key><string>ca-app-pub-8244563543256981/8517950502</string>
 <key>ShogiInterstitialAdUnitID</key><string>ca-app-pub-8244563543256981/2168551619</string>

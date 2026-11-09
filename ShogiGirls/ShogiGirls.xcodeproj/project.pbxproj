@@ -7,403 +7,385 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		03BF55635DF67D4EFE7C19D5 /* tsukika_base.png in Resources */ = {isa = PBXBuildFile; fileRef = B84C8D63A9ABB10815FC648A /* tsukika_base.png */; };
-		05D1BFC79FD23B2F86070134 /* hinata_reward_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D331C71DF66AE4F285691B /* hinata_reward_2.png */; };
-		06AB34C07D9F0C24F4C7930C /* tsukika_reward_5.png in Resources */ = {isa = PBXBuildFile; fileRef = F6E257839E26A1033C4B9E71 /* tsukika_reward_5.png */; };
-		082FAA64E38E73C50E042592 /* cecilia_reward_2.png in Resources */ = {isa = PBXBuildFile; fileRef = D136A1CBDB4E82EB9AD283C6 /* cecilia_reward_2.png */; };
-		0B0699AA90294F7701FEDD3B /* hinata_happy.png in Resources */ = {isa = PBXBuildFile; fileRef = 98D7869125B574924F1EBC5B /* hinata_happy.png */; };
-		0BCC30A20F4858DD30BC1D96 /* kotone_reward_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 86119EEF8D3E36D651E11902 /* kotone_reward_2.png */; };
-		0BF4529304EF7DB10FC7A497 /* shion_happy.png in Resources */ = {isa = PBXBuildFile; fileRef = 10B2085B781F60101E265DAF /* shion_happy.png */; };
-		0C36FE8B3A9DB8937F0C077E /* cecilia_reward_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D7D8C4ACCC2CDC914FF8CDA /* cecilia_reward_5.png */; };
-		0C8D045A62806DC6E3DB87B1 /* chinatsu_reward_3.png in Resources */ = {isa = PBXBuildFile; fileRef = D84BDEE03213DA8036405E12 /* chinatsu_reward_3.png */; };
-		11B45B1B27C234FC9F671133 /* shion_reward_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A38360800670ACDFE6EBF8F /* shion_reward_5.png */; };
-		14712F6B10E687C810D225D8 /* mio_worry.png in Resources */ = {isa = PBXBuildFile; fileRef = F10816DEB3743150BCDDFD8E /* mio_worry.png */; };
-		15A562F9A20A69900297B4D2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8A3DED3907FAD94E110CC88 /* Foundation.framework */; };
-		1EB12A72D6891321B507CE35 /* kotone_reward_3.png in Resources */ = {isa = PBXBuildFile; fileRef = A974ADB62DC22193136B925A /* kotone_reward_3.png */; };
-		23AF6FD8083F47B1B1DE6BAD /* mio_reward_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F7878B732A2B0B9E6119526 /* mio_reward_1.png */; };
-		255368656D66D6E47795A646 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1163BDD2367DD1D558341572 /* PrivacyInfo.xcprivacy */; };
-		2AE52CAE765FEE29B90B57BD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8A3DED3907FAD94E110CC88 /* Foundation.framework */; };
-		2D5843D8BC87E2D1139E4D6D /* rin_happy.png in Resources */ = {isa = PBXBuildFile; fileRef = 8729508162EAF53CEA2179B3 /* rin_happy.png */; };
-		2F830078A4722F84BF157BD8 /* hinata_reward_5.png in Resources */ = {isa = PBXBuildFile; fileRef = CCB7ADDCAB4DDB87256C25D4 /* hinata_reward_5.png */; };
-		317448C4AFF81B8EA3AEFE21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336904868493C8D83023DC33 /* AppDelegate.swift */; };
-		338E670C63F98CAD6C390EEA /* koharu_base.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E1DCEBFC2BA4A50883F628 /* koharu_base.png */; };
-		347DDC829170F3B00452F74D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0CB71E32AA645DBDBAD75B /* Theme.swift */; };
-		380184911A82A8756B225909 /* mio_base.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E55FE3D55F1FCE083EE96A /* mio_base.png */; };
-		3C14DEA24A1346FD3708824B /* kotone_reward_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 23FF95532E9E0FEDAD5A34C7 /* kotone_reward_4.png */; };
-		4229507D6C30D3DA64105952 /* mio_reward_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 2535FCC02F38C2D77B80BEB6 /* mio_reward_4.png */; };
-		45534879165AC94BBDF3CB13 /* tsukika_happy.png in Resources */ = {isa = PBXBuildFile; fileRef = 1C86DAD77C77585C5DA66E13 /* tsukika_happy.png */; };
-		4994015F7C1261447B8466CB /* chinatsu_base.png in Resources */ = {isa = PBXBuildFile; fileRef = 81D8B07C20BD7379A045F6A1 /* chinatsu_base.png */; };
-		4C7200B0BD834410DDB64FE2 /* mio_reward_2.png in Resources */ = {isa = PBXBuildFile; fileRef = D9AF99EDD2EA5B241C0B1519 /* mio_reward_2.png */; };
-		4D8144B24823D47B9952DB1E /* shion_base.png in Resources */ = {isa = PBXBuildFile; fileRef = 319EA52A7BCF38E0D27953F2 /* shion_base.png */; };
-		4E7CF0DE957A3F8232079D6D /* rin_reward_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 05144DC80AEF301A3783A1BA /* rin_reward_4.png */; };
-		4EFA4E2D4F5C4B2C73797B3F /* shion_worry.png in Resources */ = {isa = PBXBuildFile; fileRef = 53CD837E3C837AED8DDDA713 /* shion_worry.png */; };
-		4F0219639AB27FFEAC699E26 /* cecilia_reward_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F203C5E84431CB86C3B3D85 /* cecilia_reward_4.png */; };
-		501F406674F1741A6EB65AC3 /* kotone_happy.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F40009BA9214A7D8BFE13DC /* kotone_happy.png */; };
-		53D0B000DDC8D82E07EEA27C /* BoardScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E7A0A8A08037F194F036DD /* BoardScene.swift */; };
-		56DEBC135E497307A81E95BE /* cecilia_reward_3.png in Resources */ = {isa = PBXBuildFile; fileRef = EEABD7C84F0A131BEC26DF1C /* cecilia_reward_3.png */; };
-		5AB3035FC68A24E2B4B93978 /* tsukika_worry.png in Resources */ = {isa = PBXBuildFile; fileRef = B50C7FA5BD3B358A13D59F60 /* tsukika_worry.png */; };
-		5D747E848382320748FA01CB /* rin_reward_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 477C4A42D8F2D91805127E3E /* rin_reward_2.png */; };
-		64E8196A84BACB9ED2DDDECC /* hinata_worry.png in Resources */ = {isa = PBXBuildFile; fileRef = C505D8294D2B1BD6E75D282D /* hinata_worry.png */; };
-		657C01A89B56C4A7D9E6D136 /* ShogiAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74841C6A53FB26DE7634E6B1 /* ShogiAI.swift */; };
-		659ED9F6C08B64A4D259EA59 /* rin_base.png in Resources */ = {isa = PBXBuildFile; fileRef = BC9EFA6273A5A44F47A047E6 /* rin_base.png */; };
-		6C38CD6F683F9354DBF6142B /* tsukika_reward_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 9902BDA00A70ACA6DB6B305E /* tsukika_reward_3.png */; };
-		6CCF0B3CD47C6ACB07D1FE29 /* tsukika_reward_4.png in Resources */ = {isa = PBXBuildFile; fileRef = A7648F71A17C2288B7828713 /* tsukika_reward_4.png */; };
-		6EA3060A107D4CC5A56F6B5C /* rin_reward_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 42D1CB195CB590AF4D811DD2 /* rin_reward_3.png */; };
-		6FEAC1D60F673F835720038F /* mio_happy.png in Resources */ = {isa = PBXBuildFile; fileRef = B86212F4EF2BCDD98C991277 /* mio_happy.png */; };
-		75E594776E01D9783FEC6FFC /* akane_worry.png in Resources */ = {isa = PBXBuildFile; fileRef = A384D31D2FE67AAE40110D94 /* akane_worry.png */; };
-		79A3AD133C1C17ADF74FB7DE /* akane_reward_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 6AE3DE32D1F9A98260DFB6A1 /* akane_reward_3.png */; };
-		7AE131B9FF95C5BA93D39B58 /* chinatsu_reward_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E7CEC03EDCADCDFA156BBA /* chinatsu_reward_1.png */; };
-		7E08A996F4FD6C78F7CA30CC /* shion_reward_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 834386482CAEE5759DDC9EC6 /* shion_reward_4.png */; };
-		833DC8365B805D3BD01C35AF /* shion_reward_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEEED5267CAE87A4D9AA962 /* shion_reward_1.png */; };
-		860D47CCDD54F7CECF78F0FF /* koharu_worry.png in Resources */ = {isa = PBXBuildFile; fileRef = BCCF907711D173EB3D9CA6AA /* koharu_worry.png */; };
-		88C1C5F6685BFEF83706D248 /* Shogi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022A502C4DB9D52C389C381B /* Shogi.swift */; };
-		8E7D55AA214F793F33FF7498 /* koharu_reward_2.png in Resources */ = {isa = PBXBuildFile; fileRef = AB8A287BC8F8888D1BB3BD8C /* koharu_reward_2.png */; };
-		921BD3A3BAE6A1DDBFF9C0EE /* shion_reward_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 0000402BD3CA896837A3AA28 /* shion_reward_3.png */; };
-		9221EE28A4F84E3CFC4BC1A3 /* Ads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0A4238528574FF6646E4A4 /* Ads.swift */; };
-		9453FE52C055FBA441E9EC7D /* hinata_base.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B52FB8C70B5DBD4E978282 /* hinata_base.png */; };
-		9781094B322363855C043194 /* akane_reward_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 66780882EBCDAC8E5CB00533 /* akane_reward_4.png */; };
-		9E34D959332A75F072D9BD8A /* kotone_worry.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B60D4EC3C2101047D4058F /* kotone_worry.png */; };
-		9FA57B52757AD2A89805FDB1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 323A4FB121C797C6096E782E /* Assets.xcassets */; };
-		9FA65E67F20F54F616B2AB6B /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 2421316CD3366E77CD48F5D6 /* GoogleMobileAds */; };
-		A126E66DF2685C66D96156A3 /* koharu_happy.png in Resources */ = {isa = PBXBuildFile; fileRef = EF343FFF3A8004DFBA0F5D30 /* koharu_happy.png */; };
-		A158697E7E48677DB705CE3B /* ShogiGirlsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB4FC9E6BC4E424D2807574 /* ShogiGirlsUITests.swift */; };
-		A2F3EF0B1D673D89336BFD29 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F7203F913DC9F34E1E188 /* GameViewController.swift */; };
-		A39E740B369197B1FC53984A /* kotone_base.png in Resources */ = {isa = PBXBuildFile; fileRef = 733B4C311C5CFA17FC579AA5 /* kotone_base.png */; };
-		A3E43E84E21EA953C1A0878D /* rin_reward_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 82C7783401E695984C4DE6D6 /* rin_reward_1.png */; };
-		A56ADA8BCF0D00F07A9AFA3C /* hinata_reward_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C8353EB68A810E7A6F679CE /* hinata_reward_3.png */; };
-		A5EF6BF570D0FB7BB73AAB63 /* koharu_reward_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 6154AA6F962E5AA65E1BA548 /* koharu_reward_4.png */; };
-		A90F9A74A9101CDD0BC442D9 /* rin_reward_5.png in Resources */ = {isa = PBXBuildFile; fileRef = F91E3F3ACBB9F646F679D2A4 /* rin_reward_5.png */; };
-		AD6EDEA1791B30287B9C5B9F /* chinatsu_reward_5.png in Resources */ = {isa = PBXBuildFile; fileRef = A7D4095FA426E7E9F380F99B /* chinatsu_reward_5.png */; };
-		AE617546020983A4D693666C /* cecilia_worry.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C1BEF42AFB963322594FCD0 /* cecilia_worry.png */; };
-		AF1C307AF3FB0657EBC09A09 /* mio_reward_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AD64530D556B4B9459EDF3E /* mio_reward_5.png */; };
-		B26571CFB82DE9ED2AC20435 /* chinatsu_reward_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EDB4870CB561A7149C2234D /* chinatsu_reward_2.png */; };
-		B28AE2DCA53E959AEAF54579 /* cecilia_happy.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CF518E910206156C1D4AF02 /* cecilia_happy.png */; };
-		B34B8E6BDCE137CE7BCA471E /* hinata_reward_4.png in Resources */ = {isa = PBXBuildFile; fileRef = B394CC138A84B9B90A242E6F /* hinata_reward_4.png */; };
-		B834FB1CF1BC57C30737885A /* tsukika_reward_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D8ED4911E032276C04C1F45 /* tsukika_reward_2.png */; };
-		BB305ED1D1794BACAD906131 /* cecilia_reward_1.png in Resources */ = {isa = PBXBuildFile; fileRef = B71C26D3EDBAEB3E5EFB329F /* cecilia_reward_1.png */; };
-		BC086639AF55C551D7A18EEB /* SaveStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55AEE6608D52196577FC941 /* SaveStore.swift */; };
-		BF96004E257553E2CC97F6A2 /* chinatsu_happy.png in Resources */ = {isa = PBXBuildFile; fileRef = AE275A6756C3EEB030473C75 /* chinatsu_happy.png */; };
-		C025AB00CD9CD37334D8E05D /* koharu_reward_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 13FB0CE57DC6D0861046C21A /* koharu_reward_3.png */; };
-		C0A1D51A1E86DAC6A61846AA /* akane_reward_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 41161CC5FEB1272530AB718E /* akane_reward_1.png */; };
-		C1590F0A809F2694A0ADDFA3 /* tsukika_reward_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 413E7E03EB72E83A0B2D7C21 /* tsukika_reward_1.png */; };
-		C3A19CF4742D417A81C8C75E /* mio_reward_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EE9CBCC68093DFC22C6EF44 /* mio_reward_3.png */; };
-		C3E15D55111A75B084872AE5 /* Characters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A73AAE35B84122F784B0296 /* Characters.swift */; };
-		C4ECE7E36B158C4B02EDE630 /* koharu_reward_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 7517EBDFB194897EA5A0F552 /* koharu_reward_5.png */; };
-		C532355ADBB0656AE580FD3D /* kotone_reward_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 451A9EB7A86042CCB0BFA4A9 /* kotone_reward_5.png */; };
-		CC3988C9EFF1F1C40DA4FCDC /* kotone_reward_1.png in Resources */ = {isa = PBXBuildFile; fileRef = F9FADD4D4FC9C19751701E46 /* kotone_reward_1.png */; };
-		D1E8CB913869F6D45AD867D6 /* shion_reward_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 76F194A061F9B63926992CD8 /* shion_reward_2.png */; };
-		D596AA5B2CDF8375BE046C06 /* akane_reward_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 303BCA07D1E00C93A40ABAF6 /* akane_reward_5.png */; };
-		D6E3FE4F59F222F9044144BF /* rin_worry.png in Resources */ = {isa = PBXBuildFile; fileRef = 6FCC5C1FB4CC6949EEEB9F95 /* rin_worry.png */; };
-		DA69759F05C41978CD3EC109 /* akane_happy.png in Resources */ = {isa = PBXBuildFile; fileRef = 1398105DADAEBC39E5045B26 /* akane_happy.png */; };
-		DD4088B6739F4D4787CD7E1B /* cecilia_base.png in Resources */ = {isa = PBXBuildFile; fileRef = 7CF861B1B03FFBA41F645788 /* cecilia_base.png */; };
-		E8E2687C5742B58669AF9008 /* hinata_reward_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 881586C56CE59EFB0C8A5DC0 /* hinata_reward_1.png */; };
-		FC16755CC0CD85C5BF39C373 /* akane_reward_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B409993AD7B940E0294AE5F /* akane_reward_2.png */; };
-		FC2492BE6A3D011177CA5052 /* chinatsu_reward_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 47B9770FA0AC13118E8416F9 /* chinatsu_reward_4.png */; };
-		FC703796D96D25E011C34CE9 /* chinatsu_worry.png in Resources */ = {isa = PBXBuildFile; fileRef = 893C300582C37F30D75DDC01 /* chinatsu_worry.png */; };
-		FD3322A597FCE67DD5C981D6 /* koharu_reward_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 165E0F51771507777F451068 /* koharu_reward_1.png */; };
-		FDAFF3F2E1068952B8DF06D2 /* akane_base.png in Resources */ = {isa = PBXBuildFile; fileRef = 598C1AAE5AA7A3DCEF786B9D /* akane_base.png */; };
-		FDB3BAB3FF472218B1C7A340 /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = 0A332AD1E5F81CAE54836754 /* GoogleUserMessagingPlatform */; };
+		07F57285C0A128CBB674F4E8 /* rin_reward_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 21E234BBA36060EBF621DA2B /* rin_reward_2.jpg */; };
+		0EF9B0EBABEDE0CCAE411871 /* koharu_reward_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D0E0E6D1B6AB16BF8068B82B /* koharu_reward_3.jpg */; };
+		12D89E318203E266D5CF3575 /* kotone_base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A474FA0EA0EB46A49F81FCC9 /* kotone_base.jpg */; };
+		1613245EB0A3E5CFBE50B823 /* akane_reward_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9CB17314F07DBE7270EBE3D6 /* akane_reward_4.jpg */; };
+		1630D05E77FEF814591CAF6A /* Characters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A7803C8A68F04C5935A775 /* Characters.swift */; };
+		20EA031A51F79F2A33E058AE /* tsukika_reward_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 64D6BD247FDD38FE1F4F9141 /* tsukika_reward_4.jpg */; };
+		22B529E0E787DC04DDEA74F6 /* mio_reward_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2D4402D34E3DA3D85A09A41D /* mio_reward_1.jpg */; };
+		245A5DCE98073D1125C1E779 /* hinata_reward_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9056355A1070F55EAF8A99CC /* hinata_reward_2.jpg */; };
+		25E7F953DBC088228A7E8C2B /* chinatsu_reward_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4EEE481936D489FCC9A54B29 /* chinatsu_reward_5.jpg */; };
+		28E4136076FA364846DBF523 /* koharu_happy.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 08D574338CDE2F9A0CA04769 /* koharu_happy.jpg */; };
+		2BD75CF625475F8D4111CD75 /* rin_reward_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 47897600984C351C48E4BEF8 /* rin_reward_5.jpg */; };
+		2C4A3C91FD7953197834F888 /* tsukika_base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B1D494BDB101421899E7869D /* tsukika_base.jpg */; };
+		2FD2273E2B5968F873E58717 /* cecilia_reward_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5F907B1C1E0F37325A69241A /* cecilia_reward_2.jpg */; };
+		30DC8054455B479BAFDDC079 /* BoardScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204DEDA027B54306D315328C /* BoardScene.swift */; };
+		32F73250CA5F32CB6DF1AF93 /* kotone_reward_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B2234D3AA95F96D5B40748EE /* kotone_reward_1.jpg */; };
+		34C8FDB4BB4CEA1573B380D1 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DDF986AEB150274BE37375 /* Theme.swift */; };
+		3CA12959A04C8859493B0CE1 /* tsukika_reward_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1980B5E021FA779BA2EEF73E /* tsukika_reward_5.jpg */; };
+		3D56FC203048CB5BE8C5B2AD /* kotone_reward_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D24CCCE34757EB302B193A6 /* kotone_reward_3.jpg */; };
+		41CC22DEF08617310C02611F /* kotone_happy.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 27A1A7557BC150D83441F369 /* kotone_happy.jpg */; };
+		42B5BC3B6676E28CEEFB89D2 /* koharu_reward_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0C09A137F6D43A2FA974B97E /* koharu_reward_5.jpg */; };
+		4371E45693C3C1DBF3C1956E /* akane_base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1B5867C54933AC6670E384FE /* akane_base.jpg */; };
+		448AE6D502D30D848F5740B0 /* shion_reward_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0F18B55F76FD5BA5F5C373BD /* shion_reward_2.jpg */; };
+		48869ABA6608E8FAA43F16A5 /* shion_happy.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3EA67860E9017BF99BCD0D4 /* shion_happy.jpg */; };
+		49109A4BA4EA100DA0A4E796 /* cecilia_reward_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9353A9B4F15FB9D3AA85F4A5 /* cecilia_reward_4.jpg */; };
+		49458376B26A660117A8BB9F /* rin_reward_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6C1678CCF29836A488FD562E /* rin_reward_4.jpg */; };
+		4A63206FD7BB19265AB1C6FA /* hinata_base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C85B820DFDB50ACCE1304D87 /* hinata_base.jpg */; };
+		4C57DE62AAF6883BD99EC65C /* Ads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8FAE49EC02E7141ADB22E2 /* Ads.swift */; };
+		4CE05A7B74A233CFEC017822 /* ShogiAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D80C96F5C8FF5E3D02399B /* ShogiAI.swift */; };
+		4CF7FC7E8ACECEBDF11092A7 /* kotone_reward_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 819EF48B28E61AA2CEAFA5A0 /* kotone_reward_2.jpg */; };
+		4F714E597D68CA637E56844B /* chinatsu_base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AFFE794ED35792F9AC8D5CFF /* chinatsu_base.jpg */; };
+		51EC2C554E1E65B65768862D /* rin_happy.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2F9C5BFEDF610217B306C8AF /* rin_happy.jpg */; };
+		54BB5029F450900E4E07C354 /* kotone_worry.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 021A4E6286EA8FA019FB2D2C /* kotone_worry.jpg */; };
+		54FBDC79903E5EA04571A875 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B8B05A075DA8D466640466CF /* Assets.xcassets */; };
+		586A247FF6FC90BCF8C0A9E2 /* mio_reward_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 205CE564C9332406C63DE566 /* mio_reward_3.jpg */; };
+		5A380F4EE501C6E607F3C94A /* chinatsu_reward_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F262C6ACB981C987C700F42E /* chinatsu_reward_2.jpg */; };
+		5B449ABE2F174AD622B50D8D /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = BF9EE43C831422F28A7CD0EF /* GoogleMobileAds */; };
+		5E128AAF24A42BBC5B4AB7E8 /* chinatsu_worry.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C77E81118D531A076310ABEA /* chinatsu_worry.jpg */; };
+		5FFDE72388AE2FF231A7BE49 /* koharu_reward_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F793010D14D4C3FA16BC29FB /* koharu_reward_1.jpg */; };
+		60796419B0ED69ABE634FD84 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 294B975AA2B661B6EB6864CC /* PrivacyInfo.xcprivacy */; };
+		64CACFF81B688BD00C08ACA3 /* kotone_reward_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 12B6394491386634795512EC /* kotone_reward_5.jpg */; };
+		6668C47B8018F8251BA572A1 /* shion_reward_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6F8B704A617A025A908A014D /* shion_reward_1.jpg */; };
+		67158D9C96302DE93581B8C9 /* tsukika_reward_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F7A23AA218B09BCBB6790620 /* tsukika_reward_2.jpg */; };
+		6A39C6AEA7F1389F5D97F080 /* mio_worry.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B6AE296C913E3F80D5997083 /* mio_worry.jpg */; };
+		6F9A884FCABEC1B4D66510E6 /* chinatsu_happy.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5DA111983D9C0F8207117FCB /* chinatsu_happy.jpg */; };
+		72E9F871CE89EBFC13F11127 /* mio_reward_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 06BF7D79B47E7DDA1DD8A0D0 /* mio_reward_4.jpg */; };
+		76ECA62C5453E594044EEDC4 /* mio_happy.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 21BF2B2546A56141CF0AF233 /* mio_happy.jpg */; };
+		76FE8C202A5140A188C2B594 /* kotone_reward_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 65F46558CE20350F17FF2D3A /* kotone_reward_4.jpg */; };
+		78A220A48DF1640CA98774D0 /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = 66F73953182D2D985D3C407C /* GoogleUserMessagingPlatform */; };
+		7A10B83321E2F027F5DDAF25 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39155E1FB2C545176DD8A9CE /* Foundation.framework */; };
+		7E53D88E043CAC4182A39E04 /* chinatsu_reward_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E2293EB61257B7A6109CF59B /* chinatsu_reward_4.jpg */; };
+		7FAC373AD5AB2C054A839F63 /* mio_reward_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A103D93F9B04E91C50F2893 /* mio_reward_5.jpg */; };
+		87912B33E44CEAE16965927B /* shion_reward_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 83DB26297295DD260A4223D3 /* shion_reward_4.jpg */; };
+		8917130DFCE6724379F68BBF /* cecilia_base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2ED8C2B8EBB80BFE75824DE8 /* cecilia_base.jpg */; };
+		8BEC2F07BBF0F4EB58F98AFC /* mio_reward_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0AAEC152693292F21492F251 /* mio_reward_2.jpg */; };
+		9093B1FF50789D4886424F0F /* tsukika_worry.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F10FF4155D83A7A1726775C9 /* tsukika_worry.jpg */; };
+		9730B276DA185B597B37B7E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76C09B926FB87E0773003D /* AppDelegate.swift */; };
+		9909A5F6084006E6C58F8746 /* akane_worry.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 705FF5A3470602F409C7D7DE /* akane_worry.jpg */; };
+		9AA1227C67E5F37A00B8545B /* koharu_reward_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 153F4ABAC89FBB7F44D92CBF /* koharu_reward_2.jpg */; };
+		9EAB76A6DB653CA1041D9D65 /* akane_reward_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0E8A67BE3CE53F397E9B9E4F /* akane_reward_3.jpg */; };
+		A12F74BF75B586ACD078B179 /* shion_reward_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8BDD04966B4CB00AAB0A3084 /* shion_reward_5.jpg */; };
+		A1446F7E8C1F6E50432EE0E1 /* akane_reward_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 734346D922536B2115CDB3A9 /* akane_reward_5.jpg */; };
+		A411A50A81E0E0B7551F6EC2 /* cecilia_reward_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 240A97C8A8FD93505A41C725 /* cecilia_reward_3.jpg */; };
+		A588BBA4EFB11AF118815E49 /* Shogi.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF01972E4CFAC694AA73CCE /* Shogi.swift */; };
+		A637952C3FA5FCFD79961823 /* cecilia_happy.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AD4285A19E830E7ABED6763E /* cecilia_happy.jpg */; };
+		A9C5913344F8BBAD21E3E64E /* koharu_reward_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2555A998DC358335279B0D48 /* koharu_reward_4.jpg */; };
+		AB2EE9AD2E176BFC4220208B /* shion_reward_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FE38A4F7E575B5D4E83713D7 /* shion_reward_3.jpg */; };
+		B3978393873C735F6895AFF4 /* hinata_reward_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 09981699DE89D4D1AEEC41F6 /* hinata_reward_1.jpg */; };
+		B44542AF2C1346458919B319 /* ShogiGirlsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C64F6F13B9BB82A58BFEC4 /* ShogiGirlsUITests.swift */; };
+		B6080396F844C9CC5FEB9BF6 /* tsukika_reward_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6964798941B9C48E70DE4ED7 /* tsukika_reward_3.jpg */; };
+		B93EB3BA527D6E4BA7AECA5E /* hinata_reward_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EA627D8C182DA709F424B9F2 /* hinata_reward_5.jpg */; };
+		B9E8988D5ECFA781B2D6E823 /* hinata_reward_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 652410D4A36F190EF42E12AC /* hinata_reward_4.jpg */; };
+		BA3CAEE7FEA16432B6BD3C3A /* rin_reward_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FF3D26B2C645849882A9EAD3 /* rin_reward_1.jpg */; };
+		BA6CED584F17157F037B0E33 /* rin_worry.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F32F058403F9759FA8B506C6 /* rin_worry.jpg */; };
+		BB3E1C46CE3F30A5AEBCE26E /* tsukika_happy.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 80A7F61141C291D03F442DAB /* tsukika_happy.jpg */; };
+		BC46FAD2DF08DD45B0FE8D7B /* chinatsu_reward_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2A78710BBDE083FD19F344BF /* chinatsu_reward_1.jpg */; };
+		C291BE5CA39ECB00B57439C6 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09387538451331DB25E9371B /* GameViewController.swift */; };
+		CFF8A1745DFA67558FBABDE5 /* rin_reward_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A699C7F330DD5D9FD020F242 /* rin_reward_3.jpg */; };
+		D15A3B9B3DB2F19280396C73 /* mio_base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2D5C1B8C8A7F0712259D3CB8 /* mio_base.jpg */; };
+		D3EEB15538254E33D0EBE3EB /* akane_reward_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5D58B44DC17550035AA8DA5A /* akane_reward_1.jpg */; };
+		D6BF90EC659ED19011AE588D /* SaveStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A85974D6086F9D622FBF437 /* SaveStore.swift */; };
+		D779546CB5D332ADAD9C9746 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39155E1FB2C545176DD8A9CE /* Foundation.framework */; };
+		DFDDEA412B16C3EBA21715B7 /* cecilia_worry.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BBC6E6C149C6B95C056AB477 /* cecilia_worry.jpg */; };
+		E0947AF9837D6A15DBD39857 /* cecilia_reward_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5320E4CD3A8D4EC4FFDD527A /* cecilia_reward_5.jpg */; };
+		E236273167551E43F1823092 /* hinata_happy.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CCD4DE70C17D355AEDB71384 /* hinata_happy.jpg */; };
+		E28B84DDBA69369E348300E1 /* koharu_worry.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C5425B6534ABBC153D9C48A /* koharu_worry.jpg */; };
+		E51CDABB37A8CB081DF1FD10 /* akane_reward_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 433B9E96E6FE3294EEECBFE9 /* akane_reward_2.jpg */; };
+		E5ECEF38D2533A980DBF5637 /* tsukika_reward_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A49E9AF14A74587A7B9EDBB5 /* tsukika_reward_1.jpg */; };
+		E64CA91C3128359A75469AE8 /* hinata_reward_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2218D9E290ABFC77F726EAFA /* hinata_reward_3.jpg */; };
+		E9AF746075C64919772F0A30 /* shion_base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 82CCD545AFB582443F86ACF7 /* shion_base.jpg */; };
+		ECAD65BB681A34FE30B7A0BD /* cecilia_reward_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0038D9390C257B260332 /* cecilia_reward_1.jpg */; };
+		EE9DEE682CA6C076224F57C8 /* koharu_base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = ED02B4ED4664864591751C87 /* koharu_base.jpg */; };
+		F2444C93F7494878C05DE6F4 /* hinata_worry.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DE2E71FDC9FB1D7447524D4A /* hinata_worry.jpg */; };
+		F3DA0E523FD17654F830B62B /* akane_happy.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C180036916C0E9A14524B68B /* akane_happy.jpg */; };
+		F43A1F162214538CA52EE06B /* shion_worry.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 67BDA77A5E47109590089CD0 /* shion_worry.jpg */; };
+		F5514B2B5C78AC00CCD6345D /* rin_base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B451393C937E218791C41A76 /* rin_base.jpg */; };
+		F5FBF8508F5AE0583CA82050 /* chinatsu_reward_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B9E896D1496253143CA71124 /* chinatsu_reward_3.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		08444E8BBE4D2C0E64B77A83 /* PBXContainerItemProxy */ = {
+		3B3310D5DBEA9C168C33010A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 1332337326B528299ACDCE15 /* Project object */;
+			containerPortal = 10B828F2299BB11FF11F8F1D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 4075E0F8DB28B0399C2BB7AB;
+			remoteGlobalIDString = 0CBDAE65A0886C4BC2D363EB;
 			remoteInfo = ShogiGirls;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0000402BD3CA896837A3AA28 /* shion_reward_3.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = shion_reward_3.png; path = App/Resources/shion_reward_3.png; sourceTree = "<group>"; };
-		022A502C4DB9D52C389C381B /* Shogi.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Shogi.swift; path = Sources/ShogiCore/Shogi.swift; sourceTree = "<group>"; };
-		05144DC80AEF301A3783A1BA /* rin_reward_4.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = rin_reward_4.png; path = App/Resources/rin_reward_4.png; sourceTree = "<group>"; };
-		0B409993AD7B940E0294AE5F /* akane_reward_2.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = akane_reward_2.png; path = App/Resources/akane_reward_2.png; sourceTree = "<group>"; };
-		0C1BEF42AFB963322594FCD0 /* cecilia_worry.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = cecilia_worry.png; path = App/Resources/cecilia_worry.png; sourceTree = "<group>"; };
-		0F7878B732A2B0B9E6119526 /* mio_reward_1.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = mio_reward_1.png; path = App/Resources/mio_reward_1.png; sourceTree = "<group>"; };
-		10B2085B781F60101E265DAF /* shion_happy.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = shion_happy.png; path = App/Resources/shion_happy.png; sourceTree = "<group>"; };
-		1163BDD2367DD1D558341572 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = App/Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		1398105DADAEBC39E5045B26 /* akane_happy.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = akane_happy.png; path = App/Resources/akane_happy.png; sourceTree = "<group>"; };
-		13FB0CE57DC6D0861046C21A /* koharu_reward_3.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = koharu_reward_3.png; path = App/Resources/koharu_reward_3.png; sourceTree = "<group>"; };
-		165E0F51771507777F451068 /* koharu_reward_1.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = koharu_reward_1.png; path = App/Resources/koharu_reward_1.png; sourceTree = "<group>"; };
-		1C86DAD77C77585C5DA66E13 /* tsukika_happy.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = tsukika_happy.png; path = App/Resources/tsukika_happy.png; sourceTree = "<group>"; };
-		23FF95532E9E0FEDAD5A34C7 /* kotone_reward_4.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = kotone_reward_4.png; path = App/Resources/kotone_reward_4.png; sourceTree = "<group>"; };
-		2535FCC02F38C2D77B80BEB6 /* mio_reward_4.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = mio_reward_4.png; path = App/Resources/mio_reward_4.png; sourceTree = "<group>"; };
-		2F40009BA9214A7D8BFE13DC /* kotone_happy.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = kotone_happy.png; path = App/Resources/kotone_happy.png; sourceTree = "<group>"; };
-		303BCA07D1E00C93A40ABAF6 /* akane_reward_5.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = akane_reward_5.png; path = App/Resources/akane_reward_5.png; sourceTree = "<group>"; };
-		319EA52A7BCF38E0D27953F2 /* shion_base.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = shion_base.png; path = App/Resources/shion_base.png; sourceTree = "<group>"; };
-		323A4FB121C797C6096E782E /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = App/Resources/Assets.xcassets; sourceTree = "<group>"; };
-		336904868493C8D83023DC33 /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = App/AppDelegate.swift; sourceTree = "<group>"; };
-		3BB4FC9E6BC4E424D2807574 /* ShogiGirlsUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShogiGirlsUITests.swift; path = UITests/ShogiGirlsUITests.swift; sourceTree = "<group>"; };
-		3C8353EB68A810E7A6F679CE /* hinata_reward_3.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = hinata_reward_3.png; path = App/Resources/hinata_reward_3.png; sourceTree = "<group>"; };
-		3D7D8C4ACCC2CDC914FF8CDA /* cecilia_reward_5.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = cecilia_reward_5.png; path = App/Resources/cecilia_reward_5.png; sourceTree = "<group>"; };
-		3F203C5E84431CB86C3B3D85 /* cecilia_reward_4.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = cecilia_reward_4.png; path = App/Resources/cecilia_reward_4.png; sourceTree = "<group>"; };
-		41161CC5FEB1272530AB718E /* akane_reward_1.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = akane_reward_1.png; path = App/Resources/akane_reward_1.png; sourceTree = "<group>"; };
-		413E7E03EB72E83A0B2D7C21 /* tsukika_reward_1.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = tsukika_reward_1.png; path = App/Resources/tsukika_reward_1.png; sourceTree = "<group>"; };
-		42D1CB195CB590AF4D811DD2 /* rin_reward_3.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = rin_reward_3.png; path = App/Resources/rin_reward_3.png; sourceTree = "<group>"; };
-		451A9EB7A86042CCB0BFA4A9 /* kotone_reward_5.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = kotone_reward_5.png; path = App/Resources/kotone_reward_5.png; sourceTree = "<group>"; };
-		45248FDB97E2E383897F413E /* ShogiGirlsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShogiGirlsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		477C4A42D8F2D91805127E3E /* rin_reward_2.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = rin_reward_2.png; path = App/Resources/rin_reward_2.png; sourceTree = "<group>"; };
-		47B9770FA0AC13118E8416F9 /* chinatsu_reward_4.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = chinatsu_reward_4.png; path = App/Resources/chinatsu_reward_4.png; sourceTree = "<group>"; };
-		535F7203F913DC9F34E1E188 /* GameViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GameViewController.swift; path = App/GameViewController.swift; sourceTree = "<group>"; };
-		53CD837E3C837AED8DDDA713 /* shion_worry.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = shion_worry.png; path = App/Resources/shion_worry.png; sourceTree = "<group>"; };
-		598C1AAE5AA7A3DCEF786B9D /* akane_base.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = akane_base.png; path = App/Resources/akane_base.png; sourceTree = "<group>"; };
-		6154AA6F962E5AA65E1BA548 /* koharu_reward_4.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = koharu_reward_4.png; path = App/Resources/koharu_reward_4.png; sourceTree = "<group>"; };
-		63E55FE3D55F1FCE083EE96A /* mio_base.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = mio_base.png; path = App/Resources/mio_base.png; sourceTree = "<group>"; };
-		66780882EBCDAC8E5CB00533 /* akane_reward_4.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = akane_reward_4.png; path = App/Resources/akane_reward_4.png; sourceTree = "<group>"; };
-		6A38360800670ACDFE6EBF8F /* shion_reward_5.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = shion_reward_5.png; path = App/Resources/shion_reward_5.png; sourceTree = "<group>"; };
-		6A73AAE35B84122F784B0296 /* Characters.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Characters.swift; path = Sources/ShogiCore/Characters.swift; sourceTree = "<group>"; };
-		6AE3DE32D1F9A98260DFB6A1 /* akane_reward_3.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = akane_reward_3.png; path = App/Resources/akane_reward_3.png; sourceTree = "<group>"; };
-		6FCC5C1FB4CC6949EEEB9F95 /* rin_worry.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = rin_worry.png; path = App/Resources/rin_worry.png; sourceTree = "<group>"; };
-		733B4C311C5CFA17FC579AA5 /* kotone_base.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = kotone_base.png; path = App/Resources/kotone_base.png; sourceTree = "<group>"; };
-		74841C6A53FB26DE7634E6B1 /* ShogiAI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShogiAI.swift; path = Sources/ShogiCore/ShogiAI.swift; sourceTree = "<group>"; };
-		7517EBDFB194897EA5A0F552 /* koharu_reward_5.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = koharu_reward_5.png; path = App/Resources/koharu_reward_5.png; sourceTree = "<group>"; };
-		75E7A0A8A08037F194F036DD /* BoardScene.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BoardScene.swift; path = App/BoardScene.swift; sourceTree = "<group>"; };
-		76D331C71DF66AE4F285691B /* hinata_reward_2.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = hinata_reward_2.png; path = App/Resources/hinata_reward_2.png; sourceTree = "<group>"; };
-		76F194A061F9B63926992CD8 /* shion_reward_2.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = shion_reward_2.png; path = App/Resources/shion_reward_2.png; sourceTree = "<group>"; };
-		7CF861B1B03FFBA41F645788 /* cecilia_base.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = cecilia_base.png; path = App/Resources/cecilia_base.png; sourceTree = "<group>"; };
-		81D8B07C20BD7379A045F6A1 /* chinatsu_base.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = chinatsu_base.png; path = App/Resources/chinatsu_base.png; sourceTree = "<group>"; };
-		82C7783401E695984C4DE6D6 /* rin_reward_1.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = rin_reward_1.png; path = App/Resources/rin_reward_1.png; sourceTree = "<group>"; };
-		834386482CAEE5759DDC9EC6 /* shion_reward_4.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = shion_reward_4.png; path = App/Resources/shion_reward_4.png; sourceTree = "<group>"; };
-		86119EEF8D3E36D651E11902 /* kotone_reward_2.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = kotone_reward_2.png; path = App/Resources/kotone_reward_2.png; sourceTree = "<group>"; };
-		8729508162EAF53CEA2179B3 /* rin_happy.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = rin_happy.png; path = App/Resources/rin_happy.png; sourceTree = "<group>"; };
-		87E1DCEBFC2BA4A50883F628 /* koharu_base.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = koharu_base.png; path = App/Resources/koharu_base.png; sourceTree = "<group>"; };
-		87E7CEC03EDCADCDFA156BBA /* chinatsu_reward_1.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = chinatsu_reward_1.png; path = App/Resources/chinatsu_reward_1.png; sourceTree = "<group>"; };
-		881586C56CE59EFB0C8A5DC0 /* hinata_reward_1.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = hinata_reward_1.png; path = App/Resources/hinata_reward_1.png; sourceTree = "<group>"; };
-		893C300582C37F30D75DDC01 /* chinatsu_worry.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = chinatsu_worry.png; path = App/Resources/chinatsu_worry.png; sourceTree = "<group>"; };
-		8AD64530D556B4B9459EDF3E /* mio_reward_5.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = mio_reward_5.png; path = App/Resources/mio_reward_5.png; sourceTree = "<group>"; };
-		8D8ED4911E032276C04C1F45 /* tsukika_reward_2.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = tsukika_reward_2.png; path = App/Resources/tsukika_reward_2.png; sourceTree = "<group>"; };
-		98D7869125B574924F1EBC5B /* hinata_happy.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = hinata_happy.png; path = App/Resources/hinata_happy.png; sourceTree = "<group>"; };
-		9902BDA00A70ACA6DB6B305E /* tsukika_reward_3.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = tsukika_reward_3.png; path = App/Resources/tsukika_reward_3.png; sourceTree = "<group>"; };
-		9A0A4238528574FF6646E4A4 /* Ads.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Ads.swift; path = App/Ads.swift; sourceTree = "<group>"; };
-		9CEEED5267CAE87A4D9AA962 /* shion_reward_1.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = shion_reward_1.png; path = App/Resources/shion_reward_1.png; sourceTree = "<group>"; };
-		9CF518E910206156C1D4AF02 /* cecilia_happy.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = cecilia_happy.png; path = App/Resources/cecilia_happy.png; sourceTree = "<group>"; };
-		9EDB4870CB561A7149C2234D /* chinatsu_reward_2.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = chinatsu_reward_2.png; path = App/Resources/chinatsu_reward_2.png; sourceTree = "<group>"; };
-		9EE9CBCC68093DFC22C6EF44 /* mio_reward_3.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = mio_reward_3.png; path = App/Resources/mio_reward_3.png; sourceTree = "<group>"; };
-		A1B52FB8C70B5DBD4E978282 /* hinata_base.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = hinata_base.png; path = App/Resources/hinata_base.png; sourceTree = "<group>"; };
-		A1B60D4EC3C2101047D4058F /* kotone_worry.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = kotone_worry.png; path = App/Resources/kotone_worry.png; sourceTree = "<group>"; };
-		A384D31D2FE67AAE40110D94 /* akane_worry.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = akane_worry.png; path = App/Resources/akane_worry.png; sourceTree = "<group>"; };
-		A55AEE6608D52196577FC941 /* SaveStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SaveStore.swift; path = Sources/ShogiCore/SaveStore.swift; sourceTree = "<group>"; };
-		A7648F71A17C2288B7828713 /* tsukika_reward_4.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = tsukika_reward_4.png; path = App/Resources/tsukika_reward_4.png; sourceTree = "<group>"; };
-		A7D4095FA426E7E9F380F99B /* chinatsu_reward_5.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = chinatsu_reward_5.png; path = App/Resources/chinatsu_reward_5.png; sourceTree = "<group>"; };
-		A974ADB62DC22193136B925A /* kotone_reward_3.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = kotone_reward_3.png; path = App/Resources/kotone_reward_3.png; sourceTree = "<group>"; };
-		AB8A287BC8F8888D1BB3BD8C /* koharu_reward_2.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = koharu_reward_2.png; path = App/Resources/koharu_reward_2.png; sourceTree = "<group>"; };
-		AE275A6756C3EEB030473C75 /* chinatsu_happy.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = chinatsu_happy.png; path = App/Resources/chinatsu_happy.png; sourceTree = "<group>"; };
-		B394CC138A84B9B90A242E6F /* hinata_reward_4.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = hinata_reward_4.png; path = App/Resources/hinata_reward_4.png; sourceTree = "<group>"; };
-		B50C7FA5BD3B358A13D59F60 /* tsukika_worry.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = tsukika_worry.png; path = App/Resources/tsukika_worry.png; sourceTree = "<group>"; };
-		B71C26D3EDBAEB3E5EFB329F /* cecilia_reward_1.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = cecilia_reward_1.png; path = App/Resources/cecilia_reward_1.png; sourceTree = "<group>"; };
-		B84C8D63A9ABB10815FC648A /* tsukika_base.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = tsukika_base.png; path = App/Resources/tsukika_base.png; sourceTree = "<group>"; };
-		B86212F4EF2BCDD98C991277 /* mio_happy.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = mio_happy.png; path = App/Resources/mio_happy.png; sourceTree = "<group>"; };
-		B8A3DED3907FAD94E110CC88 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		BC9EFA6273A5A44F47A047E6 /* rin_base.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = rin_base.png; path = App/Resources/rin_base.png; sourceTree = "<group>"; };
-		BCCF907711D173EB3D9CA6AA /* koharu_worry.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = koharu_worry.png; path = App/Resources/koharu_worry.png; sourceTree = "<group>"; };
-		C505D8294D2B1BD6E75D282D /* hinata_worry.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = hinata_worry.png; path = App/Resources/hinata_worry.png; sourceTree = "<group>"; };
-		CCB7ADDCAB4DDB87256C25D4 /* hinata_reward_5.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = hinata_reward_5.png; path = App/Resources/hinata_reward_5.png; sourceTree = "<group>"; };
-		D136A1CBDB4E82EB9AD283C6 /* cecilia_reward_2.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = cecilia_reward_2.png; path = App/Resources/cecilia_reward_2.png; sourceTree = "<group>"; };
-		D84BDEE03213DA8036405E12 /* chinatsu_reward_3.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = chinatsu_reward_3.png; path = App/Resources/chinatsu_reward_3.png; sourceTree = "<group>"; };
-		D9AF99EDD2EA5B241C0B1519 /* mio_reward_2.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = mio_reward_2.png; path = App/Resources/mio_reward_2.png; sourceTree = "<group>"; };
-		DD0CB71E32AA645DBDBAD75B /* Theme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Theme.swift; path = App/Theme.swift; sourceTree = "<group>"; };
-		EEABD7C84F0A131BEC26DF1C /* cecilia_reward_3.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = cecilia_reward_3.png; path = App/Resources/cecilia_reward_3.png; sourceTree = "<group>"; };
-		EF343FFF3A8004DFBA0F5D30 /* koharu_happy.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = koharu_happy.png; path = App/Resources/koharu_happy.png; sourceTree = "<group>"; };
-		F10816DEB3743150BCDDFD8E /* mio_worry.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = mio_worry.png; path = App/Resources/mio_worry.png; sourceTree = "<group>"; };
-		F6E257839E26A1033C4B9E71 /* tsukika_reward_5.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = tsukika_reward_5.png; path = App/Resources/tsukika_reward_5.png; sourceTree = "<group>"; };
-		F91E3F3ACBB9F646F679D2A4 /* rin_reward_5.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = rin_reward_5.png; path = App/Resources/rin_reward_5.png; sourceTree = "<group>"; };
-		F9FADD4D4FC9C19751701E46 /* kotone_reward_1.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = kotone_reward_1.png; path = App/Resources/kotone_reward_1.png; sourceTree = "<group>"; };
-		FCEAAAF749E87DA660AEDB3D /* ShogiGirls.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShogiGirls.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		021A4E6286EA8FA019FB2D2C /* kotone_worry.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = kotone_worry.jpg; path = App/Resources/Optimized/kotone_worry.jpg; sourceTree = "<group>"; };
+		06BF7D79B47E7DDA1DD8A0D0 /* mio_reward_4.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = mio_reward_4.jpg; path = App/Resources/Optimized/mio_reward_4.jpg; sourceTree = "<group>"; };
+		08D574338CDE2F9A0CA04769 /* koharu_happy.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = koharu_happy.jpg; path = App/Resources/Optimized/koharu_happy.jpg; sourceTree = "<group>"; };
+		09387538451331DB25E9371B /* GameViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GameViewController.swift; path = App/GameViewController.swift; sourceTree = "<group>"; };
+		09981699DE89D4D1AEEC41F6 /* hinata_reward_1.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = hinata_reward_1.jpg; path = App/Resources/Optimized/hinata_reward_1.jpg; sourceTree = "<group>"; };
+		0A103D93F9B04E91C50F2893 /* mio_reward_5.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = mio_reward_5.jpg; path = App/Resources/Optimized/mio_reward_5.jpg; sourceTree = "<group>"; };
+		0A8FAE49EC02E7141ADB22E2 /* Ads.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Ads.swift; path = App/Ads.swift; sourceTree = "<group>"; };
+		0AAEC152693292F21492F251 /* mio_reward_2.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = mio_reward_2.jpg; path = App/Resources/Optimized/mio_reward_2.jpg; sourceTree = "<group>"; };
+		0C09A137F6D43A2FA974B97E /* koharu_reward_5.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = koharu_reward_5.jpg; path = App/Resources/Optimized/koharu_reward_5.jpg; sourceTree = "<group>"; };
+		0E8A67BE3CE53F397E9B9E4F /* akane_reward_3.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = akane_reward_3.jpg; path = App/Resources/Optimized/akane_reward_3.jpg; sourceTree = "<group>"; };
+		0F18B55F76FD5BA5F5C373BD /* shion_reward_2.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = shion_reward_2.jpg; path = App/Resources/Optimized/shion_reward_2.jpg; sourceTree = "<group>"; };
+		12B6394491386634795512EC /* kotone_reward_5.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = kotone_reward_5.jpg; path = App/Resources/Optimized/kotone_reward_5.jpg; sourceTree = "<group>"; };
+		153F4ABAC89FBB7F44D92CBF /* koharu_reward_2.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = koharu_reward_2.jpg; path = App/Resources/Optimized/koharu_reward_2.jpg; sourceTree = "<group>"; };
+		1980B5E021FA779BA2EEF73E /* tsukika_reward_5.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = tsukika_reward_5.jpg; path = App/Resources/Optimized/tsukika_reward_5.jpg; sourceTree = "<group>"; };
+		1B5867C54933AC6670E384FE /* akane_base.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = akane_base.jpg; path = App/Resources/Optimized/akane_base.jpg; sourceTree = "<group>"; };
+		204DEDA027B54306D315328C /* BoardScene.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BoardScene.swift; path = App/BoardScene.swift; sourceTree = "<group>"; };
+		205CE564C9332406C63DE566 /* mio_reward_3.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = mio_reward_3.jpg; path = App/Resources/Optimized/mio_reward_3.jpg; sourceTree = "<group>"; };
+		21BF2B2546A56141CF0AF233 /* mio_happy.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = mio_happy.jpg; path = App/Resources/Optimized/mio_happy.jpg; sourceTree = "<group>"; };
+		21E234BBA36060EBF621DA2B /* rin_reward_2.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = rin_reward_2.jpg; path = App/Resources/Optimized/rin_reward_2.jpg; sourceTree = "<group>"; };
+		2218D9E290ABFC77F726EAFA /* hinata_reward_3.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = hinata_reward_3.jpg; path = App/Resources/Optimized/hinata_reward_3.jpg; sourceTree = "<group>"; };
+		240A97C8A8FD93505A41C725 /* cecilia_reward_3.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = cecilia_reward_3.jpg; path = App/Resources/Optimized/cecilia_reward_3.jpg; sourceTree = "<group>"; };
+		2555A998DC358335279B0D48 /* koharu_reward_4.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = koharu_reward_4.jpg; path = App/Resources/Optimized/koharu_reward_4.jpg; sourceTree = "<group>"; };
+		27A1A7557BC150D83441F369 /* kotone_happy.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = kotone_happy.jpg; path = App/Resources/Optimized/kotone_happy.jpg; sourceTree = "<group>"; };
+		294B975AA2B661B6EB6864CC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = App/Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		2A78710BBDE083FD19F344BF /* chinatsu_reward_1.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = chinatsu_reward_1.jpg; path = App/Resources/Optimized/chinatsu_reward_1.jpg; sourceTree = "<group>"; };
+		2D4402D34E3DA3D85A09A41D /* mio_reward_1.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = mio_reward_1.jpg; path = App/Resources/Optimized/mio_reward_1.jpg; sourceTree = "<group>"; };
+		2D5C1B8C8A7F0712259D3CB8 /* mio_base.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = mio_base.jpg; path = App/Resources/Optimized/mio_base.jpg; sourceTree = "<group>"; };
+		2ED8C2B8EBB80BFE75824DE8 /* cecilia_base.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = cecilia_base.jpg; path = App/Resources/Optimized/cecilia_base.jpg; sourceTree = "<group>"; };
+		2F9C5BFEDF610217B306C8AF /* rin_happy.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = rin_happy.jpg; path = App/Resources/Optimized/rin_happy.jpg; sourceTree = "<group>"; };
+		39155E1FB2C545176DD8A9CE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		3C5425B6534ABBC153D9C48A /* koharu_worry.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = koharu_worry.jpg; path = App/Resources/Optimized/koharu_worry.jpg; sourceTree = "<group>"; };
+		3D24CCCE34757EB302B193A6 /* kotone_reward_3.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = kotone_reward_3.jpg; path = App/Resources/Optimized/kotone_reward_3.jpg; sourceTree = "<group>"; };
+		433B9E96E6FE3294EEECBFE9 /* akane_reward_2.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = akane_reward_2.jpg; path = App/Resources/Optimized/akane_reward_2.jpg; sourceTree = "<group>"; };
+		47897600984C351C48E4BEF8 /* rin_reward_5.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = rin_reward_5.jpg; path = App/Resources/Optimized/rin_reward_5.jpg; sourceTree = "<group>"; };
+		4B7F0038D9390C257B260332 /* cecilia_reward_1.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = cecilia_reward_1.jpg; path = App/Resources/Optimized/cecilia_reward_1.jpg; sourceTree = "<group>"; };
+		4EEE481936D489FCC9A54B29 /* chinatsu_reward_5.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = chinatsu_reward_5.jpg; path = App/Resources/Optimized/chinatsu_reward_5.jpg; sourceTree = "<group>"; };
+		5320E4CD3A8D4EC4FFDD527A /* cecilia_reward_5.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = cecilia_reward_5.jpg; path = App/Resources/Optimized/cecilia_reward_5.jpg; sourceTree = "<group>"; };
+		598ABEF8867F9E65771BDD88 /* ShogiGirlsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShogiGirlsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D58B44DC17550035AA8DA5A /* akane_reward_1.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = akane_reward_1.jpg; path = App/Resources/Optimized/akane_reward_1.jpg; sourceTree = "<group>"; };
+		5DA111983D9C0F8207117FCB /* chinatsu_happy.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = chinatsu_happy.jpg; path = App/Resources/Optimized/chinatsu_happy.jpg; sourceTree = "<group>"; };
+		5F907B1C1E0F37325A69241A /* cecilia_reward_2.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = cecilia_reward_2.jpg; path = App/Resources/Optimized/cecilia_reward_2.jpg; sourceTree = "<group>"; };
+		64D6BD247FDD38FE1F4F9141 /* tsukika_reward_4.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = tsukika_reward_4.jpg; path = App/Resources/Optimized/tsukika_reward_4.jpg; sourceTree = "<group>"; };
+		652410D4A36F190EF42E12AC /* hinata_reward_4.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = hinata_reward_4.jpg; path = App/Resources/Optimized/hinata_reward_4.jpg; sourceTree = "<group>"; };
+		65F46558CE20350F17FF2D3A /* kotone_reward_4.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = kotone_reward_4.jpg; path = App/Resources/Optimized/kotone_reward_4.jpg; sourceTree = "<group>"; };
+		67BDA77A5E47109590089CD0 /* shion_worry.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = shion_worry.jpg; path = App/Resources/Optimized/shion_worry.jpg; sourceTree = "<group>"; };
+		6964798941B9C48E70DE4ED7 /* tsukika_reward_3.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = tsukika_reward_3.jpg; path = App/Resources/Optimized/tsukika_reward_3.jpg; sourceTree = "<group>"; };
+		6A85974D6086F9D622FBF437 /* SaveStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SaveStore.swift; path = Sources/ShogiCore/SaveStore.swift; sourceTree = "<group>"; };
+		6C1678CCF29836A488FD562E /* rin_reward_4.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = rin_reward_4.jpg; path = App/Resources/Optimized/rin_reward_4.jpg; sourceTree = "<group>"; };
+		6F8B704A617A025A908A014D /* shion_reward_1.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = shion_reward_1.jpg; path = App/Resources/Optimized/shion_reward_1.jpg; sourceTree = "<group>"; };
+		705FF5A3470602F409C7D7DE /* akane_worry.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = akane_worry.jpg; path = App/Resources/Optimized/akane_worry.jpg; sourceTree = "<group>"; };
+		734346D922536B2115CDB3A9 /* akane_reward_5.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = akane_reward_5.jpg; path = App/Resources/Optimized/akane_reward_5.jpg; sourceTree = "<group>"; };
+		75A7803C8A68F04C5935A775 /* Characters.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Characters.swift; path = Sources/ShogiCore/Characters.swift; sourceTree = "<group>"; };
+		76C64F6F13B9BB82A58BFEC4 /* ShogiGirlsUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShogiGirlsUITests.swift; path = UITests/ShogiGirlsUITests.swift; sourceTree = "<group>"; };
+		80A7F61141C291D03F442DAB /* tsukika_happy.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = tsukika_happy.jpg; path = App/Resources/Optimized/tsukika_happy.jpg; sourceTree = "<group>"; };
+		819EF48B28E61AA2CEAFA5A0 /* kotone_reward_2.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = kotone_reward_2.jpg; path = App/Resources/Optimized/kotone_reward_2.jpg; sourceTree = "<group>"; };
+		82CCD545AFB582443F86ACF7 /* shion_base.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = shion_base.jpg; path = App/Resources/Optimized/shion_base.jpg; sourceTree = "<group>"; };
+		82DDF986AEB150274BE37375 /* Theme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Theme.swift; path = App/Theme.swift; sourceTree = "<group>"; };
+		83DB26297295DD260A4223D3 /* shion_reward_4.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = shion_reward_4.jpg; path = App/Resources/Optimized/shion_reward_4.jpg; sourceTree = "<group>"; };
+		8A76C09B926FB87E0773003D /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = App/AppDelegate.swift; sourceTree = "<group>"; };
+		8BDD04966B4CB00AAB0A3084 /* shion_reward_5.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = shion_reward_5.jpg; path = App/Resources/Optimized/shion_reward_5.jpg; sourceTree = "<group>"; };
+		9056355A1070F55EAF8A99CC /* hinata_reward_2.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = hinata_reward_2.jpg; path = App/Resources/Optimized/hinata_reward_2.jpg; sourceTree = "<group>"; };
+		9353A9B4F15FB9D3AA85F4A5 /* cecilia_reward_4.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = cecilia_reward_4.jpg; path = App/Resources/Optimized/cecilia_reward_4.jpg; sourceTree = "<group>"; };
+		9CB17314F07DBE7270EBE3D6 /* akane_reward_4.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = akane_reward_4.jpg; path = App/Resources/Optimized/akane_reward_4.jpg; sourceTree = "<group>"; };
+		A474FA0EA0EB46A49F81FCC9 /* kotone_base.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = kotone_base.jpg; path = App/Resources/Optimized/kotone_base.jpg; sourceTree = "<group>"; };
+		A49E9AF14A74587A7B9EDBB5 /* tsukika_reward_1.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = tsukika_reward_1.jpg; path = App/Resources/Optimized/tsukika_reward_1.jpg; sourceTree = "<group>"; };
+		A699C7F330DD5D9FD020F242 /* rin_reward_3.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = rin_reward_3.jpg; path = App/Resources/Optimized/rin_reward_3.jpg; sourceTree = "<group>"; };
+		AD4285A19E830E7ABED6763E /* cecilia_happy.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = cecilia_happy.jpg; path = App/Resources/Optimized/cecilia_happy.jpg; sourceTree = "<group>"; };
+		AFFE794ED35792F9AC8D5CFF /* chinatsu_base.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = chinatsu_base.jpg; path = App/Resources/Optimized/chinatsu_base.jpg; sourceTree = "<group>"; };
+		B1D494BDB101421899E7869D /* tsukika_base.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = tsukika_base.jpg; path = App/Resources/Optimized/tsukika_base.jpg; sourceTree = "<group>"; };
+		B2234D3AA95F96D5B40748EE /* kotone_reward_1.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = kotone_reward_1.jpg; path = App/Resources/Optimized/kotone_reward_1.jpg; sourceTree = "<group>"; };
+		B3EA67860E9017BF99BCD0D4 /* shion_happy.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = shion_happy.jpg; path = App/Resources/Optimized/shion_happy.jpg; sourceTree = "<group>"; };
+		B451393C937E218791C41A76 /* rin_base.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = rin_base.jpg; path = App/Resources/Optimized/rin_base.jpg; sourceTree = "<group>"; };
+		B6AE296C913E3F80D5997083 /* mio_worry.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = mio_worry.jpg; path = App/Resources/Optimized/mio_worry.jpg; sourceTree = "<group>"; };
+		B8B05A075DA8D466640466CF /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = App/Resources/Assets.xcassets; sourceTree = "<group>"; };
+		B9E896D1496253143CA71124 /* chinatsu_reward_3.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = chinatsu_reward_3.jpg; path = App/Resources/Optimized/chinatsu_reward_3.jpg; sourceTree = "<group>"; };
+		BBC6E6C149C6B95C056AB477 /* cecilia_worry.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = cecilia_worry.jpg; path = App/Resources/Optimized/cecilia_worry.jpg; sourceTree = "<group>"; };
+		C180036916C0E9A14524B68B /* akane_happy.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = akane_happy.jpg; path = App/Resources/Optimized/akane_happy.jpg; sourceTree = "<group>"; };
+		C6D80C96F5C8FF5E3D02399B /* ShogiAI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShogiAI.swift; path = Sources/ShogiCore/ShogiAI.swift; sourceTree = "<group>"; };
+		C77E81118D531A076310ABEA /* chinatsu_worry.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = chinatsu_worry.jpg; path = App/Resources/Optimized/chinatsu_worry.jpg; sourceTree = "<group>"; };
+		C85B820DFDB50ACCE1304D87 /* hinata_base.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = hinata_base.jpg; path = App/Resources/Optimized/hinata_base.jpg; sourceTree = "<group>"; };
+		CCD4DE70C17D355AEDB71384 /* hinata_happy.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = hinata_happy.jpg; path = App/Resources/Optimized/hinata_happy.jpg; sourceTree = "<group>"; };
+		D0E0E6D1B6AB16BF8068B82B /* koharu_reward_3.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = koharu_reward_3.jpg; path = App/Resources/Optimized/koharu_reward_3.jpg; sourceTree = "<group>"; };
+		DE2E71FDC9FB1D7447524D4A /* hinata_worry.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = hinata_worry.jpg; path = App/Resources/Optimized/hinata_worry.jpg; sourceTree = "<group>"; };
+		DF9AB85765EAC045709DECBE /* ShogiGirls.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShogiGirls.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2293EB61257B7A6109CF59B /* chinatsu_reward_4.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = chinatsu_reward_4.jpg; path = App/Resources/Optimized/chinatsu_reward_4.jpg; sourceTree = "<group>"; };
+		EA627D8C182DA709F424B9F2 /* hinata_reward_5.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = hinata_reward_5.jpg; path = App/Resources/Optimized/hinata_reward_5.jpg; sourceTree = "<group>"; };
+		ED02B4ED4664864591751C87 /* koharu_base.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = koharu_base.jpg; path = App/Resources/Optimized/koharu_base.jpg; sourceTree = "<group>"; };
+		F10FF4155D83A7A1726775C9 /* tsukika_worry.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = tsukika_worry.jpg; path = App/Resources/Optimized/tsukika_worry.jpg; sourceTree = "<group>"; };
+		F262C6ACB981C987C700F42E /* chinatsu_reward_2.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = chinatsu_reward_2.jpg; path = App/Resources/Optimized/chinatsu_reward_2.jpg; sourceTree = "<group>"; };
+		F32F058403F9759FA8B506C6 /* rin_worry.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = rin_worry.jpg; path = App/Resources/Optimized/rin_worry.jpg; sourceTree = "<group>"; };
+		F793010D14D4C3FA16BC29FB /* koharu_reward_1.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = koharu_reward_1.jpg; path = App/Resources/Optimized/koharu_reward_1.jpg; sourceTree = "<group>"; };
+		F7A23AA218B09BCBB6790620 /* tsukika_reward_2.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = tsukika_reward_2.jpg; path = App/Resources/Optimized/tsukika_reward_2.jpg; sourceTree = "<group>"; };
+		FAF01972E4CFAC694AA73CCE /* Shogi.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Shogi.swift; path = Sources/ShogiCore/Shogi.swift; sourceTree = "<group>"; };
+		FE38A4F7E575B5D4E83713D7 /* shion_reward_3.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = shion_reward_3.jpg; path = App/Resources/Optimized/shion_reward_3.jpg; sourceTree = "<group>"; };
+		FF3D26B2C645849882A9EAD3 /* rin_reward_1.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = rin_reward_1.jpg; path = App/Resources/Optimized/rin_reward_1.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3110416C70C6B131784362EC /* Frameworks */ = {
+		59DE42BCE348BBCCA52727CE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AE52CAE765FEE29B90B57BD /* Foundation.framework in Frameworks */,
+				D779546CB5D332ADAD9C9746 /* Foundation.framework in Frameworks */,
+				5B449ABE2F174AD622B50D8D /* GoogleMobileAds in Frameworks */,
+				78A220A48DF1640CA98774D0 /* GoogleUserMessagingPlatform in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		96BDDF5CB0D5D5784771DFD6 /* Frameworks */ = {
+		AA9CF9F7514FD069E53685B0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				15A562F9A20A69900297B4D2 /* Foundation.framework in Frameworks */,
-				9FA65E67F20F54F616B2AB6B /* GoogleMobileAds in Frameworks */,
-				FDB3BAB3FF472218B1C7A340 /* GoogleUserMessagingPlatform in Frameworks */,
+				7A10B83321E2F027F5DDAF25 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5606DCA2763E99A595821AF5 = {
+		0122C7DC6D5A7EE622747825 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				9C5365CA532CC0445B286067 /* Products */,
-				E68B0B5A81E007D966199554 /* Frameworks */,
-				C9DDA3366FA47962D109697D /* Sources */,
-				F4065E1F9B4C178BD7EA9D07 /* Resources */,
-			);
-			sourceTree = "<group>";
-		};
-		9C5365CA532CC0445B286067 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				FCEAAAF749E87DA660AEDB3D /* ShogiGirls.app */,
-				45248FDB97E2E383897F413E /* ShogiGirlsUITests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		A9229CBDAA788316D1CB27B3 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				B8A3DED3907FAD94E110CC88 /* Foundation.framework */,
-			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
-		C9DDA3366FA47962D109697D /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				9A0A4238528574FF6646E4A4 /* Ads.swift */,
-				336904868493C8D83023DC33 /* AppDelegate.swift */,
-				75E7A0A8A08037F194F036DD /* BoardScene.swift */,
-				535F7203F913DC9F34E1E188 /* GameViewController.swift */,
-				DD0CB71E32AA645DBDBAD75B /* Theme.swift */,
-				6A73AAE35B84122F784B0296 /* Characters.swift */,
-				A55AEE6608D52196577FC941 /* SaveStore.swift */,
-				022A502C4DB9D52C389C381B /* Shogi.swift */,
-				74841C6A53FB26DE7634E6B1 /* ShogiAI.swift */,
-				3BB4FC9E6BC4E424D2807574 /* ShogiGirlsUITests.swift */,
+				0A8FAE49EC02E7141ADB22E2 /* Ads.swift */,
+				8A76C09B926FB87E0773003D /* AppDelegate.swift */,
+				204DEDA027B54306D315328C /* BoardScene.swift */,
+				09387538451331DB25E9371B /* GameViewController.swift */,
+				82DDF986AEB150274BE37375 /* Theme.swift */,
+				75A7803C8A68F04C5935A775 /* Characters.swift */,
+				6A85974D6086F9D622FBF437 /* SaveStore.swift */,
+				FAF01972E4CFAC694AA73CCE /* Shogi.swift */,
+				C6D80C96F5C8FF5E3D02399B /* ShogiAI.swift */,
+				76C64F6F13B9BB82A58BFEC4 /* ShogiGirlsUITests.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
 		};
-		E68B0B5A81E007D966199554 /* Frameworks */ = {
+		348EF9391384E1C5EF769A1C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A9229CBDAA788316D1CB27B3 /* iOS */,
+				DF9AB85765EAC045709DECBE /* ShogiGirls.app */,
+				598ABEF8867F9E65771BDD88 /* ShogiGirlsUITests.xctest */,
 			);
-			name = Frameworks;
+			name = Products;
 			sourceTree = "<group>";
 		};
-		F4065E1F9B4C178BD7EA9D07 /* Resources */ = {
+		A388B1AF0065FAFDA621D521 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				323A4FB121C797C6096E782E /* Assets.xcassets */,
-				1163BDD2367DD1D558341572 /* PrivacyInfo.xcprivacy */,
-				598C1AAE5AA7A3DCEF786B9D /* akane_base.png */,
-				1398105DADAEBC39E5045B26 /* akane_happy.png */,
-				41161CC5FEB1272530AB718E /* akane_reward_1.png */,
-				0B409993AD7B940E0294AE5F /* akane_reward_2.png */,
-				6AE3DE32D1F9A98260DFB6A1 /* akane_reward_3.png */,
-				66780882EBCDAC8E5CB00533 /* akane_reward_4.png */,
-				303BCA07D1E00C93A40ABAF6 /* akane_reward_5.png */,
-				A384D31D2FE67AAE40110D94 /* akane_worry.png */,
-				7CF861B1B03FFBA41F645788 /* cecilia_base.png */,
-				9CF518E910206156C1D4AF02 /* cecilia_happy.png */,
-				B71C26D3EDBAEB3E5EFB329F /* cecilia_reward_1.png */,
-				D136A1CBDB4E82EB9AD283C6 /* cecilia_reward_2.png */,
-				EEABD7C84F0A131BEC26DF1C /* cecilia_reward_3.png */,
-				3F203C5E84431CB86C3B3D85 /* cecilia_reward_4.png */,
-				3D7D8C4ACCC2CDC914FF8CDA /* cecilia_reward_5.png */,
-				0C1BEF42AFB963322594FCD0 /* cecilia_worry.png */,
-				81D8B07C20BD7379A045F6A1 /* chinatsu_base.png */,
-				AE275A6756C3EEB030473C75 /* chinatsu_happy.png */,
-				87E7CEC03EDCADCDFA156BBA /* chinatsu_reward_1.png */,
-				9EDB4870CB561A7149C2234D /* chinatsu_reward_2.png */,
-				D84BDEE03213DA8036405E12 /* chinatsu_reward_3.png */,
-				47B9770FA0AC13118E8416F9 /* chinatsu_reward_4.png */,
-				A7D4095FA426E7E9F380F99B /* chinatsu_reward_5.png */,
-				893C300582C37F30D75DDC01 /* chinatsu_worry.png */,
-				A1B52FB8C70B5DBD4E978282 /* hinata_base.png */,
-				98D7869125B574924F1EBC5B /* hinata_happy.png */,
-				881586C56CE59EFB0C8A5DC0 /* hinata_reward_1.png */,
-				76D331C71DF66AE4F285691B /* hinata_reward_2.png */,
-				3C8353EB68A810E7A6F679CE /* hinata_reward_3.png */,
-				B394CC138A84B9B90A242E6F /* hinata_reward_4.png */,
-				CCB7ADDCAB4DDB87256C25D4 /* hinata_reward_5.png */,
-				C505D8294D2B1BD6E75D282D /* hinata_worry.png */,
-				87E1DCEBFC2BA4A50883F628 /* koharu_base.png */,
-				EF343FFF3A8004DFBA0F5D30 /* koharu_happy.png */,
-				165E0F51771507777F451068 /* koharu_reward_1.png */,
-				AB8A287BC8F8888D1BB3BD8C /* koharu_reward_2.png */,
-				13FB0CE57DC6D0861046C21A /* koharu_reward_3.png */,
-				6154AA6F962E5AA65E1BA548 /* koharu_reward_4.png */,
-				7517EBDFB194897EA5A0F552 /* koharu_reward_5.png */,
-				BCCF907711D173EB3D9CA6AA /* koharu_worry.png */,
-				733B4C311C5CFA17FC579AA5 /* kotone_base.png */,
-				2F40009BA9214A7D8BFE13DC /* kotone_happy.png */,
-				F9FADD4D4FC9C19751701E46 /* kotone_reward_1.png */,
-				86119EEF8D3E36D651E11902 /* kotone_reward_2.png */,
-				A974ADB62DC22193136B925A /* kotone_reward_3.png */,
-				23FF95532E9E0FEDAD5A34C7 /* kotone_reward_4.png */,
-				451A9EB7A86042CCB0BFA4A9 /* kotone_reward_5.png */,
-				A1B60D4EC3C2101047D4058F /* kotone_worry.png */,
-				63E55FE3D55F1FCE083EE96A /* mio_base.png */,
-				B86212F4EF2BCDD98C991277 /* mio_happy.png */,
-				0F7878B732A2B0B9E6119526 /* mio_reward_1.png */,
-				D9AF99EDD2EA5B241C0B1519 /* mio_reward_2.png */,
-				9EE9CBCC68093DFC22C6EF44 /* mio_reward_3.png */,
-				2535FCC02F38C2D77B80BEB6 /* mio_reward_4.png */,
-				8AD64530D556B4B9459EDF3E /* mio_reward_5.png */,
-				F10816DEB3743150BCDDFD8E /* mio_worry.png */,
-				BC9EFA6273A5A44F47A047E6 /* rin_base.png */,
-				8729508162EAF53CEA2179B3 /* rin_happy.png */,
-				82C7783401E695984C4DE6D6 /* rin_reward_1.png */,
-				477C4A42D8F2D91805127E3E /* rin_reward_2.png */,
-				42D1CB195CB590AF4D811DD2 /* rin_reward_3.png */,
-				05144DC80AEF301A3783A1BA /* rin_reward_4.png */,
-				F91E3F3ACBB9F646F679D2A4 /* rin_reward_5.png */,
-				6FCC5C1FB4CC6949EEEB9F95 /* rin_worry.png */,
-				319EA52A7BCF38E0D27953F2 /* shion_base.png */,
-				10B2085B781F60101E265DAF /* shion_happy.png */,
-				9CEEED5267CAE87A4D9AA962 /* shion_reward_1.png */,
-				76F194A061F9B63926992CD8 /* shion_reward_2.png */,
-				0000402BD3CA896837A3AA28 /* shion_reward_3.png */,
-				834386482CAEE5759DDC9EC6 /* shion_reward_4.png */,
-				6A38360800670ACDFE6EBF8F /* shion_reward_5.png */,
-				53CD837E3C837AED8DDDA713 /* shion_worry.png */,
-				B84C8D63A9ABB10815FC648A /* tsukika_base.png */,
-				1C86DAD77C77585C5DA66E13 /* tsukika_happy.png */,
-				413E7E03EB72E83A0B2D7C21 /* tsukika_reward_1.png */,
-				8D8ED4911E032276C04C1F45 /* tsukika_reward_2.png */,
-				9902BDA00A70ACA6DB6B305E /* tsukika_reward_3.png */,
-				A7648F71A17C2288B7828713 /* tsukika_reward_4.png */,
-				F6E257839E26A1033C4B9E71 /* tsukika_reward_5.png */,
-				B50C7FA5BD3B358A13D59F60 /* tsukika_worry.png */,
+				B8B05A075DA8D466640466CF /* Assets.xcassets */,
+				1B5867C54933AC6670E384FE /* akane_base.jpg */,
+				C180036916C0E9A14524B68B /* akane_happy.jpg */,
+				5D58B44DC17550035AA8DA5A /* akane_reward_1.jpg */,
+				433B9E96E6FE3294EEECBFE9 /* akane_reward_2.jpg */,
+				0E8A67BE3CE53F397E9B9E4F /* akane_reward_3.jpg */,
+				9CB17314F07DBE7270EBE3D6 /* akane_reward_4.jpg */,
+				734346D922536B2115CDB3A9 /* akane_reward_5.jpg */,
+				705FF5A3470602F409C7D7DE /* akane_worry.jpg */,
+				2ED8C2B8EBB80BFE75824DE8 /* cecilia_base.jpg */,
+				AD4285A19E830E7ABED6763E /* cecilia_happy.jpg */,
+				4B7F0038D9390C257B260332 /* cecilia_reward_1.jpg */,
+				5F907B1C1E0F37325A69241A /* cecilia_reward_2.jpg */,
+				240A97C8A8FD93505A41C725 /* cecilia_reward_3.jpg */,
+				9353A9B4F15FB9D3AA85F4A5 /* cecilia_reward_4.jpg */,
+				5320E4CD3A8D4EC4FFDD527A /* cecilia_reward_5.jpg */,
+				BBC6E6C149C6B95C056AB477 /* cecilia_worry.jpg */,
+				AFFE794ED35792F9AC8D5CFF /* chinatsu_base.jpg */,
+				5DA111983D9C0F8207117FCB /* chinatsu_happy.jpg */,
+				2A78710BBDE083FD19F344BF /* chinatsu_reward_1.jpg */,
+				F262C6ACB981C987C700F42E /* chinatsu_reward_2.jpg */,
+				B9E896D1496253143CA71124 /* chinatsu_reward_3.jpg */,
+				E2293EB61257B7A6109CF59B /* chinatsu_reward_4.jpg */,
+				4EEE481936D489FCC9A54B29 /* chinatsu_reward_5.jpg */,
+				C77E81118D531A076310ABEA /* chinatsu_worry.jpg */,
+				C85B820DFDB50ACCE1304D87 /* hinata_base.jpg */,
+				CCD4DE70C17D355AEDB71384 /* hinata_happy.jpg */,
+				09981699DE89D4D1AEEC41F6 /* hinata_reward_1.jpg */,
+				9056355A1070F55EAF8A99CC /* hinata_reward_2.jpg */,
+				2218D9E290ABFC77F726EAFA /* hinata_reward_3.jpg */,
+				652410D4A36F190EF42E12AC /* hinata_reward_4.jpg */,
+				EA627D8C182DA709F424B9F2 /* hinata_reward_5.jpg */,
+				DE2E71FDC9FB1D7447524D4A /* hinata_worry.jpg */,
+				ED02B4ED4664864591751C87 /* koharu_base.jpg */,
+				08D574338CDE2F9A0CA04769 /* koharu_happy.jpg */,
+				F793010D14D4C3FA16BC29FB /* koharu_reward_1.jpg */,
+				153F4ABAC89FBB7F44D92CBF /* koharu_reward_2.jpg */,
+				D0E0E6D1B6AB16BF8068B82B /* koharu_reward_3.jpg */,
+				2555A998DC358335279B0D48 /* koharu_reward_4.jpg */,
+				0C09A137F6D43A2FA974B97E /* koharu_reward_5.jpg */,
+				3C5425B6534ABBC153D9C48A /* koharu_worry.jpg */,
+				A474FA0EA0EB46A49F81FCC9 /* kotone_base.jpg */,
+				27A1A7557BC150D83441F369 /* kotone_happy.jpg */,
+				B2234D3AA95F96D5B40748EE /* kotone_reward_1.jpg */,
+				819EF48B28E61AA2CEAFA5A0 /* kotone_reward_2.jpg */,
+				3D24CCCE34757EB302B193A6 /* kotone_reward_3.jpg */,
+				65F46558CE20350F17FF2D3A /* kotone_reward_4.jpg */,
+				12B6394491386634795512EC /* kotone_reward_5.jpg */,
+				021A4E6286EA8FA019FB2D2C /* kotone_worry.jpg */,
+				2D5C1B8C8A7F0712259D3CB8 /* mio_base.jpg */,
+				21BF2B2546A56141CF0AF233 /* mio_happy.jpg */,
+				2D4402D34E3DA3D85A09A41D /* mio_reward_1.jpg */,
+				0AAEC152693292F21492F251 /* mio_reward_2.jpg */,
+				205CE564C9332406C63DE566 /* mio_reward_3.jpg */,
+				06BF7D79B47E7DDA1DD8A0D0 /* mio_reward_4.jpg */,
+				0A103D93F9B04E91C50F2893 /* mio_reward_5.jpg */,
+				B6AE296C913E3F80D5997083 /* mio_worry.jpg */,
+				B451393C937E218791C41A76 /* rin_base.jpg */,
+				2F9C5BFEDF610217B306C8AF /* rin_happy.jpg */,
+				FF3D26B2C645849882A9EAD3 /* rin_reward_1.jpg */,
+				21E234BBA36060EBF621DA2B /* rin_reward_2.jpg */,
+				A699C7F330DD5D9FD020F242 /* rin_reward_3.jpg */,
+				6C1678CCF29836A488FD562E /* rin_reward_4.jpg */,
+				47897600984C351C48E4BEF8 /* rin_reward_5.jpg */,
+				F32F058403F9759FA8B506C6 /* rin_worry.jpg */,
+				82CCD545AFB582443F86ACF7 /* shion_base.jpg */,
+				B3EA67860E9017BF99BCD0D4 /* shion_happy.jpg */,
+				6F8B704A617A025A908A014D /* shion_reward_1.jpg */,
+				0F18B55F76FD5BA5F5C373BD /* shion_reward_2.jpg */,
+				FE38A4F7E575B5D4E83713D7 /* shion_reward_3.jpg */,
+				83DB26297295DD260A4223D3 /* shion_reward_4.jpg */,
+				8BDD04966B4CB00AAB0A3084 /* shion_reward_5.jpg */,
+				67BDA77A5E47109590089CD0 /* shion_worry.jpg */,
+				B1D494BDB101421899E7869D /* tsukika_base.jpg */,
+				80A7F61141C291D03F442DAB /* tsukika_happy.jpg */,
+				A49E9AF14A74587A7B9EDBB5 /* tsukika_reward_1.jpg */,
+				F7A23AA218B09BCBB6790620 /* tsukika_reward_2.jpg */,
+				6964798941B9C48E70DE4ED7 /* tsukika_reward_3.jpg */,
+				64D6BD247FDD38FE1F4F9141 /* tsukika_reward_4.jpg */,
+				1980B5E021FA779BA2EEF73E /* tsukika_reward_5.jpg */,
+				F10FF4155D83A7A1726775C9 /* tsukika_worry.jpg */,
+				294B975AA2B661B6EB6864CC /* PrivacyInfo.xcprivacy */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		BA94F6EBC80E8BC1BE8A454F = {
+			isa = PBXGroup;
+			children = (
+				348EF9391384E1C5EF769A1C /* Products */,
+				F4A8E77D23EB0730C529BED7 /* Frameworks */,
+				0122C7DC6D5A7EE622747825 /* Sources */,
+				A388B1AF0065FAFDA621D521 /* Resources */,
+			);
+			sourceTree = "<group>";
+		};
+		DCF95E6D5AE57F4CFB102986 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				39155E1FB2C545176DD8A9CE /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		F4A8E77D23EB0730C529BED7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DCF95E6D5AE57F4CFB102986 /* iOS */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		29D84A41D51755E568FF805C /* ShogiGirlsUITests */ = {
+		0CBDAE65A0886C4BC2D363EB /* ShogiGirls */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1429544DA0ED43715E34C24E /* Build configuration list for PBXNativeTarget "ShogiGirlsUITests" */;
+			buildConfigurationList = 901D73E6B902A4CE49F5CD67 /* Build configuration list for PBXNativeTarget "ShogiGirls" */;
 			buildPhases = (
-				B328772B606D29AA45B0C9D1 /* Sources */,
-				3110416C70C6B131784362EC /* Frameworks */,
-				AEC90B93302B83C330B36302 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E87A86B71F1D79EFFEAC7072 /* PBXTargetDependency */,
-			);
-			name = ShogiGirlsUITests;
-			productName = ShogiGirlsUITests;
-			productReference = 45248FDB97E2E383897F413E /* ShogiGirlsUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
-		4075E0F8DB28B0399C2BB7AB /* ShogiGirls */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 641F54BA30A63F5607213C7A /* Build configuration list for PBXNativeTarget "ShogiGirls" */;
-			buildPhases = (
-				94CDDF540BD494BF023AE417 /* Sources */,
-				96BDDF5CB0D5D5784771DFD6 /* Frameworks */,
-				C5868AA706795F0675D68AA1 /* Resources */,
+				1EFA47932193E9713C111146 /* Sources */,
+				59DE42BCE348BBCCA52727CE /* Frameworks */,
+				9F547B00B2B0FC0473894449 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -411,23 +393,41 @@
 			);
 			name = ShogiGirls;
 			packageProductDependencies = (
-				2421316CD3366E77CD48F5D6 /* GoogleMobileAds */,
-				0A332AD1E5F81CAE54836754 /* GoogleUserMessagingPlatform */,
+				BF9EE43C831422F28A7CD0EF /* GoogleMobileAds */,
+				66F73953182D2D985D3C407C /* GoogleUserMessagingPlatform */,
 			);
 			productName = ShogiGirls;
-			productReference = FCEAAAF749E87DA660AEDB3D /* ShogiGirls.app */;
+			productReference = DF9AB85765EAC045709DECBE /* ShogiGirls.app */;
 			productType = "com.apple.product-type.application";
+		};
+		282D254E10C065955082102E /* ShogiGirlsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EDE539786EC13CAE5B0DE622 /* Build configuration list for PBXNativeTarget "ShogiGirlsUITests" */;
+			buildPhases = (
+				4646C6D4E5798C32F969CBA8 /* Sources */,
+				AA9CF9F7514FD069E53685B0 /* Frameworks */,
+				477BFDFA11EE89156E7FCDF4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				98DF287256A5D52F260D9B8D /* PBXTargetDependency */,
+			);
+			name = ShogiGirlsUITests;
+			productName = ShogiGirlsUITests;
+			productReference = 598ABEF8867F9E65771BDD88 /* ShogiGirlsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		1332337326B528299ACDCE15 /* Project object */ = {
+		10B828F2299BB11FF11F8F1D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 			};
-			buildConfigurationList = CA7AAB297D165F8DAA124E87 /* Build configuration list for PBXProject "ShogiGirls" */;
+			buildConfigurationList = 8F1E47F6D429F159B7319B54 /* Build configuration list for PBXProject "ShogiGirls" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -435,211 +435,215 @@
 				en,
 				Base,
 			);
-			mainGroup = 5606DCA2763E99A595821AF5;
+			mainGroup = BA94F6EBC80E8BC1BE8A454F;
 			minimizedProjectReferenceProxies = 0;
 			packageReferences = (
-				F16B3145598FB0017B1C2973 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
-				3D7C0287146B349888B040F9 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
+				03C80041A71C073A95156B78 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				17731CA97235124FCDAD5CED /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
 			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 9C5365CA532CC0445B286067 /* Products */;
+			productRefGroup = 348EF9391384E1C5EF769A1C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4075E0F8DB28B0399C2BB7AB /* ShogiGirls */,
-				29D84A41D51755E568FF805C /* ShogiGirlsUITests */,
+				0CBDAE65A0886C4BC2D363EB /* ShogiGirls */,
+				282D254E10C065955082102E /* ShogiGirlsUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		AEC90B93302B83C330B36302 /* Resources */ = {
+		477BFDFA11EE89156E7FCDF4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C5868AA706795F0675D68AA1 /* Resources */ = {
+		9F547B00B2B0FC0473894449 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9FA57B52757AD2A89805FDB1 /* Assets.xcassets in Resources */,
-				255368656D66D6E47795A646 /* PrivacyInfo.xcprivacy in Resources */,
-				FDAFF3F2E1068952B8DF06D2 /* akane_base.png in Resources */,
-				DA69759F05C41978CD3EC109 /* akane_happy.png in Resources */,
-				C0A1D51A1E86DAC6A61846AA /* akane_reward_1.png in Resources */,
-				FC16755CC0CD85C5BF39C373 /* akane_reward_2.png in Resources */,
-				79A3AD133C1C17ADF74FB7DE /* akane_reward_3.png in Resources */,
-				9781094B322363855C043194 /* akane_reward_4.png in Resources */,
-				D596AA5B2CDF8375BE046C06 /* akane_reward_5.png in Resources */,
-				75E594776E01D9783FEC6FFC /* akane_worry.png in Resources */,
-				DD4088B6739F4D4787CD7E1B /* cecilia_base.png in Resources */,
-				B28AE2DCA53E959AEAF54579 /* cecilia_happy.png in Resources */,
-				BB305ED1D1794BACAD906131 /* cecilia_reward_1.png in Resources */,
-				082FAA64E38E73C50E042592 /* cecilia_reward_2.png in Resources */,
-				56DEBC135E497307A81E95BE /* cecilia_reward_3.png in Resources */,
-				4F0219639AB27FFEAC699E26 /* cecilia_reward_4.png in Resources */,
-				0C36FE8B3A9DB8937F0C077E /* cecilia_reward_5.png in Resources */,
-				AE617546020983A4D693666C /* cecilia_worry.png in Resources */,
-				4994015F7C1261447B8466CB /* chinatsu_base.png in Resources */,
-				BF96004E257553E2CC97F6A2 /* chinatsu_happy.png in Resources */,
-				7AE131B9FF95C5BA93D39B58 /* chinatsu_reward_1.png in Resources */,
-				B26571CFB82DE9ED2AC20435 /* chinatsu_reward_2.png in Resources */,
-				0C8D045A62806DC6E3DB87B1 /* chinatsu_reward_3.png in Resources */,
-				FC2492BE6A3D011177CA5052 /* chinatsu_reward_4.png in Resources */,
-				AD6EDEA1791B30287B9C5B9F /* chinatsu_reward_5.png in Resources */,
-				FC703796D96D25E011C34CE9 /* chinatsu_worry.png in Resources */,
-				9453FE52C055FBA441E9EC7D /* hinata_base.png in Resources */,
-				0B0699AA90294F7701FEDD3B /* hinata_happy.png in Resources */,
-				E8E2687C5742B58669AF9008 /* hinata_reward_1.png in Resources */,
-				05D1BFC79FD23B2F86070134 /* hinata_reward_2.png in Resources */,
-				A56ADA8BCF0D00F07A9AFA3C /* hinata_reward_3.png in Resources */,
-				B34B8E6BDCE137CE7BCA471E /* hinata_reward_4.png in Resources */,
-				2F830078A4722F84BF157BD8 /* hinata_reward_5.png in Resources */,
-				64E8196A84BACB9ED2DDDECC /* hinata_worry.png in Resources */,
-				338E670C63F98CAD6C390EEA /* koharu_base.png in Resources */,
-				A126E66DF2685C66D96156A3 /* koharu_happy.png in Resources */,
-				FD3322A597FCE67DD5C981D6 /* koharu_reward_1.png in Resources */,
-				8E7D55AA214F793F33FF7498 /* koharu_reward_2.png in Resources */,
-				C025AB00CD9CD37334D8E05D /* koharu_reward_3.png in Resources */,
-				A5EF6BF570D0FB7BB73AAB63 /* koharu_reward_4.png in Resources */,
-				C4ECE7E36B158C4B02EDE630 /* koharu_reward_5.png in Resources */,
-				860D47CCDD54F7CECF78F0FF /* koharu_worry.png in Resources */,
-				A39E740B369197B1FC53984A /* kotone_base.png in Resources */,
-				501F406674F1741A6EB65AC3 /* kotone_happy.png in Resources */,
-				CC3988C9EFF1F1C40DA4FCDC /* kotone_reward_1.png in Resources */,
-				0BCC30A20F4858DD30BC1D96 /* kotone_reward_2.png in Resources */,
-				1EB12A72D6891321B507CE35 /* kotone_reward_3.png in Resources */,
-				3C14DEA24A1346FD3708824B /* kotone_reward_4.png in Resources */,
-				C532355ADBB0656AE580FD3D /* kotone_reward_5.png in Resources */,
-				9E34D959332A75F072D9BD8A /* kotone_worry.png in Resources */,
-				380184911A82A8756B225909 /* mio_base.png in Resources */,
-				6FEAC1D60F673F835720038F /* mio_happy.png in Resources */,
-				23AF6FD8083F47B1B1DE6BAD /* mio_reward_1.png in Resources */,
-				4C7200B0BD834410DDB64FE2 /* mio_reward_2.png in Resources */,
-				C3A19CF4742D417A81C8C75E /* mio_reward_3.png in Resources */,
-				4229507D6C30D3DA64105952 /* mio_reward_4.png in Resources */,
-				AF1C307AF3FB0657EBC09A09 /* mio_reward_5.png in Resources */,
-				14712F6B10E687C810D225D8 /* mio_worry.png in Resources */,
-				659ED9F6C08B64A4D259EA59 /* rin_base.png in Resources */,
-				2D5843D8BC87E2D1139E4D6D /* rin_happy.png in Resources */,
-				A3E43E84E21EA953C1A0878D /* rin_reward_1.png in Resources */,
-				5D747E848382320748FA01CB /* rin_reward_2.png in Resources */,
-				6EA3060A107D4CC5A56F6B5C /* rin_reward_3.png in Resources */,
-				4E7CF0DE957A3F8232079D6D /* rin_reward_4.png in Resources */,
-				A90F9A74A9101CDD0BC442D9 /* rin_reward_5.png in Resources */,
-				D6E3FE4F59F222F9044144BF /* rin_worry.png in Resources */,
-				4D8144B24823D47B9952DB1E /* shion_base.png in Resources */,
-				0BF4529304EF7DB10FC7A497 /* shion_happy.png in Resources */,
-				833DC8365B805D3BD01C35AF /* shion_reward_1.png in Resources */,
-				D1E8CB913869F6D45AD867D6 /* shion_reward_2.png in Resources */,
-				921BD3A3BAE6A1DDBFF9C0EE /* shion_reward_3.png in Resources */,
-				7E08A996F4FD6C78F7CA30CC /* shion_reward_4.png in Resources */,
-				11B45B1B27C234FC9F671133 /* shion_reward_5.png in Resources */,
-				4EFA4E2D4F5C4B2C73797B3F /* shion_worry.png in Resources */,
-				03BF55635DF67D4EFE7C19D5 /* tsukika_base.png in Resources */,
-				45534879165AC94BBDF3CB13 /* tsukika_happy.png in Resources */,
-				C1590F0A809F2694A0ADDFA3 /* tsukika_reward_1.png in Resources */,
-				B834FB1CF1BC57C30737885A /* tsukika_reward_2.png in Resources */,
-				6C38CD6F683F9354DBF6142B /* tsukika_reward_3.png in Resources */,
-				6CCF0B3CD47C6ACB07D1FE29 /* tsukika_reward_4.png in Resources */,
-				06AB34C07D9F0C24F4C7930C /* tsukika_reward_5.png in Resources */,
-				5AB3035FC68A24E2B4B93978 /* tsukika_worry.png in Resources */,
+				54FBDC79903E5EA04571A875 /* Assets.xcassets in Resources */,
+				4371E45693C3C1DBF3C1956E /* akane_base.jpg in Resources */,
+				F3DA0E523FD17654F830B62B /* akane_happy.jpg in Resources */,
+				D3EEB15538254E33D0EBE3EB /* akane_reward_1.jpg in Resources */,
+				E51CDABB37A8CB081DF1FD10 /* akane_reward_2.jpg in Resources */,
+				9EAB76A6DB653CA1041D9D65 /* akane_reward_3.jpg in Resources */,
+				1613245EB0A3E5CFBE50B823 /* akane_reward_4.jpg in Resources */,
+				A1446F7E8C1F6E50432EE0E1 /* akane_reward_5.jpg in Resources */,
+				9909A5F6084006E6C58F8746 /* akane_worry.jpg in Resources */,
+				8917130DFCE6724379F68BBF /* cecilia_base.jpg in Resources */,
+				A637952C3FA5FCFD79961823 /* cecilia_happy.jpg in Resources */,
+				ECAD65BB681A34FE30B7A0BD /* cecilia_reward_1.jpg in Resources */,
+				2FD2273E2B5968F873E58717 /* cecilia_reward_2.jpg in Resources */,
+				A411A50A81E0E0B7551F6EC2 /* cecilia_reward_3.jpg in Resources */,
+				49109A4BA4EA100DA0A4E796 /* cecilia_reward_4.jpg in Resources */,
+				E0947AF9837D6A15DBD39857 /* cecilia_reward_5.jpg in Resources */,
+				DFDDEA412B16C3EBA21715B7 /* cecilia_worry.jpg in Resources */,
+				4F714E597D68CA637E56844B /* chinatsu_base.jpg in Resources */,
+				6F9A884FCABEC1B4D66510E6 /* chinatsu_happy.jpg in Resources */,
+				BC46FAD2DF08DD45B0FE8D7B /* chinatsu_reward_1.jpg in Resources */,
+				5A380F4EE501C6E607F3C94A /* chinatsu_reward_2.jpg in Resources */,
+				F5FBF8508F5AE0583CA82050 /* chinatsu_reward_3.jpg in Resources */,
+				7E53D88E043CAC4182A39E04 /* chinatsu_reward_4.jpg in Resources */,
+				25E7F953DBC088228A7E8C2B /* chinatsu_reward_5.jpg in Resources */,
+				5E128AAF24A42BBC5B4AB7E8 /* chinatsu_worry.jpg in Resources */,
+				4A63206FD7BB19265AB1C6FA /* hinata_base.jpg in Resources */,
+				E236273167551E43F1823092 /* hinata_happy.jpg in Resources */,
+				B3978393873C735F6895AFF4 /* hinata_reward_1.jpg in Resources */,
+				245A5DCE98073D1125C1E779 /* hinata_reward_2.jpg in Resources */,
+				E64CA91C3128359A75469AE8 /* hinata_reward_3.jpg in Resources */,
+				B9E8988D5ECFA781B2D6E823 /* hinata_reward_4.jpg in Resources */,
+				B93EB3BA527D6E4BA7AECA5E /* hinata_reward_5.jpg in Resources */,
+				F2444C93F7494878C05DE6F4 /* hinata_worry.jpg in Resources */,
+				EE9DEE682CA6C076224F57C8 /* koharu_base.jpg in Resources */,
+				28E4136076FA364846DBF523 /* koharu_happy.jpg in Resources */,
+				5FFDE72388AE2FF231A7BE49 /* koharu_reward_1.jpg in Resources */,
+				9AA1227C67E5F37A00B8545B /* koharu_reward_2.jpg in Resources */,
+				0EF9B0EBABEDE0CCAE411871 /* koharu_reward_3.jpg in Resources */,
+				A9C5913344F8BBAD21E3E64E /* koharu_reward_4.jpg in Resources */,
+				42B5BC3B6676E28CEEFB89D2 /* koharu_reward_5.jpg in Resources */,
+				E28B84DDBA69369E348300E1 /* koharu_worry.jpg in Resources */,
+				12D89E318203E266D5CF3575 /* kotone_base.jpg in Resources */,
+				41CC22DEF08617310C02611F /* kotone_happy.jpg in Resources */,
+				32F73250CA5F32CB6DF1AF93 /* kotone_reward_1.jpg in Resources */,
+				4CF7FC7E8ACECEBDF11092A7 /* kotone_reward_2.jpg in Resources */,
+				3D56FC203048CB5BE8C5B2AD /* kotone_reward_3.jpg in Resources */,
+				76FE8C202A5140A188C2B594 /* kotone_reward_4.jpg in Resources */,
+				64CACFF81B688BD00C08ACA3 /* kotone_reward_5.jpg in Resources */,
+				54BB5029F450900E4E07C354 /* kotone_worry.jpg in Resources */,
+				D15A3B9B3DB2F19280396C73 /* mio_base.jpg in Resources */,
+				76ECA62C5453E594044EEDC4 /* mio_happy.jpg in Resources */,
+				22B529E0E787DC04DDEA74F6 /* mio_reward_1.jpg in Resources */,
+				8BEC2F07BBF0F4EB58F98AFC /* mio_reward_2.jpg in Resources */,
+				586A247FF6FC90BCF8C0A9E2 /* mio_reward_3.jpg in Resources */,
+				72E9F871CE89EBFC13F11127 /* mio_reward_4.jpg in Resources */,
+				7FAC373AD5AB2C054A839F63 /* mio_reward_5.jpg in Resources */,
+				6A39C6AEA7F1389F5D97F080 /* mio_worry.jpg in Resources */,
+				F5514B2B5C78AC00CCD6345D /* rin_base.jpg in Resources */,
+				51EC2C554E1E65B65768862D /* rin_happy.jpg in Resources */,
+				BA3CAEE7FEA16432B6BD3C3A /* rin_reward_1.jpg in Resources */,
+				07F57285C0A128CBB674F4E8 /* rin_reward_2.jpg in Resources */,
+				CFF8A1745DFA67558FBABDE5 /* rin_reward_3.jpg in Resources */,
+				49458376B26A660117A8BB9F /* rin_reward_4.jpg in Resources */,
+				2BD75CF625475F8D4111CD75 /* rin_reward_5.jpg in Resources */,
+				BA6CED584F17157F037B0E33 /* rin_worry.jpg in Resources */,
+				E9AF746075C64919772F0A30 /* shion_base.jpg in Resources */,
+				48869ABA6608E8FAA43F16A5 /* shion_happy.jpg in Resources */,
+				6668C47B8018F8251BA572A1 /* shion_reward_1.jpg in Resources */,
+				448AE6D502D30D848F5740B0 /* shion_reward_2.jpg in Resources */,
+				AB2EE9AD2E176BFC4220208B /* shion_reward_3.jpg in Resources */,
+				87912B33E44CEAE16965927B /* shion_reward_4.jpg in Resources */,
+				A12F74BF75B586ACD078B179 /* shion_reward_5.jpg in Resources */,
+				F43A1F162214538CA52EE06B /* shion_worry.jpg in Resources */,
+				2C4A3C91FD7953197834F888 /* tsukika_base.jpg in Resources */,
+				BB3E1C46CE3F30A5AEBCE26E /* tsukika_happy.jpg in Resources */,
+				E5ECEF38D2533A980DBF5637 /* tsukika_reward_1.jpg in Resources */,
+				67158D9C96302DE93581B8C9 /* tsukika_reward_2.jpg in Resources */,
+				B6080396F844C9CC5FEB9BF6 /* tsukika_reward_3.jpg in Resources */,
+				20EA031A51F79F2A33E058AE /* tsukika_reward_4.jpg in Resources */,
+				3CA12959A04C8859493B0CE1 /* tsukika_reward_5.jpg in Resources */,
+				9093B1FF50789D4886424F0F /* tsukika_worry.jpg in Resources */,
+				60796419B0ED69ABE634FD84 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		94CDDF540BD494BF023AE417 /* Sources */ = {
+		1EFA47932193E9713C111146 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9221EE28A4F84E3CFC4BC1A3 /* Ads.swift in Sources */,
-				317448C4AFF81B8EA3AEFE21 /* AppDelegate.swift in Sources */,
-				53D0B000DDC8D82E07EEA27C /* BoardScene.swift in Sources */,
-				A2F3EF0B1D673D89336BFD29 /* GameViewController.swift in Sources */,
-				347DDC829170F3B00452F74D /* Theme.swift in Sources */,
-				C3E15D55111A75B084872AE5 /* Characters.swift in Sources */,
-				BC086639AF55C551D7A18EEB /* SaveStore.swift in Sources */,
-				88C1C5F6685BFEF83706D248 /* Shogi.swift in Sources */,
-				657C01A89B56C4A7D9E6D136 /* ShogiAI.swift in Sources */,
+				4C57DE62AAF6883BD99EC65C /* Ads.swift in Sources */,
+				9730B276DA185B597B37B7E9 /* AppDelegate.swift in Sources */,
+				30DC8054455B479BAFDDC079 /* BoardScene.swift in Sources */,
+				C291BE5CA39ECB00B57439C6 /* GameViewController.swift in Sources */,
+				34C8FDB4BB4CEA1573B380D1 /* Theme.swift in Sources */,
+				1630D05E77FEF814591CAF6A /* Characters.swift in Sources */,
+				D6BF90EC659ED19011AE588D /* SaveStore.swift in Sources */,
+				A588BBA4EFB11AF118815E49 /* Shogi.swift in Sources */,
+				4CE05A7B74A233CFEC017822 /* ShogiAI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B328772B606D29AA45B0C9D1 /* Sources */ = {
+		4646C6D4E5798C32F969CBA8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A158697E7E48677DB705CE3B /* ShogiGirlsUITests.swift in Sources */,
+				B44542AF2C1346458919B319 /* ShogiGirlsUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E87A86B71F1D79EFFEAC7072 /* PBXTargetDependency */ = {
+		98DF287256A5D52F260D9B8D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ShogiGirls;
-			target = 4075E0F8DB28B0399C2BB7AB /* ShogiGirls */;
-			targetProxy = 08444E8BBE4D2C0E64B77A83 /* PBXContainerItemProxy */;
+			target = 0CBDAE65A0886C4BC2D363EB /* ShogiGirls */;
+			targetProxy = 3B3310D5DBEA9C168C33010A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		1167DFE09E1A767BB89077A7 /* Release */ = {
+		882398EBD9D27A308C074D06 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				DEVELOPMENT_TEAM = JS3245KG7Q;
-				GENERATE_INFOPLIST_FILE = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.takeo.ShogiGirls.UITests;
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = ShogiGirls;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		1D37CA704073C60F643C6AEE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				DEVELOPMENT_TEAM = JS3245KG7Q;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.takeo.ShogiGirls.UITests;
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = ShogiGirls;
-			};
-			name = Debug;
-		};
-		8B4AFC417CD2E9DD12FFBDE4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JS3245KG7Q;
-				INFOPLIST_FILE = App/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.takeo.ShogiGirls;
-				SDKROOT = iphoneos;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		A6C6A3385A7F187C88C0661F /* Debug */ = {
+		A099EF6B84DC5157039B6D23 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -701,19 +705,19 @@
 			};
 			name = Debug;
 		};
-		BC405446D4B66BBD19F154FA /* Debug */ = {
+		A64E481996A8C45C7AE9477E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = JS3245KG7Q;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.takeo.ShogiGirls;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -723,87 +727,83 @@
 			};
 			name = Debug;
 		};
-		F89A23500538455708F3C5B5 /* Release */ = {
+		C6C3929ADB4A2825C7036214 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = JS3245KG7Q;
+				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_COMPILATION_MODE = wholemodule;
+				PRODUCT_BUNDLE_IDENTIFIER = com.takeo.ShogiGirls.UITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = ShogiGirls;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CE28CB39429E981B73156890 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = JS3245KG7Q;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.takeo.ShogiGirls.UITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = ShogiGirls;
+			};
+			name = Debug;
+		};
+		DCC57542E644CAE97B8495AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = JS3245KG7Q;
+				INFOPLIST_FILE = App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.takeo.ShogiGirls;
+				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1429544DA0ED43715E34C24E /* Build configuration list for PBXNativeTarget "ShogiGirlsUITests" */ = {
+		8F1E47F6D429F159B7319B54 /* Build configuration list for PBXProject "ShogiGirls" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1167DFE09E1A767BB89077A7 /* Release */,
-				1D37CA704073C60F643C6AEE /* Debug */,
+				A099EF6B84DC5157039B6D23 /* Debug */,
+				882398EBD9D27A308C074D06 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		641F54BA30A63F5607213C7A /* Build configuration list for PBXNativeTarget "ShogiGirls" */ = {
+		901D73E6B902A4CE49F5CD67 /* Build configuration list for PBXNativeTarget "ShogiGirls" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8B4AFC417CD2E9DD12FFBDE4 /* Release */,
-				BC405446D4B66BBD19F154FA /* Debug */,
+				DCC57542E644CAE97B8495AE /* Release */,
+				A64E481996A8C45C7AE9477E /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CA7AAB297D165F8DAA124E87 /* Build configuration list for PBXProject "ShogiGirls" */ = {
+		EDE539786EC13CAE5B0DE622 /* Build configuration list for PBXNativeTarget "ShogiGirlsUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A6C6A3385A7F187C88C0661F /* Debug */,
-				F89A23500538455708F3C5B5 /* Release */,
+				C6C3929ADB4A2825C7036214 /* Release */,
+				CE28CB39429E981B73156890 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -811,15 +811,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3D7C0287146B349888B040F9 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
-		F16B3145598FB0017B1C2973 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+		03C80041A71C073A95156B78 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
 			requirement = {
@@ -827,20 +819,28 @@
 				minimumVersion = 12.0.0;
 			};
 		};
+		17731CA97235124FCDAD5CED /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0A332AD1E5F81CAE54836754 /* GoogleUserMessagingPlatform */ = {
+		66F73953182D2D985D3C407C /* GoogleUserMessagingPlatform */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3D7C0287146B349888B040F9 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */;
+			package = 17731CA97235124FCDAD5CED /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */;
 			productName = GoogleUserMessagingPlatform;
 		};
-		2421316CD3366E77CD48F5D6 /* GoogleMobileAds */ = {
+		BF9EE43C831422F28A7CD0EF /* GoogleMobileAds */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F16B3145598FB0017B1C2973 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			package = 03C80041A71C073A95156B78 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 1332337326B528299ACDCE15 /* Project object */;
+	rootObject = 10B828F2299BB11FF11F8F1D /* Project object */;
 }

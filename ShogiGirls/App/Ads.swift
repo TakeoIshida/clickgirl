@@ -1,11 +1,27 @@
 import UIKit
 import GoogleMobileAds
-import UserMessagingPlatform
+import StoreKit
+import AppTrackingTransparency
 
 @MainActor final class Ads: NSObject, FullScreenContentDelegate {
+    private enum Availability: Equatable {
+        case checking
+        case enabled
+        case disabled
+    }
+
+    // GoogleのEEA向け同意要件の対象地域に英国・スイスを加える。
+    // Storefrontを取得できない場合も広告を開始しない（安全側）。
+    private static let advertisingDisabledRegions: Set<String> = [
+        "AT", "BE", "BG", "HR", "CY", "CZ", "DE", "DK", "EE", "ES", "FI",
+        "FR", "GR", "HU", "IE", "IS", "IT", "LI", "LT", "LU", "LV", "MT",
+        "NL", "NO", "PL", "PT", "RO", "SE", "SI", "SK", "GB", "CH"
+    ]
+
     private var rewarded: RewardedAd?
     private var interstitial: InterstitialAd?
     private var started = false
+    private var startRequested = false
     private var loading = false
     private var rewardEarned = false
     private var completion: ((Bool) -> Void)?
@@ -13,6 +29,7 @@ import UserMessagingPlatform
     private var completedGames = 0
     private var lastInterstitial = Date.distantPast
     private var seenResults: Set<UUID> = []
+    private var availability: Availability = .checking
     var testing = false
     var forceUnavailable = false
     private var productionReady: Bool { Bundle.main.object(forInfoDictionaryKey:"ShogiAdsProductionReady") as? Bool == true }
@@ -23,7 +40,6 @@ import UserMessagingPlatform
         return productionReady
         #endif
     }
-    var privacyRequired: Bool { ConsentInformation.shared.privacyOptionsRequirementStatus == .required }
     private var rewardID: String {
         #if DEBUG
         return "ca-app-pub-3940256099942544/1712485313"
@@ -38,41 +54,43 @@ import UserMessagingPlatform
         return Bundle.main.object(forInfoDictionaryKey:"ShogiInterstitialAdUnitID") as? String ?? ""
         #endif
     }
-    func start(from controller: UIViewController) {
-        guard enabled, !started else { return }
-        #if DEBUG
-        // The official sample app ID has no publisher-configured UMP form.
-        // This branch requests only Google's official test ad units.
-        if !productionReady {
-            started = true
-            MobileAds.shared.start { _ in Task { @MainActor in self.load() } }
-            return
-        }
-        #endif
-        ConsentInformation.shared.requestConsentInfoUpdate(with: RequestParameters()) { [weak self, weak controller] _ in
-            Task { @MainActor in
-                if let controller { try? await ConsentForm.loadAndPresentIfRequired(from: controller) }
-                guard let self, ConsentInformation.shared.canRequestAds, !self.started else { return }
-                self.started = true
-                MobileAds.shared.start { _ in Task { @MainActor in self.load() } }
+    func start(from _: UIViewController) {
+        guard enabled, !started, !startRequested else { return }
+        startRequested = true
+        Task { [weak self] in
+            guard let self else { return }
+            guard let countryCode = await self.storefrontCountryCode(),
+                  !Self.advertisingDisabledRegions.contains(countryCode) else {
+                self.availability = .disabled
+                self.startRequested = false
+                return
             }
+
+            await self.requestTrackingAuthorizationIfNeeded()
+            guard !self.started else { return }
+            self.availability = .enabled
+            self.started = true
+            _ = await MobileAds.shared.start()
+            self.load()
         }
     }
-    func privacy(from controller: UIViewController, completion: @escaping () -> Void) {
-        Task { @MainActor in
-            try? await ConsentForm.presentPrivacyOptionsForm(from:controller)
-            if !ConsentInformation.shared.canRequestAds { rewarded = nil; interstitial = nil }
-            else { load() }
-            completion()
+    private func storefrontCountryCode() async -> String? {
+        #if DEBUG
+        if let override = ProcessInfo.processInfo.environment["SHOGI_AD_REGION"],
+           override.count == 2 {
+            return override.uppercased()
+        }
+        #endif
+        return await Storefront.current?.countryCode.uppercased()
+    }
+    private func requestTrackingAuthorizationIfNeeded() async {
+        guard ATTrackingManager.trackingAuthorizationStatus == .notDetermined else { return }
+        await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+            ATTrackingManager.requestTrackingAuthorization { _ in continuation.resume() }
         }
     }
     private func load() {
-        #if DEBUG
-        let consentAllowed = !productionReady || ConsentInformation.shared.canRequestAds
-        #else
-        let consentAllowed = ConsentInformation.shared.canRequestAds
-        #endif
-        guard started, !loading, consentAllowed else { return }
+        guard started, availability == .enabled, !loading else { return }
         loading = true
         RewardedAd.load(with:rewardID,request:Request()) { [weak self] ad, _ in
             self?.rewarded = ad; ad?.fullScreenContentDelegate = self; self?.loading = false

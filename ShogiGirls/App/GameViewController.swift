@@ -1,6 +1,7 @@
 import UIKit
 import SpriteKit
 import AudioToolbox
+import StoreKit
 
 @MainActor final class GameViewController: UIViewController {
     private var store = SaveStore()
@@ -87,11 +88,17 @@ import AudioToolbox
         heading("将棋ガールズ",subtitle:"また会いたくなる、一局を。")
         let featured = Characters.find(store.state.lastCharacter)
         let portrait = Theme.portrait(featured); portrait.contentMode = .scaleAspectFit; portrait.heightAnchor.constraint(equalToConstant:160).isActive = true
-        let intro = Theme.stack([Theme.label("今日も、あなたと。",size:21,weight:.semibold),Theme.label("指して、勝って、\n彼女の新しい表情に出会おう。",size:13,color:Theme.muted),Theme.label("\(featured.name)  /  \(featured.subtitle)",size:12,color:Theme.green)],spacing:12)
+        let intro = Theme.stack([Theme.label("今日も、あなたと。",size:21,weight:.semibold),Theme.label("指すたび深まる絆。\n勝って、新しい表情に出会おう。",size:13,color:Theme.muted),Theme.label("\(featured.name)  /  \(featured.subtitle)",size:12,color:Theme.green)],spacing:12)
         let hero = Theme.stack([intro,portrait],axis:.horizontal,spacing:10); hero.distribution = .fillEqually
         content.addArrangedSubview(Theme.card(hero))
         energyLabel = Theme.label("",size:13,color:Theme.green,weight:.semibold); updateEnergy()
         content.addArrangedSubview(Theme.stack([energyLabel!,Theme.button("動画で +20",id:"energyReward") { [weak self] in self?.energyReward() }],axis:.horizontal))
+        let missionDone = store.dailyMissionCompleted()
+        let mission = Theme.stack([
+            Theme.label("今日の一局",size:17,weight:.semibold),
+            Theme.label(missionDone ? "達成！ 対局力 +20を受け取ったよ" : "対局を1局終える  \(store.dailyMissionProgress()) / 1\n達成報酬：対局力 +20",size:12,color:missionDone ? Theme.green : Theme.muted)
+        ],spacing:6)
+        let missionCard = Theme.card(mission); missionCard.accessibilityIdentifier = "dailyMission"; content.addArrangedSubview(missionCard)
         if let active = store.state.activeMatch {
             content.addArrangedSubview(Theme.button(active.result == nil ? "\(Characters.find(active.characterID).name)との対局を再開" : "前の対局結果を見る",id:"resume",primary:true) { [weak self] in self?.openMatch(active) })
         }
@@ -101,10 +108,10 @@ import AudioToolbox
                 let c = Characters.all[row*2+column], unlocked = store.unlocked(c.id), record = store.record(c.id)
                 let image = Theme.portrait(c); image.heightAnchor.constraint(equalToConstant:view.bounds.width > 600 ? 240 : 135).isActive = true
                 if !unlocked { image.alpha = 0.3 }
-                let stack = Theme.stack([image,Theme.label("\(String(format:"%02d",c.ai.level))  \(c.name)",size:19,weight:.semibold),Theme.label("\(c.difficulty) · \(c.subtitle)",size:11,color:Theme.muted),Theme.label("\(record.wins)勝  \(record.losses)敗  \(record.draws)分",size:12,color:Theme.green)],spacing:7)
+                let stack = Theme.stack([image,Theme.label("\(String(format:"%02d",c.ai.level))  \(c.name)",size:19,weight:.semibold),Theme.label("\(c.difficulty) · \(c.subtitle)",size:11,color:Theme.muted),Theme.label("\(record.wins)勝  \(record.losses)敗  \(record.draws)分",size:12,color:Theme.green),Theme.label("絆 Lv.\(record.bondLevel)  ·  \(record.bondPoints)pt",size:11,color:Theme.gold,weight:.semibold)],spacing:7)
                 stack.addArrangedSubview(Theme.button(unlocked ? "対局する" : "未解放",id:"character_\(c.id)",primary:unlocked) { [weak self] in
                     guard let self else { return }
-                    if unlocked { self.showSetup(c) } else { self.alert("\(c.name)への挑戦", "\(Characters.all[c.ai.level-2].name)に1勝すると解放されるよ。") }
+                    if unlocked { self.showSetup(c) } else { self.alert("\(c.name)への挑戦", "\(Characters.all[c.ai.level-2].name)に1勝するか、3局対局すると解放されるよ。") }
                 })
                 return Theme.card(stack,padding:10)
             }
@@ -128,8 +135,9 @@ import AudioToolbox
             handicap.menu = UIMenu(children:Handicap.allCases.map { h in UIAction(title:h.title,state:h == selectedHandicap ? .on : .off) { _ in selectedHandicap = h; refreshHandicap() } })
         }
         refreshHandicap(); content.addArrangedSubview(handicap)
-        content.addArrangedSubview(Theme.label("駒落ちは相手の駒を減らし、相手から指し始めるよ。\nどの条件でも、勝つと画像と次の相手が解放される。\n時間制限なし。対局はいつでも中断・再開できるよ。",size:13,color:Theme.muted))
-        content.addArrangedSubview(Theme.button("対局を始める  −20",id:"startMatch",primary:true) { [weak self] in
+        content.addArrangedSubview(Theme.label("駒落ちは相手の駒を減らし、相手から指し始めるよ。\n1勝または3局で次の相手を解放。勝つと特別な画像も増える。\n時間制限なし。対局はいつでも中断・再開できるよ。",size:13,color:Theme.muted))
+        let startTitle = store.hasBeginnerFreeMatch ? "対局を始める  最初の3局は無料" : "対局を始める  −20"
+        content.addArrangedSubview(Theme.button(startTitle,id:"startMatch",primary:true) { [weak self] in
             guard let self else { return }
             if let active = self.store.state.activeMatch { self.alert("進行中の対局があるよ", "先に再開して決着をつけよう。",actions:[("再開する",{ self.openMatch(active) })]); return }
             let player = Side(rawValue:side.selectedSegmentIndex) ?? .black
@@ -283,22 +291,39 @@ import AudioToolbox
     }
     private func adUnavailable() { alert("動画を読み込めなかったよ", "通信状態を確認して、少し時間をおいて試してね。報酬や利用回数は変更していないよ。") }
     private func finishMatch() {
-        guard let m = match, let result = m.result else { return }; cancelSearch(); newRewards = store.finish(m); setup("result")
+        guard let m = match, let result = m.result else { return }
+        let missionWasComplete = store.dailyMissionCompleted()
+        cancelSearch(); newRewards = store.finish(m)
+        let dailyRewarded = !missionWasComplete && store.dailyMissionCompleted()
+        setup("result")
         let c = Characters.find(m.characterID), won = result.winner == m.player
         heading(result.winner == nil ? "引き分け" : won ? "あなたの勝ち！" : "また、挑戦しよう",subtitle:"\(c.name)との一局  /  \(result.reason.title)")
         let image = Theme.portrait(c,imageName:"\(c.id)_\(result.winner == nil ? "base" : won ? "worry" : "happy")"); image.heightAnchor.constraint(equalToConstant:250).isActive = true; content.addArrangedSubview(image)
         content.addArrangedSubview(Theme.card(Theme.label("「\(c.line(for:result.winner == nil ? "draw" : won ? "lose" : "win"))」",size:18)))
         let record = store.record(c.id)
         content.addArrangedSubview(Theme.label("\(record.wins)勝  ·  \(record.losses)敗  ·  \(record.draws)分  /  勝率\(record.winRate)%",size:17,weight:.semibold))
+        content.addArrangedSubview(Theme.label("絆 Lv.\(record.bondLevel)  ·  \(record.bondPoints)pt  （勝利+3・引分+2・敗北+1）",size:14,color:Theme.gold,weight:.semibold))
+        if dailyRewarded {
+            let daily = Theme.card(Theme.stack([Theme.label("DAILY COMPLETE",size:11,color:Theme.gold,weight:.bold),Theme.label("今日の一局を達成！ 対局力 +20",size:18,weight:.semibold)])); daily.accessibilityIdentifier = "dailyCompleted"; content.addArrangedSubview(daily)
+        }
         for reward in newRewards {
             let unlock = Theme.card(Theme.stack([Theme.label("NEW MEMORY",size:11,color:Theme.gold,weight:.bold),Theme.label("\(reward.title)を解放！",size:20,weight:.semibold)])); unlock.accessibilityIdentifier = "rewardUnlocked"; content.addArrangedSubview(unlock)
             unlock.alpha = 0; UIView.animate(withDuration:0.5,delay:0.15,options:[]) { unlock.alpha = 1 }
         }
-        if won && record.wins == 1 && c.ai.level < 10 { content.addArrangedSubview(Theme.label("次の相手・\(Characters.all[c.ai.level].name)に挑戦できるようになったよ。",size:15,color:Theme.green)) }
+        if (record.wins == 1 || record.played == 3) && c.ai.level < 10 { content.addArrangedSubview(Theme.label("次の相手・\(Characters.all[c.ai.level].name)に挑戦できるようになったよ。",size:15,color:Theme.green)) }
         content.addArrangedSubview(Theme.button("もう一局",id:"retry",primary:true) { [weak self] in self?.store.dismissResult(); self?.match = nil; self?.showSetup(c) })
         content.addArrangedSubview(Theme.button("コレクションを見る",id:"resultGallery") { [weak self] in self?.store.dismissResult(); self?.match = nil; self?.showGallery(character:c) })
         content.addArrangedSubview(Theme.button("ホームへ",id:"resultHome") { [weak self] in self?.store.dismissResult(); self?.showHome() })
         ads.resultShown(id:m.id,from:self)
+        requestReviewIfAppropriate()
+    }
+    private func requestReviewIfAppropriate() {
+        guard !uiTesting, store.shouldRequestReview, newRewards.contains(where:{ $0.index >= 2 }) else { return }
+        store.markReviewPrompted()
+        DispatchQueue.main.asyncAfter(deadline:.now()+1.2) { [weak self] in
+            guard let scene = self?.view.window?.windowScene else { return }
+            SKStoreReviewController.requestReview(in:scene)
+        }
     }
     private func showGallery(character: CharacterProfile? = nil) {
         setup("gallery"); heading("コレクション",subtitle:"勝つたびに増える、ふたりの思い出。",back:{ [weak self] in self?.showHome() })
@@ -337,9 +362,8 @@ import AudioToolbox
             guard let url = URL(string:"https://takeoishida.github.io/clickgirl-site/shogi-girls/") else { return }
             UIApplication.shared.open(url)
         })
-        if ads.privacyRequired { content.addArrangedSubview(Theme.button("広告のプライバシー設定") { [weak self] in guard let self else { return }; self.ads.privacy(from:self) { self.showSettings() } }) }
-        content.addArrangedSubview(Theme.card(Theme.label("駒をタップして、行き先をタップ。持ち駒も同じ操作で打てるよ。敵陣に入ると『成る』を選べる駒がある。\n\n王手は必ず防ごう。逃げ道がなくなったら詰みで決着。二歩や王手放置などの反則手は選べないよ。\n\nヒントは1日3回無料。その後は動画で追加できる。『待った』は動画を見て1対局1回まで。\n\n1・3・5・10・20勝で画像を解放。駒落ちの勝利も数えるので、自分に合った強さで楽しんでね。\n\n千日手は引き分け。連続王手の千日手は王手側の負け。入玉宣言は玉が敵陣・王手なし・敵陣の駒10枚以上・先手28点／後手27点以上で使用可能（大駒5点、小駒1点、敵陣と持ち駒を計算）。駒落ちは相手に落とした駒の点数を加算。500手で引き分け。\n\n対局力は最大100、1対局20消費。3分で1回復。中断した対局の再開では消費しないよ。",size:14)))
-        content.addArrangedSubview(Theme.label("プライバシー\n戦績・対局・設定はこの端末内に保存します。ゲーム機能はアカウント登録不要です。広告を利用する場合、広告配信事業者のSDKが通信します。アプリ削除で端末内データは失われます。",size:12,color:Theme.muted))
-        content.addArrangedSubview(Theme.label("将棋ガールズ 1.0  ·  AIの段級位を保証するものではありません",size:11,color:Theme.muted))
+        content.addArrangedSubview(Theme.card(Theme.label("駒をタップして、行き先をタップ。持ち駒も同じ操作で打てるよ。敵陣に入ると『成る』を選べる駒がある。\n\n王手は必ず防ごう。逃げ道がなくなったら詰みで決着。二歩や王手放置などの反則手は選べないよ。\n\nヒントは1日3回無料。その後は動画で追加できる。『待った』は動画を見て1対局1回まで。\n\n対局を終えるたびに絆が深まる（勝利+3・引分+2・敗北+1）。1勝または3局で次の相手を解放。1・3・5・10・20勝で特別な画像を解放するよ。\n\n毎日最初の1局を終えると対局力+20。最初の3局は対局力を消費しないよ。\n\n千日手は引き分け。連続王手の千日手は王手側の負け。入玉宣言は玉が敵陣・王手なし・敵陣の駒10枚以上・先手28点／後手27点以上で使用可能（大駒5点、小駒1点、敵陣と持ち駒を計算）。駒落ちは相手に落とした駒の点数を加算。500手で引き分け。\n\n対局力は最大100、通常は1対局20消費。3分で1回復。中断した対局の再開では消費しないよ。",size:14)))
+        content.addArrangedSubview(Theme.label("プライバシー\n戦績・対局・設定はこの端末内に保存します。ゲーム機能はアカウント登録不要です。EEA・英国・スイスなどでは広告と計測を無効にします。その他の対象地域では、トラッキング許可の確認後に広告配信事業者のSDKが通信する場合があります。アプリ削除で端末内データは失われます。",size:12,color:Theme.muted))
+        content.addArrangedSubview(Theme.label("将棋ガールズ 1.1  ·  AIの段級位を保証するものではありません",size:11,color:Theme.muted))
     }
 }

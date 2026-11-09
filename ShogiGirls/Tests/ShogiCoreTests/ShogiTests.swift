@@ -144,4 +144,56 @@ final class ShogiTests: XCTestCase {
         defaults.set(Data([0,1]),forKey:SaveStore.key)
         let recovered = SaveStore(defaults:defaults); XCTAssertNotNil(recovered.recoveryMessage); XCTAssertEqual(recovered.record("koharu").wins,20)
     }
+    func testBeginnerProgressBondDailyMissionAndFreeMatches() {
+        let suite = "shogi-growth-\(UUID())"; let defaults = UserDefaults(suiteName:suite)!
+        defer { defaults.removePersistentDomain(forName:suite) }
+        let store = SaveStore(defaults:defaults)
+        let now = Date(timeIntervalSince1970:1_800_000_000)
+        store.update { $0.energy = 40; $0.energyDate = now }
+
+        for game in 1...3 {
+            var match = Match(characterID:"koharu",player:.black,handicap:.even)
+            XCTAssertTrue(store.begin(match,now:now))
+            XCTAssertEqual(store.energy(at:now),game == 1 ? 40 : 60, "The first three matches must not consume energy")
+            match.resign(.black)
+            XCTAssertTrue(store.finish(match,now:now).isEmpty)
+            store.dismissResult()
+        }
+
+        let record = store.record("koharu")
+        XCTAssertEqual(record.losses,3)
+        XCTAssertEqual(record.bondPoints,3)
+        XCTAssertEqual(record.bondLevel,2)
+        XCTAssertTrue(store.unlocked("hinata"), "One win or three completed matches should unlock the next character")
+        XCTAssertTrue(store.dailyMissionCompleted(at:now))
+        XCTAssertEqual(store.dailyMissionProgress(at:now),1)
+        XCTAssertEqual(store.energy(at:now),60, "The daily +20 reward must only be granted once")
+        XCTAssertFalse(store.hasBeginnerFreeMatch)
+    }
+    func testReviewPromptFlagPersists() {
+        let suite = "shogi-review-\(UUID())"; let defaults = UserDefaults(suiteName:suite)!
+        defer { defaults.removePersistentDomain(forName:suite) }
+        let store = SaveStore(defaults:defaults)
+        XCTAssertTrue(store.shouldRequestReview)
+        store.markReviewPrompted()
+        XCTAssertFalse(store.shouldRequestReview)
+        XCTAssertFalse(SaveStore(defaults:defaults).shouldRequestReview)
+    }
+    func testVersionOneSaveWithoutGrowthFieldsStillLoads() throws {
+        let suite = "shogi-legacy-\(UUID())"; let defaults = UserDefaults(suiteName:suite)!
+        defer { defaults.removePersistentDomain(forName:suite) }
+        var legacy = SaveState()
+        var record = MatchRecord(); record.wins = 2; record.losses = 1
+        legacy.records["koharu"] = record
+        let encoded = try JSONEncoder().encode(legacy)
+        var object = try XCTUnwrap(JSONSerialization.jsonObject(with:encoded) as? [String:Any])
+        for key in ["dailyMissionDay","dailyMissionMatches","dailyMissionRewardClaimed","reviewPrompted"] { object.removeValue(forKey:key) }
+        defaults.set(try JSONSerialization.data(withJSONObject:object),forKey:SaveStore.key)
+
+        let loaded = SaveStore(defaults:defaults)
+        XCTAssertNil(loaded.recoveryMessage)
+        XCTAssertEqual(loaded.record("koharu").wins,2)
+        XCTAssertEqual(loaded.record("koharu").bondPoints,7)
+        XCTAssertTrue(loaded.shouldRequestReview)
+    }
 }

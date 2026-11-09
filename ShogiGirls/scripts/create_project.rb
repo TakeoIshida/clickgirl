@@ -7,11 +7,16 @@ tests.add_dependency(app)
 group = project.main_group.new_group('Sources')
 Dir[File.join(root, 'Sources', 'ShogiCore', '*.swift'), File.join(root, 'App', '*.swift')].sort.each { |p| app.source_build_phase.add_file_reference(group.new_file(p.delete_prefix(root + '/'))) }
 resources = project.main_group.new_group('Resources')
-Dir[File.join(root, 'App', 'Resources', '*')].sort.each { |p| app.resources_build_phase.add_file_reference(resources.new_file(p.delete_prefix(root + '/'))) }
+root_resources = Dir[File.join(root, 'App', 'Resources', '*')].reject do |p|
+  (File.directory?(p) && File.basename(p) != 'Assets.xcassets') ||
+    File.basename(p).match?(/_(base|happy|worry|reward_[1-5])\.png\z/)
+end
+optimized_art = Dir[File.join(root, 'App', 'Resources', 'Optimized', '*.jpg')]
+(root_resources + optimized_art).sort.each { |p| app.resources_build_phase.add_file_reference(resources.new_file(p.delete_prefix(root + '/'))) }
 Dir[File.join(root, 'UITests', '*.swift')].each { |p| tests.source_build_phase.add_file_reference(group.new_file(p.delete_prefix(root + '/'))) }
 project.build_configurations.each { |c| c.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0' }
 app.build_configurations.each do |c|
-  c.build_settings.merge!({ 'SWIFT_VERSION' => '5.0', 'PRODUCT_BUNDLE_IDENTIFIER' => 'com.takeo.ShogiGirls', 'INFOPLIST_FILE' => 'App/Info.plist', 'TARGETED_DEVICE_FAMILY' => '1,2', 'DEVELOPMENT_TEAM' => 'JS3245KG7Q', 'CODE_SIGN_STYLE' => 'Automatic', 'MARKETING_VERSION' => '1.0.0', 'CURRENT_PROJECT_VERSION' => '1', 'SWIFT_OPTIMIZATION_LEVEL' => '-O', 'ASSETCATALOG_COMPILER_APPICON_NAME' => 'AppIcon' })
+  c.build_settings.merge!({ 'SWIFT_VERSION' => '5.0', 'PRODUCT_BUNDLE_IDENTIFIER' => 'com.takeo.ShogiGirls', 'INFOPLIST_FILE' => 'App/Info.plist', 'TARGETED_DEVICE_FAMILY' => '1,2', 'DEVELOPMENT_TEAM' => 'JS3245KG7Q', 'CODE_SIGN_STYLE' => 'Automatic', 'MARKETING_VERSION' => '1.1.0', 'CURRENT_PROJECT_VERSION' => '2', 'SWIFT_OPTIMIZATION_LEVEL' => '-O', 'ASSETCATALOG_COMPILER_APPICON_NAME' => 'AppIcon' })
   c.build_settings['SWIFT_ACTIVE_COMPILATION_CONDITIONS'] = 'DEBUG' if c.name == 'Debug'
 end
 tests.build_configurations.each { |c| c.build_settings.merge!({ 'SWIFT_VERSION' => '5.0', 'PRODUCT_BUNDLE_IDENTIFIER' => 'com.takeo.ShogiGirls.UITests', 'GENERATE_INFOPLIST_FILE' => 'YES', 'TEST_TARGET_NAME' => 'ShogiGirls', 'DEVELOPMENT_TEAM' => 'JS3245KG7Q' }) }

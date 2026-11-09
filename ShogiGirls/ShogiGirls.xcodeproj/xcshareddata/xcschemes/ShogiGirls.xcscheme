@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4075E0F8DB28B0399C2BB7AB"
+               BlueprintIdentifier = "0CBDAE65A0886C4BC2D363EB"
                BuildableName = "ShogiGirls.app"
                BlueprintName = "ShogiGirls"
                ReferencedContainer = "container:ShogiGirls.xcodeproj">
@@ -30,7 +30,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4075E0F8DB28B0399C2BB7AB"
+            BlueprintIdentifier = "0CBDAE65A0886C4BC2D363EB"
             BuildableName = "ShogiGirls.app"
             BlueprintName = "ShogiGirls"
             ReferencedContainer = "container:ShogiGirls.xcodeproj">
@@ -41,7 +41,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "29D84A41D51755E568FF805C"
+               BlueprintIdentifier = "282D254E10C065955082102E"
                BuildableName = "ShogiGirlsUITests.xctest"
                BlueprintName = "ShogiGirlsUITests"
                ReferencedContainer = "container:ShogiGirls.xcodeproj">
@@ -63,7 +63,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4075E0F8DB28B0399C2BB7AB"
+            BlueprintIdentifier = "0CBDAE65A0886C4BC2D363EB"
             BuildableName = "ShogiGirls.app"
             BlueprintName = "ShogiGirls"
             ReferencedContainer = "container:ShogiGirls.xcodeproj">
@@ -80,7 +80,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4075E0F8DB28B0399C2BB7AB"
+            BlueprintIdentifier = "0CBDAE65A0886C4BC2D363EB"
             BuildableName = "ShogiGirls.app"
             BlueprintName = "ShogiGirls"
             ReferencedContainer = "container:ShogiGirls.xcodeproj">
