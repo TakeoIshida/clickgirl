@@ -50,6 +50,8 @@ DebugはGoogle公式テスト広告を使用します。Releaseは `ShogiAdsProd
 
 2026年9月23日にGitHub ActionsのXcode 26.3／iOS 26.2 SDKで、バージョン1.0.0（ビルド1）の本番広告有効版をアーカイブし、App Store配布署名付きIPAをApp Store Connectへアップロードしました。実行結果は [GitHub Actions run 35866476008](https://github.com/TakeoIshida/clickgirl/actions/runs/35866476008) で確認できます。ローカルMacのXcode更新は不要です。
 
+2026年11月9日に同じGitHub Actions方式とXcode 26.3で、バージョン1.1.0（ビルド2）をApp Store Connectへアップロードしました。[GitHub Actions run 42626505795](https://github.com/TakeoIshida/clickgirl/actions/runs/42626505795) のArchive、IPA Export、Uploadがすべて成功し、Delivery UUIDは `cb5bf0f5-9d33-4865-93c1-010342011d41` です。Apple側の処理完了後にビルドを選択できます。審査提出は未実施です。
+
 `ITSAppUsesNonExemptEncryption` は `false` に設定済みです。ビルド1の輸出コンプライアンス回答も「非該当」で完了しています。2026年9月26日にApp Store Connectの「審査用に追加」を実行しましたが、13インチiPad用スクリーンショット、価格帯、App Review連絡先（名・姓・メール・電話番号）が未設定のため追加には至っていません。
 
 参照：[Googleの初期設定](https://developers.google.com/admob/ios/quick-start)、[UMP](https://developers.google.com/admob/ios/privacy)、[リワード広告](https://developers.google.com/admob/ios/rewarded)。
