@@ -9,6 +9,27 @@ struct Mission {
     let target: Int
 }
 
+struct DailyMission {
+    let id: String
+    let title: String
+    let detail: String
+    let baseReward: Double
+    let incomeSeconds: Double
+    let ticketReward: Int
+    let progress: (GameManager) -> Int
+    let target: Int
+
+    func reward(for manager: GameManager) -> Double {
+        max(baseReward, manager.totalIncomePerSec * incomeSeconds)
+    }
+}
+
+struct DailyMissionReward {
+    let mission: DailyMission
+    let money: Double
+    let tickets: Int
+}
+
 class GameManager {
     static let shared = GameManager()
 
@@ -19,6 +40,9 @@ class GameManager {
     var gachaTickets: Int = 0
     var employees: [Employee] = Employee.allEmployees
     var pendingOfflineIncome: Double = 0
+    var pendingComebackMoney: Double = 0
+    var pendingComebackTickets: Int = 0
+    var pendingComebackDays: Int = 0
     // 図鑑: キャラごとに選択した画像インデックス [charId: imageIndex]
     var selectedImageIndex: [Int: Int] = [:]
     // ショップ: 購入済み永続アップグレード
@@ -42,6 +66,16 @@ class GameManager {
     var officeUpgradeCount: Int = 0
     var cityBuildCount: Int = 0
     var lastDailyGachaAdDate: Date?
+    var dailyMissionDate: Date = Date()
+    var completedDailyMissionIDs: Set<String> = []
+    var dailyTapCount: Int = 0
+    var dailyGrowthActionCount: Int = 0
+    var dailyGachaPullCount: Int = 0
+    var dailyMissionStreak: Int = 0
+    var lastDailyMissionCompletionDate: Date?
+    var weeklyMissionWeekStart: Date = Date()
+    var weeklyCompletedDays: Int = 0
+    var weeklyRewardClaimed: Bool = false
 
     private let calendar = Calendar.current
 
@@ -49,6 +83,8 @@ class GameManager {
 
     private init() {
         loadGame()
+        ensureDailyMissionsCurrent()
+        ensureWeeklyMissionCurrent()
         calculateOfflineIncome()
     }
 
@@ -84,6 +120,38 @@ class GameManager {
         missions.first { !completedMissionIDs.contains($0.id) }
     }
 
+    var dailyMissions: [DailyMission] {
+        [
+            DailyMission(id: "daily_tap_50", title: "朝の営業",
+                         detail: "キャラを50回タップする", baseReward: 500,
+                         incomeSeconds: 60, ticketReward: 0,
+                         progress: { min($0.dailyTapCount, 50) }, target: 50),
+            DailyMission(id: "daily_growth_2", title: "会社を成長",
+                         detail: "採用・育成・設備強化を2回行う", baseReward: 1_500,
+                         incomeSeconds: 180, ticketReward: 0,
+                         progress: { min($0.dailyGrowthActionCount, 2) }, target: 2),
+            DailyMission(id: "daily_gacha_1", title: "今日の人材発掘",
+                         detail: "ガチャを1回引く", baseReward: 3_000,
+                         incomeSeconds: 300, ticketReward: 1,
+                         progress: { min($0.dailyGachaPullCount, 1) }, target: 1),
+        ]
+    }
+
+    var currentDailyMission: DailyMission? {
+        ensureDailyMissionsCurrent()
+        guard currentMission == nil else { return nil }
+        return dailyMissions.first { !completedDailyMissionIDs.contains($0.id) }
+    }
+
+    var dailyMissionStreakStep: Int {
+        min((dailyMissionStreak % 7) + 1, 7)
+    }
+
+    var weeklyMissionProgress: Int {
+        ensureWeeklyMissionCurrent()
+        return min(weeklyCompletedDays, 5)
+    }
+
     var canClaimDailyGachaAd: Bool {
         guard let last = lastDailyGachaAdDate else { return true }
         return !calendar.isDateInToday(last)
@@ -103,11 +171,13 @@ class GameManager {
     func recordRewardedOpportunity(_ placement: String) {
         let key = "cg_metric_rewarded_opportunity_\(placement)"
         UserDefaults.standard.set(UserDefaults.standard.integer(forKey: key) + 1, forKey: key)
+        AnalyticsManager.shared.logRewardedOpportunity(placement: placement)
     }
 
     func recordRewardedCompletion(_ placement: String) {
         let key = "cg_metric_rewarded_completion_\(placement)"
         UserDefaults.standard.set(UserDefaults.standard.integer(forKey: key) + 1, forKey: key)
+        AnalyticsManager.shared.logRewardedCompleted(placement: placement)
     }
 
     @discardableResult
@@ -247,20 +317,25 @@ class GameManager {
             purchasedUpgrades.insert(item.id)
         }
         shopPurchaseCount += 1
+        recordDailyGrowthAction()
         saveGame()
         return true
     }
 
     func recordGachaPull(count: Int) {
+        ensureDailyMissionsCurrent()
         gachaPullCount += count
+        dailyGachaPullCount += count
     }
 
     // MARK: - Actions
 
     @discardableResult
     func tap() -> Double {
+        ensureDailyMissionsCurrent()
         let earned = max(1.0, tapValue)
         lifetimeTaps += 1
+        dailyTapCount += 1
         money += earned
         totalEarned += earned
         return earned
@@ -273,6 +348,7 @@ class GameManager {
         money -= employees[index].hireCost
         employees[index].isHired = true
         employees[index].level = 1
+        recordDailyGrowthAction()
         saveGame()
         return true
     }
@@ -283,6 +359,7 @@ class GameManager {
               money >= employees[index].upgradeCost else { return false }
         money -= employees[index].upgradeCost
         employees[index].level += 1
+        recordDailyGrowthAction()
         saveGame()
         return true
     }
@@ -310,11 +387,31 @@ class GameManager {
         let maxHours: Double = purchasedUpgrades.contains("offline_ext") ? 16 : 8
         let effectiveTime = min(elapsed, maxHours * 3600)
         let earned = totalIncomePerSec * effectiveTime
-        guard earned > 0 else { return }
+        if earned > 0 {
+            money += earned
+            totalEarned += earned
+            pendingOfflineIncome = earned
+        }
 
-        money += earned
-        totalEarned += earned
-        pendingOfflineIncome = earned
+        let awayDays = Int(elapsed / 86_400)
+        if awayDays >= 3 {
+            let comebackMoney = max(10_000, totalIncomePerSec * 1_800)
+            let comebackTickets = min(3, max(1, awayDays / 3))
+            money += comebackMoney
+            totalEarned += comebackMoney
+            gachaTickets += comebackTickets
+            pendingComebackMoney = comebackMoney
+            pendingComebackTickets = comebackTickets
+            pendingComebackDays = awayDays
+            AnalyticsManager.shared.logComebackBonus(
+                awayDays: awayDays,
+                moneyReward: comebackMoney,
+                ticketReward: comebackTickets
+            )
+        }
+
+        lastSaveDate = now
+        UserDefaults.standard.set(now, forKey: "cg_lastSave")
     }
 
     // MARK: - Office Floors
@@ -328,6 +425,7 @@ class GameManager {
         money -= cost
         officeFloors += 1
         officeUpgradeCount += 1
+        recordDailyGrowthAction()
         saveGame()
         return true
     }
@@ -342,6 +440,7 @@ class GameManager {
         money -= t.placeCost
         cityBuildings[plot] = CityBuilding(typeId: typeId, level: 1)
         cityBuildCount += 1
+        recordDailyGrowthAction()
         saveGame()
         return true
     }
@@ -356,6 +455,7 @@ class GameManager {
         money -= cost
         bld.level += 1
         cityBuildings[plot] = bld
+        recordDailyGrowthAction()
         saveGame()
         return true
     }
@@ -372,8 +472,107 @@ class GameManager {
         money -= cost
         officeUpgrades[id] = current + 1
         officeUpgradeCount += 1
+        recordDailyGrowthAction()
         saveGame()
         return true
+    }
+
+    // MARK: - Daily Missions
+
+    @discardableResult
+    func claimCompletedDailyMissions() -> [DailyMissionReward] {
+        ensureDailyMissionsCurrent()
+        guard currentMission == nil else { return [] }
+
+        var claimed: [DailyMissionReward] = []
+        while let mission = dailyMissions.first(where: { !completedDailyMissionIDs.contains($0.id) }),
+              mission.progress(self) >= mission.target {
+            var rewardMoney = mission.reward(for: self)
+            var ticketReward = mission.ticketReward
+            let completesDay = mission.id == dailyMissions.last?.id
+            if completesDay {
+                updateDailyMissionStreak()
+                if dailyMissionStreak.isMultiple(of: 7) {
+                    rewardMoney += max(10_000, totalIncomePerSec * 900)
+                    ticketReward += 3
+                }
+                let weeklyBonus = recordWeeklyDailyCompletion()
+                rewardMoney += weeklyBonus.money
+                ticketReward += weeklyBonus.tickets
+            }
+            money += rewardMoney
+            totalEarned += rewardMoney
+            gachaTickets += ticketReward
+            completedDailyMissionIDs.insert(mission.id)
+            claimed.append(DailyMissionReward(mission: mission,
+                                              money: rewardMoney,
+                                              tickets: ticketReward))
+            AnalyticsManager.shared.logDailyMissionCompleted(
+                missionID: mission.id,
+                moneyReward: rewardMoney,
+                ticketReward: ticketReward
+            )
+            if completesDay {
+                AnalyticsManager.shared.logDailyMissionStreak(
+                    streak: dailyMissionStreak,
+                    receivedSevenDayBonus: dailyMissionStreak.isMultiple(of: 7)
+                )
+            }
+        }
+
+        if !claimed.isEmpty { saveGame() }
+        return claimed
+    }
+
+    private func recordDailyGrowthAction() {
+        ensureDailyMissionsCurrent()
+        dailyGrowthActionCount += 1
+    }
+
+    private func updateDailyMissionStreak() {
+        let now = Date()
+        if let last = lastDailyMissionCompletionDate {
+            if calendar.isDate(last, inSameDayAs: now) { return }
+            let previousDay = calendar.date(byAdding: .day, value: -1, to: now)
+            dailyMissionStreak = previousDay.map { calendar.isDate(last, inSameDayAs: $0) } == true
+                ? dailyMissionStreak + 1
+                : 1
+        } else {
+            dailyMissionStreak = 1
+        }
+        lastDailyMissionCompletionDate = now
+    }
+
+    private func recordWeeklyDailyCompletion() -> (money: Double, tickets: Int) {
+        ensureWeeklyMissionCurrent()
+        weeklyCompletedDays = min(weeklyCompletedDays + 1, 5)
+        guard weeklyCompletedDays >= 5, !weeklyRewardClaimed else { return (0, 0) }
+
+        weeklyRewardClaimed = true
+        let bonusMoney = max(50_000, totalIncomePerSec * 3_600)
+        AnalyticsManager.shared.logWeeklyMissionCompleted(
+            completedDays: weeklyCompletedDays,
+            moneyReward: bonusMoney,
+            ticketReward: 5
+        )
+        return (bonusMoney, 5)
+    }
+
+    private func ensureWeeklyMissionCurrent() {
+        guard let currentWeek = calendar.dateInterval(of: .weekOfYear, for: Date())?.start else { return }
+        guard !calendar.isDate(weeklyMissionWeekStart, inSameDayAs: currentWeek) else { return }
+        weeklyMissionWeekStart = currentWeek
+        weeklyCompletedDays = 0
+        weeklyRewardClaimed = false
+    }
+
+    private func ensureDailyMissionsCurrent() {
+        guard !calendar.isDateInToday(dailyMissionDate) else { return }
+        dailyMissionDate = Date()
+        completedDailyMissionIDs = []
+        dailyTapCount = 0
+        dailyGrowthActionCount = 0
+        dailyGachaPullCount = 0
     }
 
     // MARK: - Reset
@@ -385,7 +584,11 @@ class GameManager {
                     "cg_floors","cg_gachaPity","cg_gachaCards","cg_city",
                     "cg_lifetimeTaps","cg_gachaTickets","cg_starterPack",
                     "cg_completedMissions","cg_shopPurchases","cg_gachaPulls",
-                    "cg_officeUpgradeCount","cg_cityBuildCount","cg_dailyGachaAd"]
+                    "cg_officeUpgradeCount","cg_cityBuildCount","cg_dailyGachaAd",
+                    "cg_dailyMissionDate","cg_completedDailyMissions","cg_dailyTaps",
+                    "cg_dailyGrowthActions","cg_dailyGachaPulls","cg_dailyMissionStreak",
+                    "cg_lastDailyMissionCompletion","cg_weeklyMissionWeekStart",
+                    "cg_weeklyCompletedDays","cg_weeklyRewardClaimed"]
         keys.forEach { d.removeObject(forKey: $0) }
         money               = 0
         totalEarned         = 0
@@ -407,6 +610,16 @@ class GameManager {
         officeUpgradeCount  = 0
         cityBuildCount      = 0
         lastDailyGachaAdDate = nil
+        dailyMissionDate = Date()
+        completedDailyMissionIDs = []
+        dailyTapCount = 0
+        dailyGrowthActionCount = 0
+        dailyGachaPullCount = 0
+        dailyMissionStreak = 0
+        lastDailyMissionCompletionDate = nil
+        weeklyMissionWeekStart = Date()
+        weeklyCompletedDays = 0
+        weeklyRewardClaimed = false
     }
 
     // MARK: - Save / Load
@@ -424,6 +637,16 @@ class GameManager {
         d.set(officeUpgradeCount, forKey: "cg_officeUpgradeCount")
         d.set(cityBuildCount, forKey: "cg_cityBuildCount")
         d.set(lastDailyGachaAdDate, forKey: "cg_dailyGachaAd")
+        d.set(dailyMissionDate, forKey: "cg_dailyMissionDate")
+        d.set(Array(completedDailyMissionIDs), forKey: "cg_completedDailyMissions")
+        d.set(dailyTapCount, forKey: "cg_dailyTaps")
+        d.set(dailyGrowthActionCount, forKey: "cg_dailyGrowthActions")
+        d.set(dailyGachaPullCount, forKey: "cg_dailyGachaPulls")
+        d.set(dailyMissionStreak, forKey: "cg_dailyMissionStreak")
+        d.set(lastDailyMissionCompletionDate, forKey: "cg_lastDailyMissionCompletion")
+        d.set(weeklyMissionWeekStart, forKey: "cg_weeklyMissionWeekStart")
+        d.set(weeklyCompletedDays, forKey: "cg_weeklyCompletedDays")
+        d.set(weeklyRewardClaimed, forKey: "cg_weeklyRewardClaimed")
         d.set(Date(), forKey: "cg_lastSave")
 
         let empData = employees.map { e -> [String: Any] in
@@ -470,6 +693,18 @@ class GameManager {
         officeUpgradeCount = d.integer(forKey: "cg_officeUpgradeCount")
         cityBuildCount = d.integer(forKey: "cg_cityBuildCount")
         lastDailyGachaAdDate = d.object(forKey: "cg_dailyGachaAd") as? Date
+        dailyMissionDate = d.object(forKey: "cg_dailyMissionDate") as? Date ?? Date()
+        if let ids = d.array(forKey: "cg_completedDailyMissions") as? [String] {
+            completedDailyMissionIDs = Set(ids)
+        }
+        dailyTapCount = d.integer(forKey: "cg_dailyTaps")
+        dailyGrowthActionCount = d.integer(forKey: "cg_dailyGrowthActions")
+        dailyGachaPullCount = d.integer(forKey: "cg_dailyGachaPulls")
+        dailyMissionStreak = d.integer(forKey: "cg_dailyMissionStreak")
+        lastDailyMissionCompletionDate = d.object(forKey: "cg_lastDailyMissionCompletion") as? Date
+        weeklyMissionWeekStart = d.object(forKey: "cg_weeklyMissionWeekStart") as? Date ?? Date()
+        weeklyCompletedDays = d.integer(forKey: "cg_weeklyCompletedDays")
+        weeklyRewardClaimed = d.bool(forKey: "cg_weeklyRewardClaimed")
         lastSaveDate = d.object(forKey: "cg_lastSave") as? Date ?? Date()
 
         if let empData = d.array(forKey: "cg_employees") as? [[String: Any]] {

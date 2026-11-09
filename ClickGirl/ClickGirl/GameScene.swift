@@ -63,11 +63,19 @@ class GameScene: SKScene {
             showCompletedMissionRewards()
         }
 
-        if gm.pendingOfflineIncome > 0 {
+        if gm.pendingOfflineIncome > 0 || gm.pendingComebackTickets > 0 {
             run(SKAction.wait(forDuration: 0.5)) { [weak self] in
                 guard let self = self else { return }
-                self.showOfflinePopup(amount: self.gm.pendingOfflineIncome)
+                self.showOfflinePopup(
+                    amount: self.gm.pendingOfflineIncome,
+                    comebackMoney: self.gm.pendingComebackMoney,
+                    comebackTickets: self.gm.pendingComebackTickets,
+                    awayDays: self.gm.pendingComebackDays
+                )
                 self.gm.pendingOfflineIncome = 0
+                self.gm.pendingComebackMoney = 0
+                self.gm.pendingComebackTickets = 0
+                self.gm.pendingComebackDays = 0
             }
         }
     }
@@ -519,12 +527,22 @@ class GameScene: SKScene {
         panel.addChild(bg)
 
         let current = gm.currentMission
-        let titleText = current.map { "MISSION  \($0.title)" } ?? "MISSION  会社成長ロードマップ達成"
+        let daily = gm.currentDailyMission
+        let titleText: String
         let detailText: String
         if let mission = current {
+            titleText = "MISSION  \(mission.title)"
             detailText = "\(mission.detail)  \(mission.progress(gm))/\(mission.target)  報酬 ✦\(formatMoney(mission.reward))"
+        } else if let mission = daily {
+            let ticketText = mission.ticketReward > 0 ? " + 券\(mission.ticketReward)枚" : ""
+            titleText = "DAILY \(gm.dailyMissionStreakStep)/7・週\(gm.weeklyMissionProgress)/5  \(mission.title)"
+            detailText = "\(mission.detail)  \(mission.progress(gm))/\(mission.target)  報酬 ✦\(formatMoney(mission.reward(for: gm)))\(ticketText)"
         } else {
-            detailText = "ランキング上位を目指して会社をさらに大きくしよう"
+            let bonusText = gm.dailyMissionStreak.isMultiple(of: 7) && gm.dailyMissionStreak > 0
+                ? "7日ボーナス獲得。明日から新しい週です"
+                : "明日も達成で継続 \(gm.dailyMissionStreakStep)/7  週目標 \(gm.weeklyMissionProgress)/5"
+            titleText = "DAILY  \(gm.dailyMissionStreak)日継続"
+            detailText = bonusText
         }
 
         let title = SKLabelNode(text: titleText)
@@ -592,6 +610,7 @@ class GameScene: SKScene {
         gm.recordRewardedOpportunity("main_boost")
         AdManager.shared.showRewarded(
             from: rootVC,
+            placement: "main_boost",
             onRewarded: { [weak self] in
                 guard let self else { return }
                 self.gm.activateRewardedIncomeBoost(duration: 300)
@@ -607,7 +626,8 @@ class GameScene: SKScene {
 
     private func showCompletedMissionRewards() {
         let completed = gm.claimCompletedMissions()
-        guard !completed.isEmpty else {
+        let dailyCompleted = gm.claimCompletedDailyMissions()
+        guard !completed.isEmpty || !dailyCompleted.isEmpty else {
             setupMissionPanel()
             return
         }
@@ -615,8 +635,15 @@ class GameScene: SKScene {
         hudNode.update(money: gm.money, incomePerSec: gm.totalIncomePerSec)
         setupMissionPanel()
         let reward = completed.reduce(0.0) { $0 + $1.reward }
-        let names = completed.map(\.title).joined(separator: " / ")
-        showToast("ミッション達成: \(names)  +✦\(formatMoney(reward))")
+            + dailyCompleted.reduce(0.0) { $0 + $1.money }
+        let ticketReward = dailyCompleted.reduce(0) { $0 + $1.tickets }
+        let names = (completed.map(\.title) + dailyCompleted.map { $0.mission.title })
+            .joined(separator: " / ")
+        let ticketText = ticketReward > 0 ? "  ガチャ券+\(ticketReward)" : ""
+        let streakText = dailyCompleted.last?.mission.id == gm.dailyMissions.last?.id
+            ? "  \(gm.dailyMissionStreak)日継続"
+            : ""
+        showToast("ミッション達成: \(names)  +✦\(formatMoney(reward))\(ticketText)\(streakText)")
     }
 
     private func showStarterPackPopup() {
@@ -898,7 +925,10 @@ class GameScene: SKScene {
         ]))
     }
 
-    private func showOfflinePopup(amount: Double) {
+    private func showOfflinePopup(amount: Double,
+                                  comebackMoney: Double,
+                                  comebackTickets: Int,
+                                  awayDays: Int) {
         displayedOfflineIncome = amount
         let popup = SKNode()
         popup.zPosition = 50
@@ -923,14 +953,17 @@ class GameScene: SKScene {
         title.position = CGPoint(x: -20, y: 70)
         popup.addChild(title)
 
-        let amtLabel = SKLabelNode(text: "✦\(formatMoney(amount)) 獲得！")
+        let amtLabel = SKLabelNode(text: "✦\(formatMoney(amount + comebackMoney)) 獲得！")
         amtLabel.fontName = "HiraginoSans-W8"
         amtLabel.fontSize = 22
         amtLabel.fontColor = UIColor(red: 1.0, green: 0.92, blue: 0.2, alpha: 1.0)
         amtLabel.position = CGPoint(x: -20, y: 35)
         popup.addChild(amtLabel)
 
-        let sub = SKLabelNode(text: "放置中に社員が稼いでくれました")
+        let subText = comebackTickets > 0
+            ? "\(awayDays)日ぶりボーナス  ガチャ券+\(comebackTickets)"
+            : "放置中に社員が稼いでくれました"
+        let sub = SKLabelNode(text: subText)
         sub.fontName = "HiraginoSans-W3"
         sub.fontSize = 12
         sub.fontColor = .lightGray
@@ -938,12 +971,14 @@ class GameScene: SKScene {
         popup.addChild(sub)
 
         let collect = makeOfflineButton(name: "offlineCollectBtn", text: "そのまま受取", width: 118)
-        collect.position = CGPoint(x: -67, y: -70)
+        collect.position = CGPoint(x: amount > 0 ? -67 : 0, y: -70)
         popup.addChild(collect)
 
-        let double = makeOfflineButton(name: "offlineDoubleBtn", text: "動画で2倍", width: 118)
-        double.position = CGPoint(x: 67, y: -70)
-        popup.addChild(double)
+        if amount > 0 {
+            let double = makeOfflineButton(name: "offlineDoubleBtn", text: "動画で2倍", width: 118)
+            double.position = CGPoint(x: 67, y: -70)
+            popup.addChild(double)
+        }
 
         popup.setScale(0)
         popup.run(SKAction.sequence([
@@ -994,6 +1029,7 @@ class GameScene: SKScene {
         gm.recordRewardedOpportunity("offline_double")
         AdManager.shared.showRewarded(
             from: rootVC,
+            placement: "offline_double",
             onRewarded: { [weak self] in
                 guard let self else { return }
                 self.gm.money += bonus

@@ -10,6 +10,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        // ログインや追加の許可画面を出さず、利用状況と広告ファネルだけを計測する。
+        AnalyticsManager.shared.configure()
+
         // AdMob を即時初期化（検証タイミングより前に start() を済ませる）
         MobileAds.shared.start { _ in
             NotificationCenter.default.post(name: .adMobReady, object: nil)

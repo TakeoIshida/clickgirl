@@ -459,6 +459,7 @@ class ShopScene: SKScene {
         GameManager.shared.recordRewardedOpportunity("shop_boost")
         AdManager.shared.showRewarded(
             from: rootVC,
+            placement: "shop_boost",
             onRewarded: { [weak self] in
                 guard let self else { return }
                 let gm = GameManager.shared

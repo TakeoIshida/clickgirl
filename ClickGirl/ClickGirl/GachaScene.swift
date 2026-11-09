@@ -461,6 +461,7 @@ class GachaScene: SKScene {
         gm.recordRewardedOpportunity("daily_gacha")
         AdManager.shared.showRewarded(
             from: rootVC,
+            placement: "daily_gacha",
             onRewarded: { [weak self] in
                 guard let self else { return }
                 let (cards, newPity) = GachaCatalog.draw(count: 1, pityCount: self.gm.gachaPityCount)
