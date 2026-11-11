@@ -110,6 +110,52 @@ jobs:
             -exportOptionsPlist ShogiGirls/ExportOptions.plist \
             -exportPath "$RUNNER_TEMP/output"
 
+      - name: Validate exported privacy manifests
+        run: |
+          IPA_PATH=$(find "$RUNNER_TEMP/output" -maxdepth 1 -name '*.ipa' -print -quit)
+          if [ -z "$IPA_PATH" ]; then
+            echo "Exported IPA was not found."
+            exit 1
+          fi
+
+          IPA_CONTENTS="$RUNNER_TEMP/privacy-validation"
+          unzip -q "$IPA_PATH" -d "$IPA_CONTENTS"
+          python3 - "$IPA_CONTENTS" <<'PY'
+          import pathlib
+          import plistlib
+          import sys
+
+          root = pathlib.Path(sys.argv[1])
+          manifests = sorted(root.rglob("PrivacyInfo.xcprivacy"))
+          if not manifests:
+              raise SystemExit("No PrivacyInfo.xcprivacy files were found in the exported IPA.")
+
+          errors = []
+          for manifest in manifests:
+              with manifest.open("rb") as stream:
+                  values = plistlib.load(stream)
+
+              domains = values.get("NSPrivacyTrackingDomains")
+              tracking = values.get("NSPrivacyTracking")
+              relative_path = manifest.relative_to(root)
+
+              if domains and tracking is not True:
+                  errors.append(
+                      f"{relative_path}: NSPrivacyTracking must be true when "
+                      "NSPrivacyTrackingDomains is non-empty."
+                  )
+              if tracking is True and not domains:
+                  errors.append(
+                      f"{relative_path}: NSPrivacyTrackingDomains must be non-empty when "
+                      "NSPrivacyTracking is true."
+                  )
+
+          if errors:
+              raise SystemExit("\n".join(errors))
+
+          print(f"Validated {len(manifests)} privacy manifest(s) in the exported IPA.")
+          PY
+
       - name: Upload to App Store Connect
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
