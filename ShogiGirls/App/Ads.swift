@@ -59,6 +59,11 @@ import AppTrackingTransparency
         startRequested = true
         Task { [weak self] in
             guard let self else { return }
+            // App Store privacy declares tracking. Resolve ATT before any ad SDK
+            // initialization or region-dependent advertising decision so the
+            // first-launch review path is deterministic.
+            await self.requestTrackingAuthorizationIfNeeded()
+
             guard let countryCode = await self.storefrontCountryCode(),
                   !Self.advertisingDisabledRegions.contains(countryCode) else {
                 self.availability = .disabled
@@ -66,7 +71,6 @@ import AppTrackingTransparency
                 return
             }
 
-            await self.requestTrackingAuthorizationIfNeeded()
             guard !self.started else { return }
             self.availability = .enabled
             self.started = true

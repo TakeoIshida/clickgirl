@@ -330,7 +330,7 @@ import StoreKit
         if let c = character {
             let r = store.record(c.id); content.addArrangedSubview(Theme.label("\(c.name)  ·  \(r.wins)勝  /  解放 \(GalleryReward.all(for:c.id).filter { store.unlocked($0) }.count)/5",size:20,weight:.semibold))
             for reward in GalleryReward.all(for:c.id) {
-                let unlocked = store.unlocked(reward), available = UIImage(named:reward.id) != nil
+                let unlocked = store.unlocked(reward), available = Theme.image(named:reward.id) != nil
                 let image = Theme.portrait(c,imageName:available ? reward.id : c.imageName); image.heightAnchor.constraint(equalToConstant:220).isActive = true
                 if !unlocked { image.image = image.image?.withRenderingMode(.alwaysTemplate); image.tintColor = UIColor(hex:0x313B35); image.alpha = 0.35 }
                 let title = Theme.label(reward.title,size:18,weight:.semibold)
@@ -348,8 +348,8 @@ import StoreKit
     private func showArtwork(_ c: CharacterProfile, _ reward: GalleryReward) {
         guard store.unlocked(reward) else { return }
         setup("artwork"); heading(reward.title,subtitle:"\(c.name) / \(reward.requiredWins)勝の思い出",back:{ [weak self] in self?.showGallery(character:c) })
-        let image = Theme.portrait(c,imageName:UIImage(named:reward.id) != nil ? reward.id : c.imageName,cropFace:false); image.contentMode = .scaleAspectFit; image.heightAnchor.constraint(equalToConstant:view.bounds.height*0.68).isActive = true; content.addArrangedSubview(image)
-        if UIImage(named:reward.id) == nil { content.addArrangedSubview(Theme.label("イラスト準備中：現在は基本衣装を表示しています",size:12,color:Theme.muted)) }
+        let image = Theme.portrait(c,imageName:Theme.image(named:reward.id) != nil ? reward.id : c.imageName,cropFace:false); image.contentMode = .scaleAspectFit; image.heightAnchor.constraint(equalToConstant:view.bounds.height*0.68).isActive = true; content.addArrangedSubview(image)
+        if Theme.image(named:reward.id) == nil { content.addArrangedSubview(Theme.label("イラスト準備中：現在は基本衣装を表示しています",size:12,color:Theme.muted)) }
     }
     private func showSettings() {
         setup("settings"); heading("設定・遊び方",subtitle:"自分のペースで、気持ちよく。",back:{ [weak self] in self?.showHome() })

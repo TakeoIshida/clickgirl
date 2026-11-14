@@ -5,6 +5,21 @@ extension UIColor {
 }
 enum Theme {
     static let paper = UIColor(hex:0xF7F3EB), ink = UIColor(hex:0x303B37), muted = UIColor(hex:0x7B8277), green = UIColor(hex:0x496957), gold = UIColor(hex:0xBA965B)
+    static func image(named name: String) -> UIImage? {
+        if let image = UIImage(named:name) { return image }
+
+        let resource = name as NSString
+        let suppliedExtension = resource.pathExtension
+        let baseName = suppliedExtension.isEmpty ? name : resource.deletingPathExtension
+        let extensions = suppliedExtension.isEmpty ? ["jpg", "jpeg", "png"] : [suppliedExtension]
+        for fileExtension in extensions {
+            if let url = Bundle.main.url(forResource:baseName,withExtension:fileExtension),
+               let image = UIImage(contentsOfFile:url.path) {
+                return image
+            }
+        }
+        return nil
+    }
     static func label(_ text: String, size: CGFloat = 15, color: UIColor = ink, weight: UIFont.Weight = .regular) -> UILabel {
         let v = UILabel(); v.text = text; v.font = .systemFont(ofSize:size,weight:weight); v.textColor = color; v.numberOfLines = 0; return v
     }
@@ -21,7 +36,7 @@ enum Theme {
         return b
     }
     static func portrait(_ character: CharacterProfile, imageName: String? = nil, cropFace: Bool = true) -> UIImageView {
-        var image = UIImage(named:imageName ?? character.imageName) ?? UIImage(named:character.imageName)
+        var image = Theme.image(named:imageName ?? character.imageName) ?? Theme.image(named:character.imageName)
         // Face-focused display crop only; full original remains available in the gallery.
         if cropFace, let cg = image?.cgImage, cg.height > cg.width * 14 / 10,
            let top = cg.cropping(to:CGRect(x:0,y:0,width:cg.width,height:cg.width)) { image = UIImage(cgImage:top) }
