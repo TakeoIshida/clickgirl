@@ -1,0 +1,185 @@
+name: Deploy Houkago Daifugo to TestFlight
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout Deployment Configuration
+        uses: actions/checkout@v4
+        with:
+          path: Deployment
+
+      - name: Checkout Houkago Daifugo
+        uses: actions/checkout@v4
+        with:
+          repository: TakeoIshida/HoukagoDaifugo
+          path: HoukagoDaifugo
+          ssh-key: ${{ secrets.HOUKAGO_DAIFUGO_DEPLOY_KEY }}
+
+      - name: Select Xcode 26
+        run: |
+          XCODE26=$(ls /Applications/ | grep "Xcode_26" | head -1)
+          if [ -z "$XCODE26" ]; then
+            echo "Xcode 26 not found"
+            ls /Applications/ | grep Xcode
+            exit 1
+          fi
+          sudo xcode-select -s "/Applications/$XCODE26"
+          xcodebuild -version
+
+      - name: Import Distribution Certificate
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o certificate.p12
+          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security import certificate.p12 -k build.keychain -P "$P12_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+
+      - name: Setup App Store Connect API Key
+        env:
+          ASC_API_KEY_BASE64: ${{ secrets.ASC_API_KEY_BASE64 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        run: |
+          mkdir -p ~/.appstoreconnect/private_keys
+          echo -n "$ASC_API_KEY_BASE64" | base64 --decode -o ~/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8
+
+      - name: Ensure App Store Resources and Install Profile
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          python3 -m venv "$RUNNER_TEMP/asc-venv"
+          "$RUNNER_TEMP/asc-venv/bin/pip" install --quiet PyJWT cryptography
+          "$RUNNER_TEMP/asc-venv/bin/python" <<'PY'
+          import base64
+          import json
+          import os
+          import pathlib
+          import time
+          import urllib.parse
+          import urllib.request
+
+          import jwt
+
+          key_id = os.environ["ASC_KEY_ID"]
+          issuer_id = os.environ["ASC_ISSUER_ID"]
+          key_path = pathlib.Path.home() / ".appstoreconnect" / "private_keys" / f"AuthKey_{key_id}.p8"
+          token = jwt.encode(
+              {"iss": issuer_id, "iat": int(time.time()), "exp": int(time.time()) + 1200, "aud": "appstoreconnect-v1"},
+              key_path.read_text(),
+              algorithm="ES256",
+              headers={"kid": key_id, "typ": "JWT"},
+          )
+
+          def api(path, method="GET", payload=None):
+              data = None if payload is None else json.dumps(payload).encode()
+              request = urllib.request.Request(
+                  f"https://api.appstoreconnect.apple.com{path}",
+                  data=data,
+                  method=method,
+                  headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+              )
+              with urllib.request.urlopen(request) as response:
+                  return json.load(response)
+
+          bundle_identifier = "com.takeo.HoukagoDaifugo"
+          profile_name = "HoukagoDaifugo_AppStore_2026"
+
+          query = urllib.parse.urlencode({"filter[identifier]": bundle_identifier})
+          bundle_ids = api(f"/v1/bundleIds?{query}")["data"]
+          if bundle_ids:
+              bundle_id = bundle_ids[0]
+              print("Using existing bundle ID")
+          else:
+              bundle_id = api("/v1/bundleIds", "POST", {
+                  "data": {"type": "bundleIds", "attributes": {
+                      "identifier": bundle_identifier,
+                      "name": "HoukagoDaifugo",
+                      "platform": "IOS"
+                  }}
+              })["data"]
+              print("Created bundle ID")
+
+          app_query = urllib.parse.urlencode({"filter[bundleId]": bundle_identifier})
+          apps = api(f"/v1/apps?{app_query}")["data"]
+          if apps:
+              print("Using existing App Store Connect app")
+          else:
+              api("/v1/apps", "POST", {"data": {"type": "apps", "attributes": {
+                  "bundleId": bundle_identifier,
+                  "name": "放課後、大富豪！",
+                  "primaryLocale": "ja",
+                  "sku": "houkago-daifugo-ios"
+              }}})
+              print("Created App Store Connect app")
+
+          profile_query = urllib.parse.urlencode({"filter[name]": profile_name})
+          profiles = api(f"/v1/profiles?{profile_query}")["data"]
+          if profiles:
+              profile = profiles[0]
+              print("Using existing provisioning profile")
+          else:
+              certificates = [
+                  certificate for certificate in api("/v1/certificates")["data"]
+                  if certificate["attributes"]["certificateType"] in ("DISTRIBUTION", "IOS_DISTRIBUTION")
+              ]
+              if not certificates:
+                  raise SystemExit("No iOS Distribution certificate found")
+              profile = api("/v1/profiles", "POST", {"data": {
+                  "type": "profiles",
+                  "attributes": {"name": profile_name, "profileType": "IOS_APP_STORE"},
+                  "relationships": {
+                      "bundleId": {"data": {"type": "bundleIds", "id": bundle_id["id"]}},
+                      "certificates": {"data": [
+                          {"type": "certificates", "id": certificate["id"]} for certificate in certificates
+                      ]}
+                  }
+              }})["data"]
+              print("Created provisioning profile")
+
+          raw_profile = base64.b64decode(profile["attributes"]["profileContent"])
+          profiles_dir = pathlib.Path.home() / "Library" / "MobileDevice" / "Provisioning Profiles"
+          profiles_dir.mkdir(parents=True, exist_ok=True)
+          (profiles_dir / f"{profile['id']}.mobileprovision").write_bytes(raw_profile)
+          print(f"Installed {profile_name}")
+          PY
+
+      - name: Run Core Tests
+        run: swift test --package-path HoukagoDaifugo
+
+      - name: Build Archive
+        run: |
+          xcodebuild archive \
+            -project HoukagoDaifugo/HoukagoDaifugo.xcodeproj \
+            -scheme HoukagoDaifugo \
+            -configuration Release \
+            -destination generic/platform=iOS \
+            -archivePath "$RUNNER_TEMP/HoukagoDaifugo.xcarchive"
+
+      - name: Export IPA
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/HoukagoDaifugo.xcarchive" \
+            -exportOptionsPlist Deployment/HoukagoDaifugoExportOptions.plist \
+            -exportPath "$RUNNER_TEMP/output"
+
+      - name: Upload to App Store Connect
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          xcrun altool --upload-app \
+            --type ios \
+            --file "$RUNNER_TEMP/output/HoukagoDaifugo.ipa" \
+            --apiKey "$ASC_KEY_ID" \
+            --apiIssuer "$ASC_ISSUER_ID"
+
