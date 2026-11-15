@@ -59,10 +59,16 @@ import AppTrackingTransparency
         startRequested = true
         Task { [weak self] in
             guard let self else { return }
-            // App Store privacy declares tracking. Resolve ATT before any ad SDK
-            // initialization or region-dependent advertising decision so the
-            // first-launch review path is deterministic.
-            await self.requestTrackingAuthorizationIfNeeded()
+            // ATT only presents while the application is fully active. A view can
+            // appear slightly before that transition on a fast launch, especially
+            // on iPad, so wait for the active state and let the first frame settle.
+            // Keep every ad SDK call behind a resolved ATT status.
+            await self.requestTrackingAuthorizationWhenActive()
+            guard ATTrackingManager.trackingAuthorizationStatus != .notDetermined else {
+                self.startRequested = false
+                self.availability = .disabled
+                return
+            }
 
             guard let countryCode = await self.storefrontCountryCode(),
                   !Self.advertisingDisabledRegions.contains(countryCode) else {
@@ -87,10 +93,37 @@ import AppTrackingTransparency
         #endif
         return await Storefront.current?.countryCode.uppercased()
     }
-    private func requestTrackingAuthorizationIfNeeded() async {
+    private func requestTrackingAuthorizationWhenActive() async {
         guard ATTrackingManager.trackingAuthorizationStatus == .notDetermined else { return }
-        await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
-            ATTrackingManager.requestTrackingAuthorization { _ in continuation.resume() }
+
+        // Apple documents that ATT doesn't present unless UIApplication is active.
+        // Polling suspends the task, so this remains inexpensive while the app is
+        // inactive and works with both app-delegate and scene life cycles.
+        while UIApplication.shared.applicationState != .active {
+            try? await Task.sleep(nanoseconds: 100_000_000)
+        }
+
+        // Allow the key window and first frame to become presentation-ready.
+        try? await Task.sleep(nanoseconds: 600_000_000)
+
+        // The API may return .notDetermined without showing UI (for example if the
+        // system temporarily dismisses the request). Apple's documentation says
+        // to call it again in that case, so retry a small, bounded number of times.
+        for attempt in 0..<3 {
+            while UIApplication.shared.applicationState != .active {
+                try? await Task.sleep(nanoseconds: 100_000_000)
+            }
+            let status = await requestTrackingAuthorization()
+            if status != .notDetermined { return }
+            if attempt < 2 { try? await Task.sleep(nanoseconds: 800_000_000) }
+        }
+    }
+
+    private func requestTrackingAuthorization() async -> ATTrackingManager.AuthorizationStatus {
+        await withCheckedContinuation { continuation in
+            ATTrackingManager.requestTrackingAuthorization { status in
+                continuation.resume(returning: status)
+            }
         }
     }
     private func load() {
