@@ -24,8 +24,8 @@ class GameScene: SKScene {
     private let saveInterval: TimeInterval = 30
     private var autoTapAccum: TimeInterval = 0
     private var mainCharImageName: String {
-        gm.selectedNobgImageName(for: 0)
-            .isEmpty ? "airi_4_nobg" : gm.selectedNobgImageName(for: 0)
+        let selected = gm.selectedNobgImageName(for: gm.selectedMainCharacterID)
+        return selected.isEmpty ? "airi_4_nobg" : selected
     }
 
     // タッチ判別
@@ -483,11 +483,17 @@ class GameScene: SKScene {
     private func handleEmployeeTap(id: Int, area: CardTapArea) {
         let emp = gm.employees.first(where: { $0.id == id })!
 
-        if emp.isHired && area == .character {
+        if area == .character {
+            guard emp.isHired else {
+                showToast("採用ボタンから仲間にできます")
+                return
+            }
             // キャラ画像エリアタップ → メインキャラ切替
-            let nobgName = emp.imageNameNobg
-            let safeName = UIImage(named: nobgName) != nil ? nobgName : emp.imageName
+            let imageName = gm.selectedNobgImageName(for: id)
+            let safeName = UIImage(named: imageName) != nil ? imageName : emp.imageName
             switchMainChar(to: safeName, name: emp.name)
+            gm.selectedMainCharacterID = id
+            gm.saveGame()
             return
         }
 
@@ -570,7 +576,7 @@ class GameScene: SKScene {
     private func setupRewardBoostButton() {
         let button = SKNode()
         button.name = "mainRewardBoostBtn"
-        button.position = CGPoint(x: frame.midX, y: frame.height - hudNode.hudHeight - 72)
+        button.position = CGPoint(x: frame.midX, y: frame.height - hudNode.hudHeight - 84)
         button.zPosition = 12
 
         let bg = SKShapeNode(rectOf: CGSize(width: min(frame.width - 42, 310), height: 34), cornerRadius: 17)

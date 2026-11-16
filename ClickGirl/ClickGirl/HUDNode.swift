@@ -75,6 +75,12 @@ class HUDNode: SKNode {
             lbl.position = CGPoint(x: x, y: 38)
             lbl.name     = name
             addChild(lbl)
+
+            let hitArea = SKSpriteNode(color: UIColor.white.withAlphaComponent(0.001),
+                                       size: CGSize(width: 44, height: 44))
+            hitArea.position = bg.position
+            hitArea.name = name
+            addChild(hitArea)
         }
 
         // ナビボタン 4つ（2列×2行）
@@ -113,6 +119,12 @@ class HUDNode: SKNode {
             lbl.position  = bg.position
             lbl.name      = btn.name
             addChild(lbl)
+
+            let hitArea = SKSpriteNode(color: UIColor.white.withAlphaComponent(0.001),
+                                       size: CGSize(width: btnW, height: 44))
+            hitArea.position = bg.position
+            hitArea.name = btn.name
+            addChild(hitArea)
         }
 
         // ガチャボタンにパルスグロー（注目を引く）

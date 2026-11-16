@@ -10,7 +10,7 @@ class CharSelectScene: SKScene {
 
     override func didMove(to view: SKView) {
         backgroundColor = darkBg
-        selectedCharId  = gm.selectedImageIndex.keys.first ?? 0
+        selectedCharId  = gm.selectedMainCharacterID
         addTopBar()
         addCards()
     }
@@ -44,6 +44,12 @@ class CharSelectScene: SKScene {
         back.position  = CGPoint(x: 16, y: frame.height - 33)
         back.name      = "backBtn"
         addChild(back)
+
+        let backHitArea = SKSpriteNode(color: UIColor.white.withAlphaComponent(0.001),
+                                       size: CGSize(width: 88, height: 44))
+        backHitArea.position = CGPoint(x: 44, y: frame.height - 28)
+        backHitArea.name = "backBtn"
+        addChild(backHitArea)
 
         let hint = SKLabelNode(text: "解放済みキャラをメインに設定できます")
         hint.fontName  = "HiraginoSans-W3"
@@ -218,9 +224,7 @@ class CharSelectScene: SKScene {
                 return
             }
             selectedCharId = id
-            // GameManager に反映
-            let imgIdx = gm.selectedImageIndex[id] ?? 0
-            gm.selectedImageIndex = [id: imgIdx]
+            gm.selectedMainCharacterID = id
             gm.saveGame()
 
             // 再描画

@@ -329,14 +329,6 @@ class ShopScene: SKScene {
                 }
                 return
             }
-            if name.hasPrefix("card_") {
-                let id = String(name.dropFirst(5))
-                let items = isPermanentTab ? ShopCatalog.permanentItems : ShopCatalog.boostItems
-                if let item = items.first(where: { $0.id == id }) {
-                    attemptPurchase(item)
-                }
-                return
-            }
         }
     }
 

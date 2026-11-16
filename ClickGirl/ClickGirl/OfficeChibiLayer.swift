@@ -215,9 +215,9 @@ private class TopDownChiib: SKNode {
     private let home: CGPoint
     private var balloon: SKNode?
 
-    // デフォルメキャラの表示サイズ（縦長画像 784×1176 に合わせて縮小）
-    private let chibiW: CGFloat = 36
-    private var chibiH: CGFloat = 24
+    // オフィス専用ドット絵は全員同じ高さで表示し、元画像の比率を維持する。
+    private var chibiW: CGFloat = 34
+    private var chibiH: CGFloat = 46
 
     init(emp: Employee, bounds: CGRect, home: CGPoint) {
         self.emp = emp
@@ -231,22 +231,23 @@ private class TopDownChiib: SKNode {
     // MARK: デフォルメキャラ組み立て
 
     private func buildChibi() {
-        let imgName = GameManager.shared.selectedNobgImageName(for: emp.id)
-        let nobgName = imgName.isEmpty ? "\(emp.charPrefix)_0_nobg" : imgName
-        let selectedIdx = GameManager.shared.selectedImageIndex[emp.id] ?? 0
-        // nobg 画像が存在しない場合は通常画像にフォールバック
-        let texName = UIImage(named: nobgName) != nil ? nobgName : "\(emp.charPrefix)_\(selectedIdx)"
+        let pixelArtName = "chibi_\(emp.charPrefix)"
+        let selectedImage = GameManager.shared.selectedNobgImageName(for: emp.id)
+        let fallbackName = selectedImage.isEmpty ? "\(emp.charPrefix)_0_nobg" : selectedImage
+        let texName = UIImage(named: pixelArtName) != nil ? pixelArtName : fallbackName
         let tex = SKTexture(imageNamed: texName)
+        tex.filteringMode = .nearest
 
         // UIImage でアスペクト比を確実に取得（SKTexture はシーン復帰直後にサイズ未取得の場合あり）
-        let ratio: CGFloat
+        let widthToHeight: CGFloat
         if let img = UIImage(named: texName), img.size.width > 0 {
-            ratio = img.size.height / img.size.width
+            widthToHeight = img.size.width / img.size.height
         } else {
             let s = tex.size()
-            ratio = s.width > 0 ? s.height / s.width : 1.4
+            widthToHeight = s.height > 0 ? s.width / s.height : 0.75
         }
-        chibiH = max(chibiW * ratio, 20)
+        chibiH = 46
+        chibiW = min(44, chibiH * widthToHeight)
 
         // 足元の楕円影
         let shadow = SKShapeNode(ellipseOf: CGSize(width: chibiW * 0.75, height: 5))
@@ -256,9 +257,8 @@ private class TopDownChiib: SKNode {
         shadow.zPosition = 1
         addChild(shadow)
 
-        // キャラクタースプライト（縦に少し伸ばしてデフォルメ感を強調）
         let sprite = SKSpriteNode(texture: tex,
-                                  size: CGSize(width: chibiW, height: chibiH * 1.35))
+                                  size: CGSize(width: chibiW, height: chibiH))
         sprite.anchorPoint = CGPoint(x: 0.5, y: 0.0)
         sprite.position = CGPoint(x: 0, y: 2)
         sprite.name = "chibiSprite"

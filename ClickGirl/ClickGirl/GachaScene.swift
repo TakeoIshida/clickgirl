@@ -310,7 +310,7 @@ class GachaScene: SKScene {
         let btnW = (frame.width - 48.0) / 2
         let btnH: CGFloat = 62
         let btnY: CGFloat = 120
-        let singleCostText = gm.gachaTickets > 0 ? "ガチャ券\(gm.gachaTickets)枚" : "✦\(formatMoney(GachaCatalog.singleCost))"
+        let singleCostText = gm.gachaTickets > 0 ? "券1枚（所持\(gm.gachaTickets)）" : "✦\(formatMoney(GachaCatalog.singleCost))"
         let configs: [(x: CGFloat, icon: String, title: String, costText: String, name: String)] = [
             (frame.width / 4.0,       "🎲", "1回ガチャ",  singleCostText, "btn1"),
             (frame.width * 3.0 / 4.0, "🎰", "10連ガチャ", "✦\(formatMoney(GachaCatalog.tenCost))", "btn10"),

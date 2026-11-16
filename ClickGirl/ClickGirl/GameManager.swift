@@ -45,6 +45,8 @@ class GameManager {
     var pendingComebackDays: Int = 0
     // 図鑑: キャラごとに選択した画像インデックス [charId: imageIndex]
     var selectedImageIndex: [Int: Int] = [:]
+    // メイン画面に表示するキャラ。図鑑の画像選択とは分けて保存する。
+    var selectedMainCharacterID: Int = 0
     // ショップ: 購入済み永続アップグレード
     var purchasedUpgrades: Set<String> = []
     // ショップ: 時限ブースト [id: 有効期限Date]
@@ -580,7 +582,7 @@ class GameManager {
     func resetAll() {
         let d = UserDefaults.standard
         let keys = ["cg_money","cg_totalEarned","cg_lastSave","cg_employees",
-                    "cg_selImg","cg_upgrades","cg_boosts","cg_office",
+                    "cg_selImg","cg_mainCharacter","cg_upgrades","cg_boosts","cg_office",
                     "cg_floors","cg_gachaPity","cg_gachaCards","cg_city",
                     "cg_lifetimeTaps","cg_gachaTickets","cg_starterPack",
                     "cg_completedMissions","cg_shopPurchases","cg_gachaPulls",
@@ -596,6 +598,7 @@ class GameManager {
         gachaTickets        = 0
         employees           = Employee.allEmployees
         selectedImageIndex  = [:]
+        selectedMainCharacterID = 0
         purchasedUpgrades   = []
         activeBoosts        = [:]
         officeUpgrades      = [:]
@@ -654,6 +657,7 @@ class GameManager {
         }
         d.set(empData, forKey: "cg_employees")
         d.set(selectedImageIndex.map { ["id": $0.key, "idx": $0.value] }, forKey: "cg_selImg")
+        d.set(selectedMainCharacterID, forKey: "cg_mainCharacter")
 
         // ショップ
         d.set(Array(purchasedUpgrades), forKey: "cg_upgrades")
@@ -724,6 +728,9 @@ class GameManager {
                 }
             }
         }
+        selectedMainCharacterID = d.object(forKey: "cg_mainCharacter") == nil
+            ? 0
+            : d.integer(forKey: "cg_mainCharacter")
 
         // ショップ
         if let upgrades = d.array(forKey: "cg_upgrades") as? [String] {

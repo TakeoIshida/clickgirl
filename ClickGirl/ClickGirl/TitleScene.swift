@@ -176,7 +176,7 @@ class TitleScene: SKScene {
             btn.name     = name
             btn.position = CGPoint(x: x, y: frame.height * 0.08)
 
-            let bg = SKShapeNode(rectOf: CGSize(width: 140, height: 34), cornerRadius: 10)
+            let bg = SKShapeNode(rectOf: CGSize(width: 140, height: 44), cornerRadius: 10)
             bg.fillColor   = UIColor(white: 1, alpha: 0.05)
             bg.strokeColor = UIColor(white: 1, alpha: 0.18)
             bg.lineWidth   = 1

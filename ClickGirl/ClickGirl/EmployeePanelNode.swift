@@ -152,18 +152,18 @@ class EmployeeCardNode: SKNode {
             incLabel.fontName = "HiraginoSans-W3"
             incLabel.fontSize = 10
             incLabel.fontColor = UIColor(red: 0.4, green: 1.0, blue: 0.5, alpha: 0.9)
-            incLabel.position = CGPoint(x: 0, y: -65)
+            incLabel.position = CGPoint(x: 0, y: -53)
             incLabel.zPosition = 2
             incLabel.name = "empCard_\(employee.id)"
             addChild(incLabel)
 
             // アップグレードボタン
-            let upgBtnSize = CGSize(width: 120, height: 26)
+            let upgBtnSize = CGSize(width: 120, height: 32)
             let upgBtn = SKShapeNode(rectOf: upgBtnSize, cornerRadius: 8)
             upgBtn.fillColor = UIColor(red: 0.15, green: 0.35, blue: 0.7, alpha: 0.9)
             upgBtn.strokeColor = UIColor(red: 0.4, green: 0.6, blue: 1.0, alpha: 0.8)
             upgBtn.lineWidth = 1
-            upgBtn.position = CGPoint(x: 0, y: -75)
+            upgBtn.position = CGPoint(x: 0, y: -73)
             upgBtn.name = "empCard_\(employee.id)"
             addChild(upgBtn)
             actionBtnPos  = upgBtn.position
@@ -174,7 +174,7 @@ class EmployeeCardNode: SKNode {
             upgLabel.fontSize = 11
             upgLabel.fontColor = .white
             upgLabel.verticalAlignmentMode = .center
-            upgLabel.position = CGPoint(x: 0, y: -75)
+            upgLabel.position = upgBtn.position
             upgLabel.name = "empCard_\(employee.id)"
             addChild(upgLabel)
 
@@ -182,12 +182,12 @@ class EmployeeCardNode: SKNode {
 
         } else {
             // 採用ボタン
-            let hireBtnSize = CGSize(width: 120, height: 30)
+            let hireBtnSize = CGSize(width: 120, height: 36)
             let hireBtn = SKShapeNode(rectOf: hireBtnSize, cornerRadius: 10)
             hireBtn.fillColor = UIColor(red: 0.7, green: 0.2, blue: 0.6, alpha: 0.9)
             hireBtn.strokeColor = UIColor(red: 1.0, green: 0.5, blue: 0.9, alpha: 0.8)
             hireBtn.lineWidth = 1.5
-            hireBtn.position = CGPoint(x: 0, y: -68)
+            hireBtn.position = CGPoint(x: 0, y: -70)
             hireBtn.name = "empCard_\(employee.id)"
             addChild(hireBtn)
             actionBtnPos  = hireBtn.position
@@ -198,7 +198,7 @@ class EmployeeCardNode: SKNode {
             hireLabel.fontSize = 11
             hireLabel.fontColor = .white
             hireLabel.verticalAlignmentMode = .center
-            hireLabel.position = CGPoint(x: 0, y: -68)
+            hireLabel.position = hireBtn.position
             hireLabel.name = "empCard_\(employee.id)"
             addChild(hireLabel)
 
@@ -295,6 +295,14 @@ class EmployeePanelNode: SKNode {
         titleLabel.position  = CGPoint(x: panelWidth / 2, y: panelHeight - 14)
         addChild(titleLabel)
 
+        let swipeHint = SKLabelNode(text: "左右にスワイプ")
+        swipeHint.fontName = "HiraginoSans-W3"
+        swipeHint.fontSize = 9
+        swipeHint.fontColor = UIColor(white: 1, alpha: 0.42)
+        swipeHint.horizontalAlignmentMode = .right
+        swipeHint.position = CGPoint(x: panelWidth - 12, y: panelHeight - 14)
+        addChild(swipeHint)
+
         let rightStar = SKLabelNode(text: "✦")
         rightStar.fontName  = leftStar.fontName
         rightStar.fontSize  = 9
@@ -380,13 +388,19 @@ class EmployeePanelNode: SKNode {
         let index = Int((localX - 5) / cardSpacing)
         let employees = GameManager.shared.employees
         guard index >= 0 && index < employees.count else { return nil }
+        let cardCenterX = CGFloat(index) * cardSpacing + 75
+        guard abs(localX - cardCenterX) <= 70 else { return nil }
 
-        // カード内のY座標（カード中心が y=95）
-        // 上半分（キャラ画像・名前）→ .character、下半分（ボタン）→ .button
+        // 見えているボタンだけを購入領域にする。ラベルや余白では購入しない。
         let cardCenterY: CGFloat = 95
-        let localY = location.y - cardCenterY   // カード中心からの相対Y
-        let area: CardTapArea = localY > -30 ? .character : .button
+        let localY = location.y - cardCenterY
+        let employee = employees[index]
+        let buttonCenterY: CGFloat = employee.isHired ? -73 : -70
+        let buttonHeight: CGFloat = employee.isHired ? 32 : 36
+        let inButton = abs(localY - buttonCenterY) <= buttonHeight / 2
 
-        return (id: employees[index].id, area: area)
+        if inButton { return (id: employee.id, area: .button) }
+        guard localY > -40 else { return nil }
+        return (id: employee.id, area: .character)
     }
 }
