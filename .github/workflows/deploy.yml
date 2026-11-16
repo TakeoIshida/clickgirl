@@ -91,8 +91,11 @@ jobs:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
         run: |
-          xcrun altool --upload-app \
+          set -o pipefail
+          UPLOAD_LOG=$(xcrun altool --upload-app \
             --type ios \
             --file $RUNNER_TEMP/output/ClickGirl.ipa \
             --apiKey "$ASC_KEY_ID" \
-            --apiIssuer "$ASC_ISSUER_ID"
+            --apiIssuer "$ASC_ISSUER_ID" 2>&1)
+          echo "$UPLOAD_LOG"
+          echo "$UPLOAD_LOG" | grep -q "UPLOAD SUCCEEDED"
