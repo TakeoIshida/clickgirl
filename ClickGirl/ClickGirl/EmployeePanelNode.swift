@@ -88,10 +88,11 @@ class EmployeeCardNode: SKNode {
         bg.name = "empCard_\(employee.id)"
         addChild(bg)
 
-        // キャラ画像（背景あり・アスペクト比を保持・最大高さ110pt）
-        let charTexture = SKTexture(imageNamed: employee.imageName)
+        // 未採用時は背景なし画像を黒く塗りつぶし、姿の詳細を隠す。
+        let charImageName = employee.isHired ? employee.imageName : employee.imageNameNobg
+        let charTexture = SKTexture(imageNamed: charImageName)
         let ratio: CGFloat
-        if let img = UIImage(named: employee.imageName), img.size.width > 0 {
+        if let img = UIImage(named: charImageName), img.size.width > 0 {
             ratio = img.size.height / img.size.width
         } else if charTexture.size().width > 0 {
             ratio = charTexture.size().height / charTexture.size().width
@@ -111,9 +112,8 @@ class EmployeeCardNode: SKNode {
         charNode.zPosition = 0
         charNode.name = "empCard_\(employee.id)"
         if !employee.isHired {
-            charNode.alpha = 0.35
             charNode.color = .black
-            charNode.colorBlendFactor = 0.5
+            charNode.colorBlendFactor = 1.0
         }
         addChild(charNode)
 

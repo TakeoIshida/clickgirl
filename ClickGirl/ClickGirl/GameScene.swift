@@ -374,7 +374,7 @@ class GameScene: SKScene {
 
     private func openRanking() {
         gm.saveGame()
-        let scene = RankingScene(size: frame.size)
+        let scene = RankingScene(size: frame.size, returnDestination: .game)
         scene.scaleMode = .resizeFill
         view?.presentScene(scene, transition: SKTransition.push(with: .left, duration: 0.3))
     }

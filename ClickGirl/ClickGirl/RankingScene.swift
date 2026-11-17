@@ -1,6 +1,11 @@
 import SpriteKit
 import GameKit
 
+enum RankingReturnDestination {
+    case title
+    case game
+}
+
 class RankingScene: SKScene {
 
     private let gold   = UIColor(red: 1.0,  green: 0.85, blue: 0.2,  alpha: 1)
@@ -8,6 +13,22 @@ class RankingScene: SKScene {
 
     private var listContainer: SKNode?
     private var loadingLabel: SKLabelNode?
+    private let returnDestination: RankingReturnDestination
+
+    override init(size: CGSize) {
+        returnDestination = .title
+        super.init(size: size)
+    }
+
+    init(size: CGSize, returnDestination: RankingReturnDestination) {
+        self.returnDestination = returnDestination
+        super.init(size: size)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        returnDestination = .title
+        super.init(coder: aDecoder)
+    }
 
     override func didMove(to view: SKView) {
         backgroundColor = darkBg
@@ -245,9 +266,14 @@ class RankingScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let loc = touches.first?.location(in: self) else { return }
         guard atPoint(loc).name == "backBtn" else { return }
-        view?.presentScene(
-            TitleScene(size: size),
-            transition: SKTransition.push(with: .right, duration: 0.3)
-        )
+        let destination: SKScene
+        switch returnDestination {
+        case .title:
+            destination = TitleScene(size: size)
+        case .game:
+            destination = GameScene(size: size)
+        }
+        destination.scaleMode = scaleMode
+        view?.presentScene(destination, transition: SKTransition.push(with: .right, duration: 0.3))
     }
 }
