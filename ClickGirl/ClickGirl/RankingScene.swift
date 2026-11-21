@@ -14,6 +14,8 @@ class RankingScene: SKScene {
     private var listContainer: SKNode?
     private var loadingLabel: SKLabelNode?
     private let returnDestination: RankingReturnDestination
+    private var safeAreaTop: CGFloat = 0
+    private var topBarH: CGFloat { 54 + safeAreaTop }
 
     override init(size: CGSize) {
         returnDestination = .title
@@ -31,6 +33,7 @@ class RankingScene: SKScene {
     }
 
     override func didMove(to view: SKView) {
+        safeAreaTop = view.safeAreaInsets.top
         backgroundColor = darkBg
         addTopBar()
         addMyRankBanner(entry: nil)
@@ -40,23 +43,24 @@ class RankingScene: SKScene {
 
     // MARK: - TopBar
     private func addTopBar() {
-        let bar = SKShapeNode(rectOf: CGSize(width: frame.width, height: 54))
+        let contentY = frame.height - safeAreaTop - 27
+        let bar = SKShapeNode(rectOf: CGSize(width: frame.width, height: topBarH))
         bar.fillColor   = UIColor(red: 0.05, green: 0.05, blue: 0.16, alpha: 0.95)
         bar.strokeColor = .clear
-        bar.position    = CGPoint(x: frame.midX, y: frame.height - 27)
+        bar.position    = CGPoint(x: frame.midX, y: frame.height - topBarH / 2)
         addChild(bar)
 
         let line = SKShapeNode(rectOf: CGSize(width: frame.width, height: 1.5))
         line.fillColor   = gold
         line.strokeColor = .clear
-        line.position    = CGPoint(x: frame.midX, y: frame.height - 54)
+        line.position    = CGPoint(x: frame.midX, y: frame.height - topBarH)
         addChild(line)
 
         let title = SKLabelNode(text: "🏆 ランキング")
         title.fontName  = "HiraginoSans-W6"
         title.fontSize  = 17
         title.fontColor = .white
-        title.position  = CGPoint(x: frame.midX, y: frame.height - 33)
+        title.position  = CGPoint(x: frame.midX, y: contentY - 6)
         addChild(title)
 
         let back = SKLabelNode(text: "◀ 戻る")
@@ -64,9 +68,15 @@ class RankingScene: SKScene {
         back.fontSize  = 14
         back.fontColor = gold
         back.horizontalAlignmentMode = .left
-        back.position  = CGPoint(x: 16, y: frame.height - 33)
+        back.position  = CGPoint(x: 16, y: contentY - 6)
         back.name      = "backBtn"
         addChild(back)
+
+        let backHitArea = SKSpriteNode(color: UIColor.white.withAlphaComponent(0.001),
+                                       size: CGSize(width: 88, height: 44))
+        backHitArea.position = CGPoint(x: 44, y: contentY)
+        backHitArea.name = "backBtn"
+        addChild(backHitArea)
     }
 
     // MARK: - 自分のランクバナー
@@ -76,7 +86,7 @@ class RankingScene: SKScene {
         let w = frame.width - 32
         let banner = SKNode()
         banner.name     = "myBanner"
-        banner.position = CGPoint(x: frame.midX, y: frame.height - 88)
+        banner.position = CGPoint(x: frame.midX, y: frame.height - topBarH - 34)
 
         let bg = SKShapeNode(rectOf: CGSize(width: w, height: 52), cornerRadius: 12)
         bg.fillColor   = UIColor(red: 0.3, green: 0.1, blue: 0.5, alpha: 0.28)
@@ -178,7 +188,7 @@ class RankingScene: SKScene {
 
         let w      = frame.width - 32
         let rowH: CGFloat = 54
-        let startY = frame.height - 156
+        let startY = frame.height - topBarH - 102
 
         for (i, entry) in entries.enumerated() {
             let row = makeRankRow(rank: entry.rank,

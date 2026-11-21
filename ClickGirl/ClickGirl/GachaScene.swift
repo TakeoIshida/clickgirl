@@ -11,10 +11,13 @@ class GachaScene: SKScene {
     private var flipAllBtnNode: SKNode?
     private var resultHintLabel: SKLabelNode?
     private var isFlippingAll = false
+    private var safeAreaTop: CGFloat = 0
+    private var topBarH: CGFloat { 56 + safeAreaTop }
 
     // MARK: - Setup
 
     override func didMove(to view: SKView) {
+        safeAreaTop = view.safeAreaInsets.top
         backgroundColor = UIColor(red: 0.04, green: 0.02, blue: 0.14, alpha: 1.0)
         buildBackground()
         buildTopBar()
@@ -102,7 +105,8 @@ class GachaScene: SKScene {
     // MARK: - トップバー
 
     private func buildTopBar() {
-        let h: CGFloat = 56
+        let h = topBarH
+        let contentY = frame.height - safeAreaTop - 28
         let bg = SKShapeNode(rectOf: CGSize(width: frame.width, height: h))
         bg.fillColor   = UIColor(red: 0.06, green: 0.02, blue: 0.20, alpha: 1.0)
         bg.strokeColor = .clear
@@ -128,15 +132,22 @@ class GachaScene: SKScene {
         back.fontName = "HiraginoSans-W5"; back.fontSize = 15
         back.fontColor = UIColor(red: 0.7, green: 0.5, blue: 1.0, alpha: 1.0)
         back.horizontalAlignmentMode = .left; back.verticalAlignmentMode = .center
-        back.position = CGPoint(x: 14, y: frame.height - h / 2)
+        back.position = CGPoint(x: 14, y: contentY)
         back.zPosition = 11; back.name = "backBtn"
         addChild(back)
+
+        let backHitArea = SKSpriteNode(color: UIColor.white.withAlphaComponent(0.001),
+                                       size: CGSize(width: 88, height: 44))
+        backHitArea.position = CGPoint(x: 44, y: contentY)
+        backHitArea.zPosition = 12
+        backHitArea.name = "backBtn"
+        addChild(backHitArea)
 
         let title = SKLabelNode(text: "🎰 ガチャ")
         title.fontName = "HiraginoSans-W7"; title.fontSize = 18
         title.fontColor = UIColor(red: 1.0, green: 0.85, blue: 1.0, alpha: 1.0)
         title.verticalAlignmentMode = .center
-        title.position = CGPoint(x: frame.midX, y: frame.height - h / 2)
+        title.position = CGPoint(x: frame.midX, y: contentY)
         title.zPosition = 11
         addChild(title)
 
@@ -144,7 +155,7 @@ class GachaScene: SKScene {
         moneyLabel.fontName = "HiraginoSans-W7"; moneyLabel.fontSize = 14
         moneyLabel.fontColor = UIColor(red: 1.0, green: 0.92, blue: 0.2, alpha: 1.0)
         moneyLabel.horizontalAlignmentMode = .right; moneyLabel.verticalAlignmentMode = .center
-        moneyLabel.position = CGPoint(x: frame.width - 12, y: frame.height - h / 2)
+        moneyLabel.position = CGPoint(x: frame.width - 12, y: contentY)
         moneyLabel.zPosition = 11; moneyLabel.name = "moneyLabel"
         moneyLabel.text = "✦\(formatMoney(gm.money))  券\(gm.gachaTickets)"
         addChild(moneyLabel)
@@ -153,7 +164,7 @@ class GachaScene: SKScene {
     // MARK: - 天井パネル
 
     private func buildInfoPanel() {
-        let panelY = frame.height - 56 - 34
+        let panelY = frame.height - topBarH - 34
         let panelBg = SKShapeNode(rectOf: CGSize(width: frame.width - 20, height: 46), cornerRadius: 10)
         panelBg.fillColor   = UIColor(red: 0.08, green: 0.04, blue: 0.22, alpha: 0.95)
         panelBg.strokeColor = UIColor(red: 0.6, green: 0.3, blue: 1.0, alpha: 0.45)

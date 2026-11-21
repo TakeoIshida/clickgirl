@@ -7,8 +7,11 @@ class CharSelectScene: SKScene {
     private let gm     = GameManager.shared
 
     private var selectedCharId: Int = 0
+    private var safeAreaTop: CGFloat = 0
+    private var topBarH: CGFloat { 54 + safeAreaTop }
 
     override func didMove(to view: SKView) {
+        safeAreaTop = view.safeAreaInsets.top
         backgroundColor = darkBg
         selectedCharId  = gm.selectedMainCharacterID
         addTopBar()
@@ -17,23 +20,24 @@ class CharSelectScene: SKScene {
 
     // MARK: - TopBar
     private func addTopBar() {
-        let bar = SKShapeNode(rectOf: CGSize(width: frame.width, height: 54))
+        let contentY = frame.height - safeAreaTop - 27
+        let bar = SKShapeNode(rectOf: CGSize(width: frame.width, height: topBarH))
         bar.fillColor   = UIColor(red: 0.05, green: 0.05, blue: 0.16, alpha: 0.95)
         bar.strokeColor = .clear
-        bar.position    = CGPoint(x: frame.midX, y: frame.height - 27)
+        bar.position    = CGPoint(x: frame.midX, y: frame.height - topBarH / 2)
         addChild(bar)
 
         let line = SKShapeNode(rectOf: CGSize(width: frame.width, height: 1.5))
         line.fillColor   = gold
         line.strokeColor = .clear
-        line.position    = CGPoint(x: frame.midX, y: frame.height - 54)
+        line.position    = CGPoint(x: frame.midX, y: frame.height - topBarH)
         addChild(line)
 
         let title = SKLabelNode(text: "👤 メインキャラ選択")
         title.fontName  = "HiraginoSans-W6"
         title.fontSize  = 17
         title.fontColor = .white
-        title.position  = CGPoint(x: frame.midX, y: frame.height - 33)
+        title.position  = CGPoint(x: frame.midX, y: contentY - 6)
         addChild(title)
 
         let back = SKLabelNode(text: "◀ 戻る")
@@ -41,13 +45,13 @@ class CharSelectScene: SKScene {
         back.fontSize  = 14
         back.fontColor = gold
         back.horizontalAlignmentMode = .left
-        back.position  = CGPoint(x: 16, y: frame.height - 33)
+        back.position  = CGPoint(x: 16, y: contentY - 6)
         back.name      = "backBtn"
         addChild(back)
 
         let backHitArea = SKSpriteNode(color: UIColor.white.withAlphaComponent(0.001),
                                        size: CGSize(width: 88, height: 44))
-        backHitArea.position = CGPoint(x: 44, y: frame.height - 28)
+        backHitArea.position = CGPoint(x: 44, y: contentY)
         backHitArea.name = "backBtn"
         addChild(backHitArea)
 
@@ -55,7 +59,7 @@ class CharSelectScene: SKScene {
         hint.fontName  = "HiraginoSans-W3"
         hint.fontSize  = 11
         hint.fontColor = UIColor(white: 1, alpha: 0.40)
-        hint.position  = CGPoint(x: frame.midX, y: frame.height - 62)
+        hint.position  = CGPoint(x: frame.midX, y: frame.height - topBarH - 8)
         addChild(hint)
     }
 
@@ -68,7 +72,7 @@ class CharSelectScene: SKScene {
         let gap:  CGFloat = 8
         let cardW = (frame.width - pad * 2 - gap * CGFloat(cols - 1)) / CGFloat(cols)
         let cardH = cardW * 1.52
-        let topY  = frame.height - 78
+        let topY  = frame.height - topBarH - 24
 
         for (i, emp) in allEmps.enumerated() {
             let col = i % cols
@@ -151,7 +155,10 @@ class CharSelectScene: SKScene {
 
         let img = SKSpriteNode(texture: tex, size: CGSize(width: imgW, height: imgH))
         img.position = CGPoint(x: 0, y: h * 0.08)
-        img.alpha    = isHired ? 1.0 : 0.28
+        if !isHired {
+            img.color = .black
+            img.colorBlendFactor = 1.0
+        }
         img.name     = node.name
         node.addChild(img)
 
@@ -166,7 +173,7 @@ class CharSelectScene: SKScene {
         }
 
         // 名前
-        let name = SKLabelNode(text: emp.name)
+        let name = SKLabelNode(text: isHired ? emp.name : "???")
         name.fontName  = "HiraginoSans-W6"
         name.fontSize  = min(w * 0.17, 14)
         name.fontColor = isSelected ? gold : isHired ? .white : UIColor(white: 1, alpha: 0.35)
@@ -175,7 +182,7 @@ class CharSelectScene: SKScene {
         node.addChild(name)
 
         // 役職
-        let role = SKLabelNode(text: emp.role)
+        let role = SKLabelNode(text: isHired ? emp.role : "未採用")
         role.fontName  = "HiraginoSans-W3"
         role.fontSize  = min(w * 0.115, 10)
         role.fontColor = UIColor(white: 1, alpha: isHired ? 0.48 : 0.22)

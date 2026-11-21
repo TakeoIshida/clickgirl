@@ -5,7 +5,8 @@ import SpriteKit
 class ShopScene: SKScene {
 
     // MARK: - 定数
-    private let topBarH:  CGFloat = 56
+    private var safeAreaTop: CGFloat = 0
+    private var topBarH: CGFloat { 56 + safeAreaTop }
     private let tabBarH:  CGFloat = 44
     private let cardW:    CGFloat   // 計算後に設定
     private let cardH:    CGFloat = 162
@@ -30,6 +31,7 @@ class ShopScene: SKScene {
     // MARK: - Setup
 
     override func didMove(to view: SKView) {
+        safeAreaTop = view.safeAreaInsets.top
         backgroundColor = UIColor(red: 0.04, green: 0.04, blue: 0.13, alpha: 1.0)
         buildTopBar()
         buildTabBar()
@@ -39,6 +41,7 @@ class ShopScene: SKScene {
     // MARK: - トップバー
 
     private func buildTopBar() {
+        let contentY = frame.height - safeAreaTop - 28
         let bg = SKShapeNode(rectOf: CGSize(width: frame.width, height: topBarH))
         bg.fillColor = UIColor(red: 0.06, green: 0.06, blue: 0.18, alpha: 1.0)
         bg.strokeColor = UIColor(red: 0.3, green: 0.4, blue: 0.8, alpha: 0.4)
@@ -53,17 +56,24 @@ class ShopScene: SKScene {
         back.fontColor = UIColor(red: 0.5, green: 0.8, blue: 1.0, alpha: 1.0)
         back.horizontalAlignmentMode = .left
         back.verticalAlignmentMode = .center
-        back.position = CGPoint(x: 14, y: frame.height - topBarH / 2)
+        back.position = CGPoint(x: 14, y: contentY)
         back.zPosition = 11
         back.name = "backBtn"
         addChild(back)
+
+        let backHitArea = SKSpriteNode(color: UIColor.white.withAlphaComponent(0.001),
+                                       size: CGSize(width: 88, height: 44))
+        backHitArea.position = CGPoint(x: 44, y: contentY)
+        backHitArea.zPosition = 12
+        backHitArea.name = "backBtn"
+        addChild(backHitArea)
 
         let title = SKLabelNode(text: "🛒 ショップ")
         title.fontName = "HiraginoSans-W6"
         title.fontSize = 17
         title.fontColor = .white
         title.verticalAlignmentMode = .center
-        title.position = CGPoint(x: frame.midX, y: frame.height - topBarH / 2)
+        title.position = CGPoint(x: frame.midX, y: contentY)
         title.zPosition = 11
         addChild(title)
 
@@ -74,7 +84,7 @@ class ShopScene: SKScene {
         moneyLabel.fontColor = UIColor(red: 1.0, green: 0.92, blue: 0.2, alpha: 1.0)
         moneyLabel.horizontalAlignmentMode = .right
         moneyLabel.verticalAlignmentMode = .center
-        moneyLabel.position = CGPoint(x: frame.width - 12, y: frame.height - topBarH / 2)
+        moneyLabel.position = CGPoint(x: frame.width - 12, y: contentY)
         moneyLabel.zPosition = 11
         moneyLabel.name = "moneyLabel"
         moneyLabel.text = "✦\(formatMoney(GameManager.shared.money))"

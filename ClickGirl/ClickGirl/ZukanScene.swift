@@ -35,7 +35,8 @@ class ZukanScene: SKScene {
     private var didSwipe = false
 
     // MARK: - レイアウト定数
-    private var topBarH:   CGFloat { 56 }
+    private var safeAreaTop: CGFloat = 0
+    private var topBarH: CGFloat { 56 + safeAreaTop }
     private var tabBarH:   CGFloat { 46 }
     private var thumbBarH: CGFloat { 90 }
     private var setBtnH:   CGFloat { 50 }
@@ -61,6 +62,7 @@ class ZukanScene: SKScene {
     // MARK: - Setup
 
     override func didMove(to view: SKView) {
+        safeAreaTop = view.safeAreaInsets.top
         backgroundColor = UIColor(red: 0.04, green: 0.04, blue: 0.12, alpha: 1.0)
         buildTopBar()
         buildTabBar()
@@ -77,6 +79,7 @@ class ZukanScene: SKScene {
 
     // トップバー
     private func buildTopBar() {
+        let contentY = frame.height - safeAreaTop - 28
         let bg = SKShapeNode(rectOf: CGSize(width: frame.width, height: topBarH))
         bg.fillColor = UIColor(red: 0.06, green: 0.06, blue: 0.18, alpha: 1.0)
         bg.strokeColor = UIColor(red: 0.3, green: 0.4, blue: 0.8, alpha: 0.4)
@@ -91,17 +94,24 @@ class ZukanScene: SKScene {
         back.fontColor = UIColor(red: 0.5, green: 0.8, blue: 1.0, alpha: 1.0)
         back.horizontalAlignmentMode = .left
         back.verticalAlignmentMode = .center
-        back.position = CGPoint(x: 14, y: frame.height - topBarH / 2)
+        back.position = CGPoint(x: 14, y: contentY)
         back.zPosition = 11
         back.name = "backBtn"
         addChild(back)
+
+        let backHitArea = SKSpriteNode(color: UIColor.white.withAlphaComponent(0.001),
+                                       size: CGSize(width: 88, height: 44))
+        backHitArea.position = CGPoint(x: 44, y: contentY)
+        backHitArea.zPosition = 12
+        backHitArea.name = "backBtn"
+        addChild(backHitArea)
 
         let title = SKLabelNode(text: "キャラ図鑑")
         title.fontName = "HiraginoSans-W6"
         title.fontSize = 17
         title.fontColor = .white
         title.verticalAlignmentMode = .center
-        title.position = CGPoint(x: frame.midX, y: frame.height - topBarH / 2)
+        title.position = CGPoint(x: frame.midX, y: contentY)
         title.zPosition = 11
         addChild(title)
     }

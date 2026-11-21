@@ -213,7 +213,7 @@ class TitleScene: SKScene {
             next.scaleMode = scaleMode
             view?.presentScene(next, transition: SKTransition.push(with: .left, duration: 0.3))
         case "settingBtn":
-            let next = SettingScene(size: size)
+            let next = SettingScene(size: size, returnDestination: .title)
             next.scaleMode = scaleMode
             view?.presentScene(next, transition: SKTransition.push(with: .left, duration: 0.3))
         default: break

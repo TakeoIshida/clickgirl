@@ -74,7 +74,8 @@ struct CityBuilding {
 class CityScene: SKScene {
 
     private let gm = GameManager.shared
-    private let topBarH:   CGFloat = 56
+    private var safeAreaTop: CGFloat = 0
+    private var topBarH: CGFloat { 56 + safeAreaTop }
     private let cityViewH: CGFloat = 215
     private let plotCount  = 6
     private let cardH:     CGFloat = 148
@@ -108,6 +109,7 @@ class CityScene: SKScene {
     // MARK: - Setup
 
     override func didMove(to view: SKView) {
+        safeAreaTop = view.safeAreaInsets.top
         backgroundColor = UIColor(red: 0.04, green: 0.04, blue: 0.12, alpha: 1.0)
         setupTopBar()
         setupCityView()
@@ -117,6 +119,7 @@ class CityScene: SKScene {
     // MARK: - Top Bar
 
     private func setupTopBar() {
+        let contentY = frame.height - safeAreaTop - 28
         let bar = SKShapeNode(rectOf: CGSize(width: frame.width, height: topBarH))
         bar.fillColor = UIColor(red: 0.06, green: 0.06, blue: 0.18, alpha: 1.0)
         bar.strokeColor = UIColor(red: 0.3, green: 0.4, blue: 0.8, alpha: 0.4)
@@ -147,17 +150,24 @@ class CityScene: SKScene {
         back.fontColor = UIColor(red: 0.5, green: 0.8, blue: 1.0, alpha: 1.0)
         back.horizontalAlignmentMode = .left
         back.verticalAlignmentMode   = .center
-        back.position = CGPoint(x: 14, y: frame.height - topBarH / 2)
+        back.position = CGPoint(x: 14, y: contentY)
         back.zPosition = 11
         back.name = "backBtn"
         addChild(back)
+
+        let backHitArea = SKSpriteNode(color: UIColor.white.withAlphaComponent(0.001),
+                                       size: CGSize(width: 88, height: 44))
+        backHitArea.position = CGPoint(x: 44, y: contentY)
+        backHitArea.zPosition = 12
+        backHitArea.name = "backBtn"
+        addChild(backHitArea)
 
         let title = SKLabelNode(text: "🌆 都市開発")
         title.fontName = "HiraginoSans-W6"
         title.fontSize = 17
         title.fontColor = .white
         title.verticalAlignmentMode = .center
-        title.position = CGPoint(x: frame.midX, y: frame.height - topBarH / 2)
+        title.position = CGPoint(x: frame.midX, y: contentY)
         title.zPosition = 11
         addChild(title)
 
@@ -167,7 +177,7 @@ class CityScene: SKScene {
         moneyLabel.fontColor = UIColor(red: 1.0, green: 0.92, blue: 0.2, alpha: 1.0)
         moneyLabel.horizontalAlignmentMode = .right
         moneyLabel.verticalAlignmentMode   = .center
-        moneyLabel.position = CGPoint(x: frame.width - 12, y: frame.height - topBarH / 2 + 8)
+        moneyLabel.position = CGPoint(x: frame.width - 12, y: contentY + 8)
         moneyLabel.zPosition = 11
         addChild(moneyLabel)
 
@@ -177,7 +187,7 @@ class CityScene: SKScene {
         incomeLabel.fontColor = UIColor(red: 0.4, green: 1.0, blue: 0.55, alpha: 0.9)
         incomeLabel.horizontalAlignmentMode = .right
         incomeLabel.verticalAlignmentMode   = .center
-        incomeLabel.position = CGPoint(x: frame.width - 12, y: frame.height - topBarH / 2 - 8)
+        incomeLabel.position = CGPoint(x: frame.width - 12, y: contentY - 8)
         incomeLabel.zPosition = 11
         addChild(incomeLabel)
 

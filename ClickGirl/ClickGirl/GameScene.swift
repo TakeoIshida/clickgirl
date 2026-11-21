@@ -272,6 +272,7 @@ class GameScene: SKScene {
     }
 
     private func playBGM() {
+        guard AppSettings.shared.isBGMEnabled else { return }
         guard let url = Bundle.main.url(forResource: "雨の曲", withExtension: "mp3") else { return }
         bgmPlayer = try? AVAudioPlayer(contentsOf: url)
         bgmPlayer?.numberOfLoops = -1
@@ -381,7 +382,7 @@ class GameScene: SKScene {
 
     private func openSetting() {
         gm.saveGame()
-        let scene = SettingScene(size: frame.size)
+        let scene = SettingScene(size: frame.size, returnDestination: .game)
         scene.scaleMode = .resizeFill
         view?.presentScene(scene, transition: SKTransition.push(with: .left, duration: 0.3))
     }

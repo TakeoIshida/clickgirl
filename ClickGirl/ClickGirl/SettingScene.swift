@@ -1,16 +1,37 @@
 import SpriteKit
 
+enum SettingReturnDestination {
+    case title
+    case game
+}
+
 class SettingScene: SKScene {
 
     private let gold   = UIColor(red: 1.0,  green: 0.85, blue: 0.2, alpha: 1)
     private let darkBg = UIColor(red: 0.04, green: 0.04, blue: 0.12, alpha: 1)
     private let cardBg = UIColor(red: 0.07, green: 0.07, blue: 0.20, alpha: 1)
 
-    private var bgmOn     = true
-    private var seOn      = true
-    private var vibrateOn = true
+    private let returnDestination: SettingReturnDestination
+    private var safeAreaTop: CGFloat = 0
+    private var topBarH: CGFloat { 54 + safeAreaTop }
+
+    override init(size: CGSize) {
+        returnDestination = .title
+        super.init(size: size)
+    }
+
+    init(size: CGSize, returnDestination: SettingReturnDestination) {
+        self.returnDestination = returnDestination
+        super.init(size: size)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        returnDestination = .title
+        super.init(coder: aDecoder)
+    }
 
     override func didMove(to view: SKView) {
+        safeAreaTop = view.safeAreaInsets.top
         backgroundColor = darkBg
         rebuild()
     }
@@ -25,23 +46,24 @@ class SettingScene: SKScene {
 
     // MARK: - TopBar
     private func addTopBar() {
-        let bar = SKShapeNode(rectOf: CGSize(width: frame.width, height: 54))
+        let contentY = frame.height - safeAreaTop - 27
+        let bar = SKShapeNode(rectOf: CGSize(width: frame.width, height: topBarH))
         bar.fillColor   = UIColor(red: 0.05, green: 0.05, blue: 0.16, alpha: 0.95)
         bar.strokeColor = .clear
-        bar.position    = CGPoint(x: frame.midX, y: frame.height - 27)
+        bar.position    = CGPoint(x: frame.midX, y: frame.height - topBarH / 2)
         addChild(bar)
 
         let line = SKShapeNode(rectOf: CGSize(width: frame.width, height: 1.5))
         line.fillColor   = gold
         line.strokeColor = .clear
-        line.position    = CGPoint(x: frame.midX, y: frame.height - 54)
+        line.position    = CGPoint(x: frame.midX, y: frame.height - topBarH)
         addChild(line)
 
         let title = SKLabelNode(text: "⚙  設定")
         title.fontName  = "HiraginoSans-W6"
         title.fontSize  = 17
         title.fontColor = .white
-        title.position  = CGPoint(x: frame.midX, y: frame.height - 33)
+        title.position  = CGPoint(x: frame.midX, y: contentY - 6)
         addChild(title)
 
         let back = SKLabelNode(text: "◀ 戻る")
@@ -49,24 +71,27 @@ class SettingScene: SKScene {
         back.fontSize  = 14
         back.fontColor = gold
         back.horizontalAlignmentMode = .left
-        back.position  = CGPoint(x: 16, y: frame.height - 33)
+        back.position  = CGPoint(x: 16, y: contentY - 6)
         back.name      = "backBtn"
         addChild(back)
+
+        let backHitArea = SKSpriteNode(color: UIColor.white.withAlphaComponent(0.001),
+                                       size: CGSize(width: 88, height: 44))
+        backHitArea.position = CGPoint(x: 44, y: contentY)
+        backHitArea.name = "backBtn"
+        addChild(backHitArea)
     }
 
     // MARK: - 設定カード
     private func addSettingsCard() {
         let w    = frame.width - 32
         let rowH: CGFloat = 58
-        let rows: [(icon: String, label: String, name: String, type: String)] = [
-            ("🔊", "BGM",    "bgmToggle",     "toggle"),
-            ("🔔", "SE",     "seToggle",      "toggle"),
-            ("🌐", "言語",   "langArrow",     "arrow"),
-            ("📳", "バイブ", "vibrateToggle", "toggle"),
+        let rows: [(icon: String, label: String, name: String)] = [
+            ("🔊", "BGM", "bgmToggle"),
         ]
 
         let totalH = CGFloat(rows.count) * rowH
-        let cardCY  = frame.height - 80 - totalH / 2 - 8
+        let cardCY  = frame.height - topBarH - 58 - totalH / 2
 
         let card = SKShapeNode(rectOf: CGSize(width: w, height: totalH + 16), cornerRadius: 14)
         card.fillColor   = cardBg
@@ -102,33 +127,10 @@ class SettingScene: SKScene {
             lbl.position = CGPoint(x: frame.midX - w / 2 + 52, y: cardCY + yOff)
             addChild(lbl)
 
-            switch row.type {
-            case "toggle":
-                let isOn: Bool
-                switch row.name {
-                case "bgmToggle":     isOn = bgmOn
-                case "seToggle":      isOn = seOn
-                case "vibrateToggle": isOn = vibrateOn
-                default:              isOn = true
-                }
-                let toggle = makeToggle(isOn: isOn)
-                toggle.name     = row.name
-                toggle.position = CGPoint(x: frame.midX + w / 2 - 44, y: cardCY + yOff)
-                addChild(toggle)
-
-            case "arrow":
-                let arrow = SKLabelNode(text: "日本語  ›")
-                arrow.fontName  = "HiraginoSans-W3"
-                arrow.fontSize  = 13
-                arrow.fontColor = UIColor(white: 0.65, alpha: 1)
-                arrow.verticalAlignmentMode   = .center
-                arrow.horizontalAlignmentMode = .right
-                arrow.name     = row.name
-                arrow.position = CGPoint(x: frame.midX + w / 2 - 14, y: cardCY + yOff)
-                addChild(arrow)
-
-            default: break
-            }
+            let toggle = makeToggle(isOn: AppSettings.shared.isBGMEnabled)
+            toggle.name     = row.name
+            toggle.position = CGPoint(x: frame.midX + w / 2 - 44, y: cardCY + yOff)
+            addChild(toggle)
 
             if i < rows.count - 1 {
                 let div = SKShapeNode(rectOf: CGSize(width: w - 24, height: 0.5))
@@ -186,7 +188,9 @@ class SettingScene: SKScene {
 
     // MARK: - バージョン
     private func addVersionLabel() {
-        let ver = SKLabelNode(text: "バージョン: 1.0.0")
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "-"
+        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "-"
+        let ver = SKLabelNode(text: "バージョン: \(version) (\(build))")
         ver.fontName  = "HiraginoSans-W3"
         ver.fontSize  = 11
         ver.fontColor = UIColor(white: 1, alpha: 0.28)
@@ -200,22 +204,22 @@ class SettingScene: SKScene {
         let name = atPoint(loc).name ?? atPoint(loc).parent?.name ?? ""
         switch name {
         case "backBtn":
-            view?.presentScene(
-                TitleScene(size: size),
-                transition: SKTransition.push(with: .right, duration: 0.3)
-            )
+            let destination = makeReturnScene()
+            destination.scaleMode = scaleMode
+            view?.presentScene(destination, transition: SKTransition.push(with: .right, duration: 0.3))
         case "bgmToggle":
-            bgmOn.toggle()
-            rebuild()
-        case "seToggle":
-            seOn.toggle()
-            rebuild()
-        case "vibrateToggle":
-            vibrateOn.toggle()
+            AppSettings.shared.isBGMEnabled.toggle()
             rebuild()
         case "resetBtn":
             showResetConfirm()
         default: break
+        }
+    }
+
+    func makeReturnScene() -> SKScene {
+        switch returnDestination {
+        case .title: return TitleScene(size: size)
+        case .game: return GameScene(size: size)
         }
     }
 

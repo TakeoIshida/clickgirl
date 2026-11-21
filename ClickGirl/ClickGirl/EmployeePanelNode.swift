@@ -118,7 +118,7 @@ class EmployeeCardNode: SKNode {
         addChild(charNode)
 
         // 名前
-        let nameLabel = SKLabelNode(text: employee.name)
+        let nameLabel = SKLabelNode(text: employee.isHired ? employee.name : "???")
         nameLabel.fontName = "HiraginoSans-W6"
         nameLabel.fontSize = 14
         nameLabel.fontColor = employee.isHired ? .white : UIColor(white: 0.6, alpha: 1)
@@ -128,7 +128,7 @@ class EmployeeCardNode: SKNode {
         addChild(nameLabel)
 
         // 役職
-        let roleLabel = SKLabelNode(text: employee.role)
+        let roleLabel = SKLabelNode(text: employee.isHired ? employee.role : "未採用")
         roleLabel.fontName = "HiraginoSans-W3"
         roleLabel.fontSize = 10
         roleLabel.fontColor = UIColor(red: 0.6, green: 0.8, blue: 1.0, alpha: 0.8)
@@ -150,9 +150,10 @@ class EmployeeCardNode: SKNode {
             // 収益表示
             let incLabel = SKLabelNode(text: "+✦\(formatMoney(employee.currentIncomePerSec))/s")
             incLabel.fontName = "HiraginoSans-W3"
-            incLabel.fontSize = 10
+            incLabel.fontSize = 9
             incLabel.fontColor = UIColor(red: 0.4, green: 1.0, blue: 0.5, alpha: 0.9)
-            incLabel.position = CGPoint(x: 0, y: -53)
+            incLabel.horizontalAlignmentMode = .right
+            incLabel.position = CGPoint(x: 61, y: 83)
             incLabel.zPosition = 2
             incLabel.name = "empCard_\(employee.id)"
             addChild(incLabel)
