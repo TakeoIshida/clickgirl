@@ -36,6 +36,11 @@ class ShopScene: SKScene {
         buildTopBar()
         buildTabBar()
         buildCards()
+        installAccessibility()
+    }
+
+    override func willMove(from view: SKView) {
+        SceneAccessibility.clear(from: view)
     }
 
     // MARK: - トップバー
@@ -328,8 +333,8 @@ class ShopScene: SKScene {
             if name == "backBtn"     { goBack(); return }
             if name == "freeBoostBtn" { showFreeBoostAd(); return }
 
-            if name == "tab_0" { isPermanentTab = true;  updateTabAppearance(); buildCards(); return }
-            if name == "tab_1" { isPermanentTab = false; updateTabAppearance(); buildCards(); return }
+            if name == "tab_0" { selectTab(permanent: true); return }
+            if name == "tab_1" { selectTab(permanent: false); return }
 
             if name.hasPrefix("buyBtn_") {
                 let id = String(name.dropFirst(7))
@@ -361,7 +366,35 @@ class ShopScene: SKScene {
             buildCards()
             updateMoneyLabel()
             showPurchaseEffect(item: item)
+            installAccessibility()
         }
+    }
+
+    private func selectTab(permanent: Bool) {
+        isPermanentTab = permanent
+        updateTabAppearance()
+        buildCards()
+        installAccessibility()
+    }
+
+    private func installAccessibility() {
+        guard let view else { return }
+        var items = [
+            SceneAccessibilityItem(nodeName: "backBtn", label: "ゲームへ戻る", activation: { [weak self] in self?.goBack(); return true }),
+            SceneAccessibilityItem(nodeName: "tab_0", label: "永続強化", traits: isPermanentTab ? [.button, .selected] : .button, activation: { [weak self] in self?.selectTab(permanent: true); return true }),
+            SceneAccessibilityItem(nodeName: "tab_1", label: "時限ブースト", traits: isPermanentTab ? .button : [.button, .selected], activation: { [weak self] in self?.selectTab(permanent: false); return true })
+        ]
+        let catalog = isPermanentTab ? ShopCatalog.permanentItems : ShopCatalog.boostItems
+        for item in catalog where childNode(withName: "//buyBtn_\(item.id)") != nil {
+            items.append(SceneAccessibilityItem(nodeName: "buyBtn_\(item.id)", label: "\(item.name)、\(formatMoney(item.cost))スターで購入", activation: { [weak self] in
+                self?.attemptPurchase(item)
+                return true
+            }))
+        }
+        if !isPermanentTab {
+            items.append(SceneAccessibilityItem(nodeName: "freeBoostBtn", label: "動画を見て収益を2倍", activation: { [weak self] in self?.showFreeBoostAd(); return true }))
+        }
+        SceneAccessibility.install(on: view, scene: self, items: items)
     }
 
     private func updateMoneyLabel() {

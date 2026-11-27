@@ -114,6 +114,11 @@ class CityScene: SKScene {
         setupTopBar()
         setupCityView()
         setupScrollList()
+        installAccessibility()
+    }
+
+    override func willMove(from view: SKView) {
+        SceneAccessibility.clear(from: view)
     }
 
     // MARK: - Top Bar
@@ -978,6 +983,7 @@ class CityScene: SKScene {
         overlay.run(SKAction.fadeIn(withDuration: 0.18))
         addChild(overlay)
         selectionOverlay = overlay
+        installBuildingSelectionAccessibility(plot: plot)
     }
 
     // MARK: - Touch
@@ -1082,6 +1088,7 @@ class CityScene: SKScene {
     private func dismissOverlay() {
         selectionOverlay?.run(SKAction.sequence([SKAction.fadeOut(withDuration: 0.15), SKAction.removeFromParent()]))
         selectionOverlay = nil
+        installAccessibility()
     }
 
     private func attemptPlace(plot: Int, typeId: String) {
@@ -1096,6 +1103,7 @@ class CityScene: SKScene {
             buildCards()
             drawCityView()
             showBuildEffect(name: t.name)
+            installAccessibility()
             if isFirstBuilding {
                 requestReviewAfterFirstCityMilestone()
             }
@@ -1122,7 +1130,41 @@ class CityScene: SKScene {
             buildCards()
             drawCityView()
             showBuildEffect(name: "\(t.name) Lv.\(bld.level + 1)")
+            installAccessibility()
         }
+    }
+
+    private func installAccessibility() {
+        guard let view, selectionOverlay == nil else { return }
+        var items = [SceneAccessibilityItem(nodeName: "backBtn", label: "オフィスへ戻る", activation: { [weak self] in self?.goBack(); return true })]
+        for plot in 0..<6 {
+            if let building = gm.cityBuildings[plot],
+               let type = CityBuildingType.all.first(where: { $0.id == building.typeId }) {
+                items.append(SceneAccessibilityItem(nodeName: "upgradeBtn_\(plot)", label: "区画\(plot + 1)、\(type.name)、レベル\(building.level)、強化", activation: { [weak self] in
+                    self?.attemptUpgrade(plot: plot)
+                    return true
+                }))
+            } else {
+                items.append(SceneAccessibilityItem(nodeName: "buildBtn_\(plot)", label: "区画\(plot + 1)、建物を建てる", activation: { [weak self] in
+                    self?.showBuildingSelection(plot: plot)
+                    return true
+                }))
+            }
+        }
+        SceneAccessibility.install(on: view, scene: self, items: items)
+    }
+
+    private func installBuildingSelectionAccessibility(plot: Int) {
+        guard let view else { return }
+        var items = [SceneAccessibilityItem(nodeName: "cancelOverlay", label: "キャンセル", activation: { [weak self] in self?.dismissOverlay(); return true })]
+        for type in CityBuildingType.all {
+            items.append(SceneAccessibilityItem(nodeName: "selectBuilding_\(plot)_\(type.id)", label: "\(type.name)、\(formatMoney(type.placeCost))スターで建設", activation: { [weak self] in
+                self?.attemptPlace(plot: plot, typeId: type.id)
+                return true
+            }))
+        }
+        SceneAccessibility.install(on: view, scene: self, items: items)
+        UIAccessibility.post(notification: .screenChanged, argument: nil)
     }
 
     // MARK: - Effects

@@ -42,6 +42,7 @@ class SettingScene: SKScene {
         addSettingsCard()
         addDangerZone()
         addVersionLabel()
+        installAccessibility()
     }
 
     // MARK: - TopBar
@@ -204,16 +205,28 @@ class SettingScene: SKScene {
         let name = atPoint(loc).name ?? atPoint(loc).parent?.name ?? ""
         switch name {
         case "backBtn":
-            let destination = makeReturnScene()
-            destination.scaleMode = scaleMode
-            view?.presentScene(destination, transition: SKTransition.push(with: .right, duration: 0.3))
+            goBack()
         case "bgmToggle":
-            AppSettings.shared.isBGMEnabled.toggle()
-            rebuild()
+            toggleBGM()
         case "resetBtn":
             showResetConfirm()
         default: break
         }
+    }
+
+    override func willMove(from view: SKView) {
+        SceneAccessibility.clear(from: view)
+    }
+
+    private func goBack() {
+        let destination = makeReturnScene()
+        destination.scaleMode = scaleMode
+        view?.presentScene(destination, transition: SKTransition.push(with: .right, duration: 0.3))
+    }
+
+    private func toggleBGM() {
+        AppSettings.shared.isBGMEnabled.toggle()
+        rebuild()
     }
 
     func makeReturnScene() -> SKScene {
@@ -273,6 +286,7 @@ class SettingScene: SKScene {
             btn.name      = name
             addChild(btn)
         }
+        installResetAccessibility()
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -280,15 +294,43 @@ class SettingScene: SKScene {
         let name = atPoint(loc).name ?? ""
         switch name {
         case "cancelReset":
-            children.filter { $0.name == "overlay" || $0.name == "cancelReset" || $0.name == "confirmReset" }
-                    .forEach { $0.removeFromParent() }
-            children.filter { ($0 as? SKLabelNode)?.text == "本当にリセットしますか？" ||
-                              ($0 as? SKLabelNode)?.text == "全データが失われます" }
-                    .forEach { $0.removeFromParent() }
+            cancelReset()
         case "confirmReset":
-            GameManager.shared.resetAll()
-            rebuild()
+            confirmReset()
         default: break
         }
+    }
+
+    private func cancelReset() {
+        children.filter { $0.name == "overlay" || $0.name == "cancelReset" || $0.name == "confirmReset" }
+            .forEach { $0.removeFromParent() }
+        children.filter { ($0 as? SKLabelNode)?.text == "本当にリセットしますか？" ||
+                          ($0 as? SKLabelNode)?.text == "全データが失われます" }
+            .forEach { $0.removeFromParent() }
+        installAccessibility()
+    }
+
+    private func confirmReset() {
+        GameManager.shared.resetAll()
+        rebuild()
+    }
+
+    private func installAccessibility() {
+        guard let view else { return }
+        let bgmState = AppSettings.shared.isBGMEnabled ? "オン" : "オフ"
+        SceneAccessibility.install(on: view, scene: self, items: [
+            SceneAccessibilityItem(nodeName: "backBtn", label: "戻る", activation: { [weak self] in self?.goBack(); return true }),
+            SceneAccessibilityItem(nodeName: "bgmToggle", label: "BGM、\(bgmState)", hint: "ダブルタップで切り替えます", activation: { [weak self] in self?.toggleBGM(); return true }),
+            SceneAccessibilityItem(nodeName: "resetBtn", label: "データをリセット", hint: "確認画面を表示します", activation: { [weak self] in self?.showResetConfirm(); return true })
+        ])
+    }
+
+    private func installResetAccessibility() {
+        guard let view else { return }
+        SceneAccessibility.install(on: view, scene: self, items: [
+            SceneAccessibilityItem(nodeName: "cancelReset", label: "キャンセル", activation: { [weak self] in self?.cancelReset(); return true }),
+            SceneAccessibilityItem(nodeName: "confirmReset", label: "すべてのデータをリセット", hint: "この操作は取り消せません", activation: { [weak self] in self?.confirmReset(); return true })
+        ])
+        UIAccessibility.post(notification: .screenChanged, argument: nil)
     }
 }

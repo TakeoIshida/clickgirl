@@ -25,6 +25,11 @@ class GachaScene: SKScene {
         buildGachaOrb()
         buildPullButtons()
         startShootingStars()
+        installAccessibility()
+    }
+
+    override func willMove(from view: SKView) {
+        SceneAccessibility.clear(from: view)
     }
 
     // MARK: - 背景
@@ -536,6 +541,12 @@ class GachaScene: SKScene {
         addChild(overlay)
         resultsOverlay = overlay
 
+        let accessibilityTarget = SKSpriteNode(color: UIColor.white.withAlphaComponent(0.001), size: frame.size)
+        accessibilityTarget.position = CGPoint(x: frame.midX, y: frame.midY)
+        accessibilityTarget.name = "resultAccessibilityBtn"
+        accessibilityTarget.zPosition = -0.5
+        overlay.addChild(accessibilityTarget)
+
         let dim = SKSpriteNode(color: UIColor(red: 0.0, green: 0.0, blue: 0.06, alpha: 0.92),
                                size: frame.size)
         dim.position = CGPoint(x: frame.midX, y: frame.midY); dim.zPosition = -1
@@ -546,6 +557,7 @@ class GachaScene: SKScene {
         } else {
             showTenResult(cards, in: overlay)
         }
+        installResultAccessibility()
     }
 
     private func showSingleResult(_ card: GachaCard, in overlay: SKNode) {
@@ -719,6 +731,7 @@ class GachaScene: SKScene {
         run(SKAction.wait(forDuration: delay + 0.35)) { [weak self] in
             guard let self else { return }
             self.showCloseHint(in: overlay)
+            self.installResultAccessibility()
         }
     }
 
@@ -730,6 +743,7 @@ class GachaScene: SKScene {
         ]))
         flipAllBtnNode = nil
         showCloseHint(in: overlay)
+        installResultAccessibility()
     }
 
     private func buildFlipAllButton(in overlay: SKNode) {
@@ -812,6 +826,37 @@ class GachaScene: SKScene {
         isAnimating = false
         refreshMoneyLabel()
         refreshPityLabel()
+        installAccessibility()
+    }
+
+    private func activateResultAccessibility() {
+        guard let overlay = resultsOverlay else { return }
+        if flipCardData.allSatisfy({ $0.flipped }) {
+            closeResultsOverlay()
+        } else {
+            flipAllCards(in: overlay)
+        }
+    }
+
+    private func installAccessibility() {
+        guard let view else { return }
+        SceneAccessibility.install(on: view, scene: self, items: [
+            SceneAccessibilityItem(nodeName: "backBtn", label: "ゲームへ戻る", activation: { [weak self] in self?.goBack(); return true }),
+            SceneAccessibilityItem(nodeName: "btn1", label: gm.gachaTickets > 0 ? "ガチャを1回引く、ガチャ券を使用" : "ガチャを1回引く", activation: { [weak self] in self?.pullGacha(count: 1); return true }),
+            SceneAccessibilityItem(nodeName: "btn10", label: "ガチャを10回引く", activation: { [weak self] in self?.pullGacha(count: 10); return true }),
+            SceneAccessibilityItem(nodeName: "btnFreeGacha", label: "動画を見て無料ガチャ", activation: { [weak self] in self?.pullFreeGacha(); return true })
+        ])
+    }
+
+    private func installResultAccessibility() {
+        guard let view else { return }
+        SceneAccessibility.install(on: view, scene: self, items: [
+            SceneAccessibilityItem(nodeName: "resultAccessibilityBtn", label: flipCardData.allSatisfy({ $0.flipped }) ? "ガチャ結果を閉じる" : "ガチャ結果をすべて表示", activation: { [weak self] in
+                self?.activateResultAccessibility()
+                return true
+            })
+        ])
+        UIAccessibility.post(notification: .screenChanged, argument: nil)
     }
 
     // MARK: - カードノード生成

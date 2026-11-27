@@ -94,6 +94,11 @@ class OfficeScene: SKScene {
         setupRoomArea()
         setupBoostBar()
         setupScrollList()
+        installAccessibility()
+    }
+
+    override func willMove(from view: SKView) {
+        SceneAccessibility.clear(from: view)
     }
 
     // MARK: - Top Bar
@@ -969,6 +974,7 @@ class OfficeScene: SKScene {
             drawRoom()
             showUpgradeEffect(name: "\(gm.officeFloors)F に拡張", newLevel: gm.officeFloors)
             moneyLabel.text = "✦\(formatMoney(gm.money))"
+            installAccessibility()
         }
     }
 
@@ -994,7 +1000,25 @@ class OfficeScene: SKScene {
             drawRoom()
             showUpgradeEffect(name: item.name, newLevel: current + 1)
             moneyLabel.text = "✦\(formatMoney(gm.money))"
+            installAccessibility()
         }
+    }
+
+    private func installAccessibility() {
+        guard let view else { return }
+        var items = [
+            SceneAccessibilityItem(nodeName: "backBtn", label: "ゲームへ戻る", activation: { [weak self] in self?.goBack(); return true }),
+            SceneAccessibilityItem(nodeName: "cityNavBtn", label: "都市開発へ", activation: { [weak self] in self?.openCity(); return true }),
+            SceneAccessibilityItem(nodeName: "addFloorBtn", label: "フロアを追加", activation: { [weak self] in self?.attemptAddFloor(); return true })
+        ]
+        for item in OfficeItem.all where childNode(withName: "//upgradeBtn_\(item.id)") != nil {
+            let level = gm.officeUpgrades[item.id] ?? 0
+            items.append(SceneAccessibilityItem(nodeName: "upgradeBtn_\(item.id)", label: "\(item.name)、レベル\(level)、強化", activation: { [weak self] in
+                self?.attemptUpgrade(id: item.id)
+                return true
+            }))
+        }
+        SceneAccessibility.install(on: view, scene: self, items: items)
     }
 
     // MARK: - Effects

@@ -39,6 +39,11 @@ class RankingScene: SKScene {
         addMyRankBanner(entry: nil)
         showLoading()
         fetchAndDisplay()
+        installAccessibility()
+    }
+
+    override func willMove(from view: SKView) {
+        SceneAccessibility.clear(from: view)
     }
 
     // MARK: - TopBar
@@ -132,6 +137,7 @@ class RankingScene: SKScene {
         banner.addChild(scoreLbl)
 
         addChild(banner)
+        installAccessibility()
     }
 
     // MARK: - ローディング
@@ -276,6 +282,10 @@ class RankingScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let loc = touches.first?.location(in: self) else { return }
         guard atPoint(loc).name == "backBtn" else { return }
+        goBack()
+    }
+
+    private func goBack() {
         let destination: SKScene
         switch returnDestination {
         case .title:
@@ -285,5 +295,14 @@ class RankingScene: SKScene {
         }
         destination.scaleMode = scaleMode
         view?.presentScene(destination, transition: SKTransition.push(with: .right, duration: 0.3))
+    }
+
+    private func installAccessibility() {
+        guard let view else { return }
+        var items = [SceneAccessibilityItem(nodeName: "backBtn", label: "戻る", activation: { [weak self] in self?.goBack(); return true })]
+        if childNode(withName: "myBanner") != nil {
+            items.append(SceneAccessibilityItem(nodeName: "myBanner", label: GKLocalPlayer.local.isAuthenticated ? "自分のランキング情報" : "Game Center未接続", traits: .staticText))
+        }
+        SceneAccessibility.install(on: view, scene: self, items: items)
     }
 }

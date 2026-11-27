@@ -9,13 +9,21 @@ class CharSelectScene: SKScene {
     private var selectedCharId: Int = 0
     private var safeAreaTop: CGFloat = 0
     private var topBarH: CGFloat { 54 + safeAreaTop }
+    private let cardCrop = SKCropNode()
+    private let cardContainer = SKNode()
+    private var maxScrollY: CGFloat = 0
+    private var touchStart: CGPoint = .zero
+    private var scrollStartY: CGFloat = 0
+    private var isDraggingCards = false
 
     override func didMove(to view: SKView) {
         safeAreaTop = view.safeAreaInsets.top
         backgroundColor = darkBg
         selectedCharId  = gm.selectedMainCharacterID
         addTopBar()
+        setupCardViewport()
         addCards()
+        installAccessibility(on: view)
     }
 
     // MARK: - TopBar
@@ -64,7 +72,21 @@ class CharSelectScene: SKScene {
     }
 
     // MARK: - カードグリッド
+    private func setupCardViewport() {
+        let viewportTop = frame.height - topBarH - 20
+        let viewportBottom: CGFloat = 12
+        let mask = SKShapeNode(rectOf: CGSize(width: frame.width,
+                                              height: viewportTop - viewportBottom))
+        mask.fillColor = .white
+        mask.strokeColor = .clear
+        mask.position = CGPoint(x: frame.midX, y: (viewportTop + viewportBottom) / 2)
+        cardCrop.maskNode = mask
+        cardCrop.addChild(cardContainer)
+        addChild(cardCrop)
+    }
+
     private func addCards() {
+        cardContainer.removeAllChildren()
         let allEmps = gm.employees
 
         let cols: Int   = 3
@@ -87,7 +109,7 @@ class CharSelectScene: SKScene {
                                 isHired: isHired, isSelected: isSelected)
             card.position = CGPoint(x: x, y: y - 24)
             card.alpha    = 0
-            addChild(card)
+            cardContainer.addChild(card)
 
             card.run(SKAction.sequence([
                 SKAction.wait(forDuration: Double(i) * 0.055),
@@ -97,6 +119,11 @@ class CharSelectScene: SKScene {
                 ])
             ]))
         }
+
+        let rows = Int(ceil(Double(allEmps.count) / Double(cols)))
+        let contentBottom = topY - CGFloat(rows) * cardH - CGFloat(max(0, rows - 1)) * gap
+        maxScrollY = max(0, 12 - contentBottom)
+        cardContainer.position.y = min(cardContainer.position.y, maxScrollY)
     }
 
     private func makeCard(emp: Employee, w: CGFloat, h: CGFloat,
@@ -216,6 +243,21 @@ class CharSelectScene: SKScene {
     // MARK: - タップ処理
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let loc = touches.first?.location(in: self) else { return }
+        touchStart = loc
+        scrollStartY = cardContainer.position.y
+        isDraggingCards = false
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let loc = touches.first?.location(in: self) else { return }
+        let dy = loc.y - touchStart.y
+        if abs(dy) > 8 { isDraggingCards = true }
+        guard isDraggingCards else { return }
+        cardContainer.position.y = min(max(0, scrollStartY + dy), maxScrollY)
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let loc = touches.first?.location(in: self) else { return }
         let name = atPoint(loc).name ?? ""
 
         if name == "backBtn" {
@@ -225,20 +267,55 @@ class CharSelectScene: SKScene {
             return
         }
 
-        if name.hasPrefix("card_"), let id = Int(name.dropFirst(5)) {
-            guard gm.employees.first(where: { $0.id == id })?.isHired == true else {
-                showLockedToast()
-                return
-            }
-            selectedCharId = id
-            gm.selectedMainCharacterID = id
-            gm.saveGame()
+        guard !isDraggingCards else { return }
 
-            // 再描画
-            removeAllChildren()
-            addTopBar()
-            addCards()
+        if name.hasPrefix("card_"), let id = Int(name.dropFirst(5)) {
+            selectEmployee(id: id)
         }
+    }
+
+    override func willMove(from view: SKView) {
+        SceneAccessibility.clear(from: view)
+    }
+
+    private func selectEmployee(id: Int) {
+        guard gm.employees.first(where: { $0.id == id })?.isHired == true else {
+            showLockedToast()
+            return
+        }
+        selectedCharId = id
+        gm.selectedMainCharacterID = id
+        gm.saveGame()
+
+        cardContainer.position.y = 0
+        addCards()
+        if let view { installAccessibility(on: view) }
+    }
+
+    private func goBack() {
+        let next = GameScene(size: size)
+        next.scaleMode = scaleMode
+        view?.presentScene(next, transition: SKTransition.push(with: .right, duration: 0.3))
+    }
+
+    private func installAccessibility(on view: SKView) {
+        var items = [
+            SceneAccessibilityItem(nodeName: "backBtn", label: "ゲームへ戻る", activation: { [weak self] in
+                self?.goBack(); return true
+            })
+        ]
+        for employee in gm.employees {
+            let status = employee.isHired ? employee.name : "未採用キャラクター"
+            let selected = employee.id == selectedCharId ? "、選択中" : ""
+            items.append(SceneAccessibilityItem(nodeName: "card_\(employee.id)",
+                                                label: "\(status)\(selected)",
+                                                hint: employee.isHired ? "メインキャラクターに設定します" : "採用後に選択できます",
+                                                activation: { [weak self] in
+                self?.selectEmployee(id: employee.id)
+                return employee.isHired
+            }))
+        }
+        SceneAccessibility.install(on: view, scene: self, items: items)
     }
 
     private func showLockedToast() {

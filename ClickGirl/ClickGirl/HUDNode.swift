@@ -6,6 +6,7 @@ class HUDNode: SKNode {
     private let incomeLabel = SKLabelNode()
     private let companyLabel = SKLabelNode()
     private var bgNode: SKShapeNode!
+    private var missionHighlight: SKShapeNode?
 
     private let width: CGFloat
     private let topInset: CGFloat
@@ -180,6 +181,30 @@ class HUDNode: SKNode {
         } else {
             incomeLabel.text = "社員を採用して自動収益を得よう"
         }
+    }
+
+    func showMissionHighlight(buttonName: String?) {
+        missionHighlight?.removeFromParent()
+        missionHighlight = nil
+        guard let buttonName,
+              let target = children.first(where: { $0.name == buttonName }) else { return }
+
+        let targetFrame = target.calculateAccumulatedFrame()
+        let ring = SKShapeNode(rectOf: CGSize(width: max(50, targetFrame.width + 12),
+                                              height: max(46, targetFrame.height + 10)),
+                               cornerRadius: 13)
+        ring.position = target.position
+        ring.fillColor = .clear
+        ring.strokeColor = UIColor(red: 1.0, green: 0.86, blue: 0.18, alpha: 1)
+        ring.lineWidth = 2.5
+        ring.zPosition = 20
+        ring.name = buttonName
+        ring.run(SKAction.repeatForever(SKAction.sequence([
+            SKAction.fadeAlpha(to: 0.22, duration: 0.55),
+            SKAction.fadeAlpha(to: 1.0, duration: 0.55)
+        ])))
+        addChild(ring)
+        missionHighlight = ring
     }
 
     private func formatMoney(_ v: Double) -> String {

@@ -10,6 +10,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        if ProcessInfo.processInfo.arguments.contains("-UITesting") {
+            return true
+        }
+
         // ログインや追加の許可画面を出さず、利用状況と広告ファネルだけを計測する。
         AnalyticsManager.shared.configure()
 

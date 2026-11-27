@@ -21,6 +21,7 @@ class EmployeeCardNode: SKNode {
     private var actionBtnPos: CGPoint = .zero
     private var actionBtnSize: CGSize = .zero
     private var isGlowing = false
+    private var missionGlow: SKShapeNode?
 
     init(employee: Employee) {
         self.employee = employee
@@ -49,6 +50,27 @@ class EmployeeCardNode: SKNode {
             fill.color = UIColor(red: 0.35, green: 0.55, blue: 1.0, alpha: 1.0)
             if isGlowing { removeAffordableGlow() }
         }
+    }
+
+    func setMissionHighlighted(_ highlighted: Bool) {
+        missionGlow?.removeFromParent()
+        missionGlow = nil
+        guard highlighted else { return }
+
+        let glow = SKShapeNode(rectOf: CGSize(width: actionBtnSize.width + 14,
+                                               height: actionBtnSize.height + 14),
+                               cornerRadius: 14)
+        glow.fillColor = .clear
+        glow.strokeColor = UIColor(red: 1.0, green: 0.86, blue: 0.18, alpha: 1)
+        glow.lineWidth = 2.8
+        glow.position = actionBtnPos
+        glow.zPosition = 4
+        glow.run(SKAction.repeatForever(SKAction.sequence([
+            SKAction.fadeAlpha(to: 0.18, duration: 0.55),
+            SKAction.fadeAlpha(to: 1.0, duration: 0.55)
+        ])))
+        addChild(glow)
+        missionGlow = glow
     }
 
     private func addAffordableGlow() {
@@ -254,6 +276,7 @@ class EmployeePanelNode: SKNode {
     private var lastDragX: CGFloat = 0
     private var lastDragTime: TimeInterval = 0
     private var needsRebuild = false
+    private var highlightedEmployeeID: Int?
 
     var onEmployeeTap: ((Int, CardTapArea) -> Void)?
 
@@ -323,12 +346,23 @@ class EmployeePanelNode: SKNode {
         for (i, emp) in employees.enumerated() {
             let card = EmployeeCardNode(employee: emp)
             card.position = CGPoint(x: CGFloat(i) * cardSpacing + 75, y: 95)
+            card.setMissionHighlighted(emp.id == highlightedEmployeeID)
             scrollContainer.addChild(card)
         }
     }
 
     func refresh() {
         needsRebuild = true
+    }
+
+    func showMissionHighlight(employeeID: Int?) {
+        highlightedEmployeeID = employeeID
+        for child in scrollContainer.children {
+            guard let card = child as? EmployeeCardNode,
+                  let name = card.name,
+                  let id = Int(name.replacingOccurrences(of: "empCard_", with: "")) else { continue }
+            card.setMissionHighlighted(id == employeeID)
+        }
     }
 
     func updateProgressBars(money: Double) {

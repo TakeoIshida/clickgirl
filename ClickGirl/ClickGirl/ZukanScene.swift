@@ -75,6 +75,11 @@ class ZukanScene: SKScene {
         currentCharIdx = firstHired
         currentImgIdx  = GameManager.shared.selectedImageIndex[chars[currentCharIdx].id] ?? 0
         refreshAll()
+        installAccessibility()
+    }
+
+    override func willMove(from view: SKView) {
+        SceneAccessibility.clear(from: view)
     }
 
     // トップバー
@@ -466,6 +471,7 @@ class ZukanScene: SKScene {
                 refreshMainImage()
                 refreshThumbs()
                 refreshSetBtn()
+                installAccessibility()
             }
             return
         }
@@ -479,14 +485,12 @@ class ZukanScene: SKScene {
             if name.hasPrefix("tab_"),
                let i = Int(name.dropFirst(4)) {
                 loadChar(idx: i)
+                installAccessibility()
                 return
             }
             if name.hasPrefix("thumb_"),
                let i = Int(name.dropFirst(6)) {
-                currentImgIdx = i
-                refreshMainImage()
-                refreshThumbs()
-                refreshSetBtn()
+                selectImage(index: i)
                 return
             }
         }
@@ -503,6 +507,7 @@ class ZukanScene: SKScene {
         let char = chars[currentCharIdx]
         GameManager.shared.setSelectedImage(charId: char.id, index: currentImgIdx)
         refreshSetBtn()
+        installAccessibility()
 
         // フラッシュ
         let flash = SKSpriteNode(color: UIColor(white: 1.0, alpha: 0.25), size: frame.size)
@@ -517,6 +522,39 @@ class ZukanScene: SKScene {
         scene.scaleMode      = .resizeFill
         scene.backgroundColor = UIColor(red: 0.03, green: 0.03, blue: 0.1, alpha: 1.0)
         view?.presentScene(scene, transition: SKTransition.push(with: .right, duration: 0.3))
+    }
+
+    private func selectImage(index: Int) {
+        currentImgIdx = index
+        refreshMainImage()
+        refreshThumbs()
+        refreshSetBtn()
+        installAccessibility()
+    }
+
+    private func installAccessibility() {
+        guard let view else { return }
+        var items = [
+            SceneAccessibilityItem(nodeName: "backBtn", label: "ゲームへ戻る", activation: { [weak self] in self?.goBack(); return true }),
+            SceneAccessibilityItem(nodeName: "setBtn", label: "現在の画像をゲームで使う", activation: { [weak self] in self?.setImage(); return true })
+        ]
+        for (index, char) in chars.enumerated() {
+            let selected = index == currentCharIdx
+            items.append(SceneAccessibilityItem(nodeName: "tab_\(index)", label: "\(char.name)\(selected ? "、選択中" : "")", traits: selected ? [.button, .selected] : .button, activation: { [weak self] in
+                self?.loadChar(idx: index)
+                self?.installAccessibility()
+                return true
+            }))
+        }
+        let current = chars[currentCharIdx]
+        for index in 0..<current.count {
+            let unlocked = ZukanConditions.isImageUnlocked(charId: current.id, imageIndex: index, gm: GameManager.shared)
+            items.append(SceneAccessibilityItem(nodeName: "thumb_\(index)", label: "\(current.name)の画像\(index + 1)\(unlocked ? "" : "、未解放")", activation: { [weak self] in
+                self?.selectImage(index: index)
+                return true
+            }))
+        }
+        SceneAccessibility.install(on: view, scene: self, items: items)
     }
 
     // MARK: - トースト表示

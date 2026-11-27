@@ -12,6 +12,7 @@ class TitleScene: SKScene {
         addCharacter()
         addStartButton()
         addBottomButtons()
+        installAccessibility(on: view)
     }
 
     // MARK: - 星パーティクル
@@ -196,6 +197,7 @@ class TitleScene: SKScene {
     }
 
     override func willMove(from view: SKView) {
+        SceneAccessibility.clear(from: view)
         removeAllActions()
     }
 
@@ -205,18 +207,44 @@ class TitleScene: SKScene {
         let name = atPoint(loc).name ?? ""
         switch name {
         case "startBtn":
-            let next = GameScene(size: size)
-            next.scaleMode = scaleMode
-            view?.presentScene(next, transition: .fade(withDuration: 0.5))
+            startGame()
         case "rankBtn":
-            let next = RankingScene(size: size)
-            next.scaleMode = scaleMode
-            view?.presentScene(next, transition: SKTransition.push(with: .left, duration: 0.3))
+            openRanking()
         case "settingBtn":
-            let next = SettingScene(size: size, returnDestination: .title)
-            next.scaleMode = scaleMode
-            view?.presentScene(next, transition: SKTransition.push(with: .left, duration: 0.3))
+            openSetting()
         default: break
         }
+    }
+
+    private func startGame() {
+        let next = GameScene(size: size)
+        next.scaleMode = scaleMode
+        view?.presentScene(next, transition: .fade(withDuration: 0.5))
+    }
+
+    private func openRanking() {
+        let next = RankingScene(size: size)
+        next.scaleMode = scaleMode
+        view?.presentScene(next, transition: SKTransition.push(with: .left, duration: 0.3))
+    }
+
+    private func openSetting() {
+        let next = SettingScene(size: size, returnDestination: .title)
+        next.scaleMode = scaleMode
+        view?.presentScene(next, transition: SKTransition.push(with: .left, duration: 0.3))
+    }
+
+    private func installAccessibility(on view: SKView) {
+        SceneAccessibility.install(on: view, scene: self, items: [
+            SceneAccessibilityItem(nodeName: "startBtn", label: "ゲームを始める", activation: { [weak self] in
+                self?.startGame(); return true
+            }),
+            SceneAccessibilityItem(nodeName: "rankBtn", label: "ランキング", activation: { [weak self] in
+                self?.openRanking(); return true
+            }),
+            SceneAccessibilityItem(nodeName: "settingBtn", label: "設定", activation: { [weak self] in
+                self?.openSetting(); return true
+            })
+        ])
     }
 }

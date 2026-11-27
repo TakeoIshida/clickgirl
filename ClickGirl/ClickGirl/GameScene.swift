@@ -78,6 +78,8 @@ class GameScene: SKScene {
                 self.gm.pendingComebackDays = 0
             }
         }
+        refreshMissionGuidance()
+        refreshAccessibility()
     }
 
     // 画像のアスペクト比を保ちながら指定サイズにアスペクトフィルするサイズを返す
@@ -261,6 +263,7 @@ class GameScene: SKScene {
     }
 
     override func willMove(from view: SKView) {
+        SceneAccessibility.clear(from: view)
         bgmPlayer?.stop()
         bgmPlayer = nil
         NotificationCenter.default.removeObserver(self)
@@ -419,6 +422,7 @@ class GameScene: SKScene {
         updateComboDisplay()
         hudNode.update(money: gm.money, incomePerSec: gm.totalIncomePerSec)
         showCompletedMissionRewards()
+        refreshAccessibility()
     }
 
     private func updateComboDisplay() {
@@ -514,6 +518,7 @@ class GameScene: SKScene {
             employeePanel.refresh()
             hudNode.update(money: gm.money, incomePerSec: gm.totalIncomePerSec)
             showCompletedMissionRewards()
+            refreshAccessibility()
         } else {
             showNotEnoughMoneyEffect()
         }
@@ -572,6 +577,7 @@ class GameScene: SKScene {
 
         addChild(panel)
         missionPanel = panel
+        refreshMissionGuidance()
     }
 
     private func setupRewardBoostButton() {
@@ -651,6 +657,69 @@ class GameScene: SKScene {
             ? "  \(gm.dailyMissionStreak)日継続"
             : ""
         showToast("ミッション達成: \(names)  +✦\(formatMoney(reward))\(ticketText)\(streakText)")
+    }
+
+    private func refreshMissionGuidance() {
+        guard hudNode != nil, employeePanel != nil else { return }
+        let missionID = gm.currentMission?.id
+        let hudButton: String?
+        let employeeID: Int?
+
+        switch missionID {
+        case "hire_airi", "upgrade_airi":
+            hudButton = nil
+            employeeID = 0
+        case "first_shop":
+            hudButton = "shopBtn"
+            employeeID = nil
+        case "first_gacha":
+            hudButton = "gachaBtn"
+            employeeID = nil
+        case "first_office", "first_city":
+            hudButton = "officeBtn"
+            employeeID = nil
+        default:
+            hudButton = nil
+            employeeID = nil
+        }
+
+        hudNode.showMissionHighlight(buttonName: hudButton)
+        employeePanel.showMissionHighlight(employeeID: employeeID)
+        let shouldEmphasizeTap = missionID == "tap_10"
+        tapHintLabel?.fontColor = shouldEmphasizeTap
+            ? UIColor(red: 1.0, green: 0.9, blue: 0.25, alpha: 1)
+            : UIColor(white: 0.92, alpha: 0.9)
+    }
+
+    private func refreshAccessibility() {
+        guard let view else { return }
+        var items = [
+            SceneAccessibilityItem(nodeName: "mainChar", label: "メインキャラクターをタップ", hint: "売上を獲得します", activation: { [weak self] in
+                guard let self else { return false }
+                self.handleMainTap(at: self.mainCharNode.position)
+                return true
+            }),
+            SceneAccessibilityItem(nodeName: "zukanBtn", label: "図鑑", activation: { [weak self] in self?.openZukan(); return true }),
+            SceneAccessibilityItem(nodeName: "gachaBtn", label: "ガチャ", activation: { [weak self] in self?.openGacha(); return true }),
+            SceneAccessibilityItem(nodeName: "shopBtn", label: "ショップ", activation: { [weak self] in self?.openShop(); return true }),
+            SceneAccessibilityItem(nodeName: "officeBtn", label: "オフィス", activation: { [weak self] in self?.openOffice(); return true }),
+            SceneAccessibilityItem(nodeName: "rankBtn", label: "ランキング", activation: { [weak self] in self?.openRanking(); return true }),
+            SceneAccessibilityItem(nodeName: "settingBtn", label: "設定", activation: { [weak self] in self?.openSetting(); return true }),
+            SceneAccessibilityItem(nodeName: "charSelectBtn", label: "メインキャラクター選択", activation: { [weak self] in self?.openCharSelect(); return true }),
+            SceneAccessibilityItem(nodeName: "mainRewardBoostBtn", label: rewardBoostLabel?.text ?? "動画で自動収益を2倍", activation: { [weak self] in
+                self?.showMainRewardBoostAd(); return true
+            })
+        ]
+
+        for employee in gm.employees {
+            let action = employee.isHired ? "レベルアップ" : "採用"
+            let label = "\(employee.isHired ? employee.name : "未採用キャラクター")、\(action)"
+            items.append(SceneAccessibilityItem(nodeName: "empCard_\(employee.id)", label: label, activation: { [weak self] in
+                self?.handleEmployeeTap(id: employee.id, area: .button)
+                return true
+            }))
+        }
+        SceneAccessibility.install(on: view, scene: self, items: items)
     }
 
     private func showStarterPackPopup() {

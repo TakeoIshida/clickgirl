@@ -6,7 +6,9 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         GameCenterManager.shared.presentingViewController = self
-        GameCenterManager.shared.authenticate()
+        if !ProcessInfo.processInfo.arguments.contains("-UITesting") {
+            GameCenterManager.shared.authenticate()
+        }
     }
 
     override func viewDidLayoutSubviews() {

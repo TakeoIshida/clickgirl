@@ -10,41 +10,48 @@ import XCTest
 final class ClickGirlUITests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 
     @MainActor
     func testTitleToMainSceneSmoke() throws {
         let app = XCUIApplication()
+        app.launchArguments = ["-UITesting"]
         app.launch()
 
-        // SpriteKit nodes are not exposed as accessibility elements, so tap the
-        // centre of the title screen's primary button by normalized coordinate.
-        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.80)).tap()
+        let start = app.buttons["startBtn"]
+        XCTAssertTrue(start.waitForExistence(timeout: 5))
+        start.tap()
 
-        XCTAssertEqual(app.state, .runningForeground)
+        XCTAssertTrue(app.buttons["mainChar"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["shopBtn"].exists)
+        XCTAssertTrue(app.buttons["gachaBtn"].exists)
+        XCTAssertTrue(app.buttons["officeBtn"].exists)
         let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = "Main scene after title"
         attachment.lifetime = .keepAlways
         add(attachment)
+    }
+
+    @MainActor
+    func testMainMenusReturnToGame() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["-UITesting"]
+        app.launch()
+
+        XCTAssertTrue(app.buttons["startBtn"].waitForExistence(timeout: 5))
+        app.buttons["startBtn"].tap()
+        XCTAssertTrue(app.buttons["shopBtn"].waitForExistence(timeout: 5))
+
+        app.buttons["shopBtn"].tap()
+        XCTAssertTrue(app.buttons["backBtn"].waitForExistence(timeout: 5))
+        app.buttons["backBtn"].tap()
+        XCTAssertTrue(app.buttons["mainChar"].waitForExistence(timeout: 5))
+
+        app.buttons["charSelectBtn"].tap()
+        XCTAssertTrue(app.buttons["backBtn"].waitForExistence(timeout: 5))
+        app.buttons["backBtn"].tap()
+        XCTAssertTrue(app.buttons["mainChar"].waitForExistence(timeout: 5))
     }
 
     @MainActor
