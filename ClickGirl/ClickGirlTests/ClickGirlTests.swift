@@ -29,4 +29,14 @@ struct ClickGirlTests {
         #expect(SettingScene(size: size, returnDestination: .game).makeReturnScene() is GameScene)
     }
 
+    @Test func advertisingRegionPolicyUsesSafeDefaults() {
+        #expect(AdvertisingRegionPolicy.allowsAdvertising(countryCode: "JP"))
+        #expect(AdvertisingRegionPolicy.allowsAdvertising(countryCode: "us"))
+        #expect(!AdvertisingRegionPolicy.allowsAdvertising(countryCode: "DE"))
+        #expect(!AdvertisingRegionPolicy.allowsAdvertising(countryCode: "GB"))
+        #expect(!AdvertisingRegionPolicy.allowsAdvertising(countryCode: "CH"))
+        #expect(!AdvertisingRegionPolicy.allowsAdvertising(countryCode: nil))
+        #expect(!AdvertisingRegionPolicy.allowsAdvertising(countryCode: ""))
+    }
+
 }

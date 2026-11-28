@@ -101,16 +101,16 @@ deploy-clickgirl
 
 ---
 
-## v1.6 (12) 提出手順
+## v1.6 (13) 提出手順
 
-2026-11-25時点の提出候補は `1.6 (12)`。
+2026-11-28時点の提出候補は `1.6 (13)`。ビルド12はアップロード済みだが、広告・計測の初期化順序を改善したビルド13を審査へ使用する。
 
 1. `git status` でClickGirlの変更だけが対象になっていることを確認する
 2. `xcodebuild build` が成功することを確認する
 3. 変更をcommitしてGitHubへpushする
 4. `deploy-clickgirl` で `Deploy to App Store` を開始する
-5. GitHub Actionsが成功し、App Store Connectでビルド12の処理が完了するまで待つ
-6. App Store ConnectのiOSアプリ バージョン1.6でビルド12を選択する
+5. GitHub Actionsが成功し、App Store Connectでビルド13の処理が完了するまで待つ
+6. App Store ConnectのiOSアプリ バージョン1.6でビルド13を選択する
 7. 輸出コンプライアンスの質問に回答する
 8. App Review Notesへ `Play.md` のv1.6記載案を登録する
 9. プライバシー、広告、Game Center、スクリーンショット、年齢区分に未回答がないことを確認する

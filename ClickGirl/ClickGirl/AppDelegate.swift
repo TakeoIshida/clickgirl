@@ -1,6 +1,4 @@
 import UIKit
-import GoogleMobileAds
-import AppTrackingTransparency
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,20 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return true
         }
 
-        // ログインや追加の許可画面を出さず、利用状況と広告ファネルだけを計測する。
-        AnalyticsManager.shared.configure()
-
-        // AdMob を即時初期化（検証タイミングより前に start() を済ませる）
-        MobileAds.shared.start { _ in
-            NotificationCenter.default.post(name: .adMobReady, object: nil)
-        }
-
-        // ATTracking はパーソナライズ広告のためだけなので非同期で別途リクエスト
-        if #available(iOS 14, *) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                ATTrackingManager.requestTrackingAuthorization { _ in }
-            }
-        }
+        AdvertisingStartup.shared.start()
 
         return true
     }
